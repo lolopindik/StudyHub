@@ -5,7 +5,7 @@ class AppTheme {
 }
 
 class TextStyles {
-  static const TextStyle ruberoidLight28 = TextStyle(fontFamily: 'Ruberoid', fontSize: 28, color: Colors.white, );
-  static const TextStyle ruberoidLight32 = TextStyle(fontFamily: 'Ruberoid', fontSize: 32, color: Colors.white, );
-  static const TextStyle ruberoidBold40 = TextStyle(fontFamily: 'Ruberoid', fontSize: 40, color: Colors.white, fontWeight: FontWeight.bold );
+  static const TextStyle ruberoidLight28 = TextStyle(fontFamily: 'Ruberoid-Light', fontSize: 28, color: Colors.white, );
+  static const TextStyle ruberoidLight32 = TextStyle(fontFamily: 'Ruberoid-Light', fontSize: 32, color: Colors.white, );
+  static const TextStyle ruberoidRegular40 = TextStyle(fontFamily: 'Ruberoid-Regular', fontSize: 40, color: Colors.white, );
 }

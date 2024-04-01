@@ -46,7 +46,7 @@ class WelcomePage extends StatelessWidget {
                       ),
                       Text(
                         'StudyHub',
-                        style: TextStyles.ruberoidBold40
+                        style: TextStyles.ruberoidRegular40
                       ),
                     ],
                   ),
@@ -61,7 +61,7 @@ class WelcomePage extends StatelessWidget {
                             'Продолжить',
                             style: TextStyles.ruberoidLight32
                           ),
-                          const SizedBox(width: 18),
+                          const SizedBox(width: 10),
                           SvgPicture.asset(
                             'lib/assets/images/svg/arrow1_wellcomepage.svg',
                           ),

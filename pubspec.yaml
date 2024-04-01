@@ -70,10 +70,15 @@ flutter:
     - lib\assets\images\svg\arrow2_wellcomepage.svg
     - lib\assets\images\svg\arrow3_wellcomepage.svg
   fonts:
-  - family: Ruberoid
+  - family: Ruberoid-Light
     fonts:
       - asset: lib\assets\fonts\Ruberoid-Light.ttf
+  - family: Ruberoid-Bold
+    fonts:
       - asset: lib\assets\fonts\Ruberoid-Bold.ttf
+  - family: Ruberoid-Regular
+    fonts: 
+      - asset: lib\assets\fonts\Ruberoid-Regular.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

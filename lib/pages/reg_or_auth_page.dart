@@ -14,7 +14,7 @@ class SignUpIn extends StatelessWidget {
             fit: BoxFit.cover,
           )
         ),
-        child: const Center(child: Text('TEST', style: TextStyles.ruberoidBold40,),),
+        child: const Center(child: Text('TEST', style: TextStyles.ruberoidRegular40,),),
       ),
     );
   }
