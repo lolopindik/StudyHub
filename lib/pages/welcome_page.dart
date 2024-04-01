@@ -10,9 +10,9 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onHorizontalDragUpdate: (details) {
+        onHorizontalDragEnd: (details) {
           // Проверяем направление свайпа
-          if (details.primaryDelta! < 0) {
+          if (details.primaryVelocity! < 0) {
             // Переходим на SignUpIn страницу
             Navigator.of(context).push(
               MaterialPageRoute(
