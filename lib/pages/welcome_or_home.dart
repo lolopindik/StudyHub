@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_hub/pages/reg_or_auth_page.dart';
+import 'package:study_hub/pages/sign_up_in.dart';
 import 'package:study_hub/pages/welcome_page.dart';
 
 
-class WelcomeOrSignUpIn extends StatelessWidget {
-  const WelcomeOrSignUpIn({super.key});
+class ExplorerPage extends StatelessWidget {
+  const ExplorerPage({super.key});
 
   @override
   Widget build(BuildContext context) {

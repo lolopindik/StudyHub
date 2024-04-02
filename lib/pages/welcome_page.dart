@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:study_hub/pages/reg_or_auth_page.dart';
+import 'package:study_hub/pages/sign_up_in.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 
 class WelcomePage extends StatelessWidget {
