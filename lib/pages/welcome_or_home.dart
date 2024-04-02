@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_hub/pages/sign_up_in.dart';
+import 'package:study_hub/pages/sign_up_In.dart';
 import 'package:study_hub/pages/welcome_page.dart';
 
 
@@ -23,7 +23,7 @@ class ExplorerPage extends StatelessWidget {
           _setFirstTime(false); // Устанавливаем значение в false
           return const WelcomePage();
         }
-        return const SignUpIn();
+        return const SignUpInPage();
       },
     );
   }

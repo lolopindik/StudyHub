@@ -16,7 +16,7 @@ class WelcomePage extends StatelessWidget {
             // Переходим на SignUpIn страницу
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => const SignUpIn(),
+                builder: (_) => const SignUpInPage(),
               ),
             );
           }
