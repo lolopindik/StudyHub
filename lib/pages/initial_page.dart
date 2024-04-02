@@ -4,8 +4,8 @@ import 'package:study_hub/pages/sign_up_In.dart';
 import 'package:study_hub/pages/welcome_page.dart';
 
 
-class ExplorerPage extends StatelessWidget {
-  const ExplorerPage({super.key});
+class InitialPage  extends StatelessWidget {
+  const InitialPage ({super.key});
 
   @override
   Widget build(BuildContext context) {

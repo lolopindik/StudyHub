@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/pages/welcome_or_home.dart';
+import 'package:study_hub/pages/initial_page.dart';
 
 void main() {
   runApp(const App());
@@ -12,7 +12,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ExplorerPage(),
+      home: InitialPage (),
     );
   }
 }
