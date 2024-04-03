@@ -1,7 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:study_hub/pages/signin_page.dart';
-import 'package:study_hub/pages/signup.dart';
+import 'package:study_hub/pages/signup_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/sign_widgets.dart';
 
@@ -33,7 +33,7 @@ class SignUpInPageState extends State<SignUpInPage> {
           Positioned.fill(
             child: IndexedStack(
               index: _selectedIndex,
-              children: const <Widget>[
+              children: <Widget>[
                 SignUpPage(),
                 SignInPage(),
               ],
