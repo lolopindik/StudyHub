@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/pages/signin_page.dart';
 import 'package:study_hub/pages/signup_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/sign_widgets.dart';
+import 'package:study_hub/widgets/sign_appbar.dart';
 
 class SignUpInPage extends StatefulWidget {
   const SignUpInPage({super.key});

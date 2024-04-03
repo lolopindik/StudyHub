@@ -19,8 +19,9 @@ class InitialPage  extends StatelessWidget {
             ),
           );
         }
+        //* вывод welcome page при первом запуске
         if (snapshot.hasData && snapshot.data == true) {
-          _setFirstTime(false); // Устанавливаем значение в false
+          _setFirstTime(false); //* Устанавливаем значение в false
           return const WelcomePage();
         }
         return const SignUpInPage();
