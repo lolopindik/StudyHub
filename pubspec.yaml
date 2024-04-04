@@ -30,6 +30,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  #*Firebase
+  firebase_core: ^2.28.0
+  firebase_auth: ^4.19.0
+  firebase_storage: ^11.7.0
+  firebase_database: ^10.5.0
+
+  email_validator: ^2.1.17
+
   shared_preferences: ^2.0.6
 
   flutter_svg: ^0.22.0
