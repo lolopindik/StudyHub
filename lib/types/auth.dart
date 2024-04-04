@@ -84,6 +84,7 @@ class AuthPage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20, top: 23),
                             child: TextField(
+                              obscureText: true,
                               controller: passwordController,
                               style: TextStyles.ruberoidLight16,
                               decoration: const InputDecoration(
