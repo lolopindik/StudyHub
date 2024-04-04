@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_hub/pages/home_page.dart';
-import 'package:study_hub/types/auth.dart';
+import 'package:study_hub/widgets/auth.dart';
 import 'package:email_validator/email_validator.dart';
 
 class SignInPage extends StatelessWidget {
