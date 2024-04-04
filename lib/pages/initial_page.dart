@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_hub/pages/sign_up_In.dart';
 import 'package:study_hub/pages/welcome_page.dart';
-import 'package:study_hub/pages/home_page.dart'; // Импорт HomePage
+import 'package:study_hub/pages/home_page.dart';
+import 'package:study_hub/preferences/app_theme.dart'; // Импорт HomePage
 
 class InitialPage extends StatelessWidget {
   const InitialPage({super.key});
@@ -15,7 +16,10 @@ class InitialPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: AppTheme.secondaryColor,
+                backgroundColor: AppTheme.mainColor,
+              ),
             ),
           );
         }
@@ -27,7 +31,7 @@ class InitialPage extends StatelessWidget {
 
         // Пользователь не аутентифицирован, продолжаем с WelcomePage или SignUpInPage
         if (snapshot.hasData && snapshot.data == true) {
-          _setFirstTime(false); //* Устанавливаем значение в false
+          _setFirstTime(false); 
           return const WelcomePage();
         }
         return const SignUpInPage();
