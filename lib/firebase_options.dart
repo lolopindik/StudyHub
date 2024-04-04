@@ -54,16 +54,16 @@ class DefaultFirebaseOptions {
     apiKey: dotenv.env['API_KEY'] ?? 'API_KEY NOT FOUND',
     appId: dotenv.env['APP_ID'] ?? 'APP_ID NOT FOUND',
     messagingSenderId: dotenv.env['MESSAGING_ID'] ?? 'MESSAGING_ID NOT FOUND',
-    projectId: 'study-hub-f86d2',
-    storageBucket: 'study-hub-f86d2.appspot.com',
+    projectId: dotenv.env['PROJECT_ID'] ?? 'PROJECT_ID NOT FOUND',
+    storageBucket: dotenv.env['STTORAGE_ID'] ?? 'STTORAGE_ID NOT FOUND',
   );
 
   static FirebaseOptions ios = FirebaseOptions(
     apiKey: dotenv.env['API_KEY'] ?? 'API_KEY NOT FOUND',
     appId: dotenv.env['APP_ID'] ?? 'APP_ID NOT FOUND',
     messagingSenderId: dotenv.env['MESSAGING_ID'] ?? 'MESSAGING_ID NOT FOUND',
-    projectId: 'study-hub-f86d2',
-    storageBucket: 'study-hub-f86d2.appspot.com',
-    iosBundleId: 'com.example.studyHub',
+    projectId: dotenv.env['PROJECT_ID'] ?? 'PROJECT_ID NOT FOUND',
+    storageBucket: dotenv.env['STTORAGE_ID'] ?? 'STTORAGE_ID NOT FOUND',
+    iosBundleId: dotenv.env['IOS_BUNDLER'] ?? 'IOS_BUNDLER NOT FOUND',
   );
 }
