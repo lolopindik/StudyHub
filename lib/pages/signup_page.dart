@@ -3,6 +3,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:study_hub/pages/user_details.dart';
 import 'package:study_hub/types/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -66,7 +67,11 @@ class SignUpPage extends StatelessWidget {
             ),
           );
 
-          // Регистрация успешна, можно выполнить дополнительные действия, например, переход на другой экран
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserData()),
+          );
+          
         } catch (e) {
           // Обработка ошибки регистрации, например, вывод сообщения об ошибке
           ScaffoldMessenger.of(context).showSnackBar(
