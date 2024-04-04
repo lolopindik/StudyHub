@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #!поддержка .env
+  flutter_dotenv: ^5.0.2
 
   #*Firebase
   firebase_core: ^2.28.0
