@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_hub/pages/sign_up_In.dart';
 import 'package:study_hub/pages/welcome_page.dart';
+import 'package:study_hub/pages/home_page.dart'; // Импорт HomePage
 
-
-class InitialPage  extends StatelessWidget {
-  const InitialPage ({super.key});
+class InitialPage extends StatelessWidget {
+  const InitialPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,13 @@ class InitialPage  extends StatelessWidget {
             ),
           );
         }
-        //* вывод welcome page при первом запуске
+
+        // Проверяем, аутентифицирован ли пользователь
+        if (snapshot.hasData && snapshot.data == false) {
+          return const HomePage(); // Если пользователь аутентифицирован, переходим на HomePage
+        }
+
+        // Пользователь не аутентифицирован, продолжаем с WelcomePage или SignUpInPage
         if (snapshot.hasData && snapshot.data == true) {
           _setFirstTime(false); //* Устанавливаем значение в false
           return const WelcomePage();
@@ -31,11 +37,12 @@ class InitialPage  extends StatelessWidget {
 
   Future<bool> _isFirstTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('first_time') ?? true;
+    bool? isLoggedIn = prefs.getBool('isLoggedIn');
+    return isLoggedIn ?? true; // Если значение null, считаем, что пользователь не аутентифицирован
   }
 
   void _setFirstTime(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('first_time', value);
+    prefs.setBool('isLoggedIn', value);
   }
 }

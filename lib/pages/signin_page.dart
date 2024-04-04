@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:study_hub/pages/home_page.dart';
 import 'package:study_hub/types/auth.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -52,7 +53,11 @@ class SignInPage extends StatelessWidget {
               content: Text('Аутентификация успешна'),
             ),
           );
-          
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
           // Аутентификация успешна, можно выполнить дополнительные действия, например, переход на другой экран
         } catch (e) {
           // Обработка ошибки аутентификации, например, вывод сообщения об ошибке
