@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,18 +50,18 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA1gCkMI4hqXdESvdavTQqmvllkOvJ_7qY',
-    appId: '1:638914810193:android:305df5642840f302a1c370',
-    messagingSenderId: '638914810193',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['API_KEY'] ?? 'API_KEY NOT FOUND',
+    appId: dotenv.env['APP_ID'] ?? 'APP_ID NOT FOUND',
+    messagingSenderId: dotenv.env['MESSAGING_ID'] ?? 'MESSAGING_ID NOT FOUND',
     projectId: 'study-hub-f86d2',
     storageBucket: 'study-hub-f86d2.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyADeciuyDR4eAE3KFQwPyITlCs2oP6PLM0',
-    appId: '1:638914810193:ios:37e64a8d4078baa3a1c370',
-    messagingSenderId: '638914810193',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env['API_KEY'] ?? 'API_KEY NOT FOUND',
+    appId: dotenv.env['APP_ID'] ?? 'APP_ID NOT FOUND',
+    messagingSenderId: dotenv.env['MESSAGING_ID'] ?? 'MESSAGING_ID NOT FOUND',
     projectId: 'study-hub-f86d2',
     storageBucket: 'study-hub-f86d2.appspot.com',
     iosBundleId: 'com.example.studyHub',
