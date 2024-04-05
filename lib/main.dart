@@ -25,6 +25,7 @@ void main() async {
 
     if (user == null) {
       if (isFirstLaunch) {
+        await firebaseService.setFirstLaunch(false);
         initialPage = const WelcomePage();
         print('no user');
       } else {

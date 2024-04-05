@@ -14,23 +14,22 @@ class FirebaseService {
     return prefs.getBool('first_time') ?? true;
   }
 
-  void setFirstLaunch(bool value) async {
+  Future<void> setFirstLaunch(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('first_time', value);
   }
 
-  onListenUser(void Function(User?)? doListen)
-  {
+  onListenUser(void Function(User?)? doListen) {
     FirebaseAuth.instance.authStateChanges().listen(doListen);
   }
 
-  onLogin() async {}
+  logOut() async {
+    await auth.signOut();
+  }
 
-  onRegister() async {}
-
-  logOut() async {}
-
-  verifyemail() async {}
-
-  getCurrentUser() {}
+// лучше не использовать из-за багов
+  verifyemail() async {
+    await currentUser?.sendEmailVerification();
+    print('verify sended');
+  }
 }
