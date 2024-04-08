@@ -19,7 +19,7 @@ class SignUpPage extends StatelessWidget {
 }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return AuthPage(
       pageTitle: 'Регистрация',
       emailController: emailController,
@@ -69,7 +69,7 @@ class SignUpPage extends StatelessWidget {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const UserData()),
+            MaterialPageRoute(builder: (context) => UserData()),
           );
 
         } catch (e) {
