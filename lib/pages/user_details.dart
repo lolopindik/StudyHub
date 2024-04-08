@@ -1,5 +1,6 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, avoid_print
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/sign_appbar.dart';
@@ -8,8 +9,10 @@ class UserData extends StatefulWidget {
   UserData({super.key});
   final fullnameController = TextEditingController();
   final tokenController = TextEditingController();
-  String messageFire = ' ';
- 
+
+  String userName = '';
+  String coureseToken = '';
+
   @override
   State<UserData> createState() => _UserDataState();
 }
@@ -17,6 +20,8 @@ class UserData extends StatefulWidget {
 class _UserDataState extends State<UserData> {
   @override
   Widget build(context) {
+    // инициализация бд
+    FirebaseDatabase.instance.ref().child('UserDetails');
     return Scaffold(
       appBar: buildSignAppBar(context),
       body: Stack(
@@ -70,8 +75,7 @@ class _UserDataState extends State<UserData> {
                                   color: AppTheme.signElementColor,
                                 ),
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 20, top: 5),
+                                  padding: const EdgeInsets.only(left: 20, top: 5),
                                   child: TextField(
                                     controller: widget.fullnameController,
                                     style: TextStyles.ruberoidLight16,
@@ -95,8 +99,7 @@ class _UserDataState extends State<UserData> {
                                   color: AppTheme.signElementColor,
                                 ),
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 20, top: 5),
+                                  padding: const EdgeInsets.only(left: 20, top: 5),
                                   child: TextField(
                                     obscureText: true,
                                     controller: widget.tokenController,
@@ -114,8 +117,10 @@ class _UserDataState extends State<UserData> {
                             Padding(
                               padding: const EdgeInsets.only(top: 61),
                               child: InkWell(
-                                //TODO: Отправить данные на субд
-                                onTap: () {},
+                                onTap: () {
+                                  // Вызываем метод для отправки данных в базу данных Firebase
+                                  sendDataToFirebase();
+                                },
                                 child: Container(
                                   width: 282,
                                   height: 51,
@@ -144,5 +149,27 @@ class _UserDataState extends State<UserData> {
         ],
       ),
     );
+  }
+
+  // Функция для отправки данных в базу данных Firebase
+  void sendDataToFirebase() {
+    String fullname = widget.fullnameController.text;
+    String courseToken = widget.tokenController.text;
+
+    // Подготовка данных для отправки
+    Map<String, dynamic> userData = {
+      'fullname': fullname,
+      'courseToken': courseToken,
+    };
+
+    // Отправка данных в базу данных Firebase
+    DatabaseReference userDetailsRef = FirebaseDatabase.instance.ref().child('UserDetails');
+    userDetailsRef.push().set(userData).then((_) {
+      // Успешно отправлено
+      print('Data sent successfully');
+    }).catchError((error) {
+      // Обработка ошибок
+      print('Failed to send data: $error');
+    });
   }
 }
