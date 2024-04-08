@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/sign_appbar.dart';
@@ -6,14 +8,15 @@ class UserData extends StatefulWidget {
   UserData({super.key});
   final fullnameController = TextEditingController();
   final tokenController = TextEditingController();
-
+  String messageFire = ' ';
+ 
   @override
   State<UserData> createState() => _UserDataState();
 }
 
 class _UserDataState extends State<UserData> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Scaffold(
       appBar: buildSignAppBar(context),
       body: Stack(
@@ -67,7 +70,8 @@ class _UserDataState extends State<UserData> {
                                   color: AppTheme.signElementColor,
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 20, top: 5),
+                                  padding:
+                                      const EdgeInsets.only(left: 20, top: 5),
                                   child: TextField(
                                     controller: widget.fullnameController,
                                     style: TextStyles.ruberoidLight16,
@@ -91,7 +95,8 @@ class _UserDataState extends State<UserData> {
                                   color: AppTheme.signElementColor,
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 20, top: 5),
+                                  padding:
+                                      const EdgeInsets.only(left: 20, top: 5),
                                   child: TextField(
                                     obscureText: true,
                                     controller: widget.tokenController,
