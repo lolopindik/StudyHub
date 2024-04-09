@@ -1,6 +1,5 @@
-// ignore_for_file: library_private_types_in_public_api, avoid_print
-
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:study_hub/fireauth.dart';
@@ -10,7 +9,7 @@ import 'package:study_hub/pages/welcome_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); 
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -33,6 +32,14 @@ void main() async {
         print('no user');
       }
     } else {
+      final ref = FirebaseDatabase.instance.ref();
+      final tokenSnapshot = await ref.child('UserDetails/${user.uid}/courseProgress/courseToken').get();
+      if (tokenSnapshot.value != null) {
+        print('Токен курса: ${tokenSnapshot.value}');
+      } else {
+        print('no token');
+      }
+
       initialPage = const HomePage();
       print('user $user');
     }
@@ -43,4 +50,3 @@ void main() async {
     ));
   });
 }
-
