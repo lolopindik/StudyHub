@@ -33,9 +33,13 @@ class _UserDataState extends State<UserData> {
     String courseToken = tokenController.text;
 
     if (fullname.isNotEmpty && courseToken.isNotEmpty) {
+      Map<String, dynamic> courseProgress = {
+        'courseToken': courseToken,
+      };
+
       Map<String, dynamic> userData = {
         'fullname': fullname,
-        'courseToken': courseToken,
+        'courseProgress': courseProgress,
       };
 
       DatabaseReference userDetailsRef =
@@ -71,4 +75,3 @@ class _UserDataState extends State<UserData> {
     );
   }
 }
-
