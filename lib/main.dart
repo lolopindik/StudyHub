@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:study_hub/fireauth.dart';
 import 'package:study_hub/pages/home_page.dart';
 import 'package:study_hub/pages/sign_up_in.dart';
+import 'package:study_hub/pages/user_details.dart';
 import 'package:study_hub/pages/welcome_page.dart';
 import 'firebase_options.dart';
 
@@ -36,12 +39,12 @@ void main() async {
       final tokenSnapshot = await ref.child('UserDetails/${user.uid}/courseProgress/courseToken').get();
       if (tokenSnapshot.value != null) {
         print('Токен курса: ${tokenSnapshot.value}');
+        print('user $user');
+        initialPage = const HomePage();
       } else {
         print('no token');
+        initialPage = const UserData();
       }
-
-      initialPage = const HomePage();
-      print('user $user');
     }
 
     runApp(MaterialApp(
