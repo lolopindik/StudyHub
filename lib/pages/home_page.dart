@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/widgets/home_appbar.dart';
@@ -14,11 +15,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   
   late String courseNumber;
+  String? _userId;
 
   @override
   void initState() {
     super.initState();
+    _getCurrentUser();
+    userTokenInfo();
     courseIteration();
+  }
+
+    void _getCurrentUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _userId = user.uid;
+      });
+    }
   }
 
   void courseIteration() {
@@ -31,10 +44,16 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void userTokenInfo() async{
+    DatabaseReference userRef = FirebaseDatabase.instance.ref().child("UserDetails/$_userId/courseProgress/courseToken");
+    DataSnapshot userToken = await userRef.get();
+    print('info about user: $_userId token: ${userToken.value}');
+  }
+
   void compareTokens(String currentCourseNumber) async {
     DatabaseReference courseRef = FirebaseDatabase.instance.ref().child("Courses/$currentCourseNumber/token");
-    DataSnapshot dataSnapshot = await courseRef.get();
-    print('info from database: ${dataSnapshot.value}');
+    DataSnapshot courseToken = await courseRef.get();
+    print('info about course tokens: ${courseToken.value}');
   }
   
   @override
