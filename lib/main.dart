@@ -20,6 +20,16 @@ void main() async {
 
   final FirebaseService firebaseService = FirebaseService();
 
+  final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
+  connectedRef.onValue.listen((event) {
+    final connected = event.snapshot.value as bool? ?? false;
+    if (connected) {
+      debugPrint("Dataabse: Connected.");
+    } else {
+      debugPrint("Dataabse: Not connected.");
+    }
+  });
+
   firebaseService.onListenUser((user) async {
     bool isFirstLaunch = await firebaseService.isFirstLaunch();
 
@@ -36,7 +46,9 @@ void main() async {
       }
     } else {
       final ref = FirebaseDatabase.instance.ref();
-      final tokenSnapshot = await ref.child('UserDetails/${user.uid}/courseProgress/courseToken').get();
+      final tokenSnapshot = await ref
+          .child('UserDetails/${user.uid}/courseProgress/courseToken')
+          .get();
       if (tokenSnapshot.value != null) {
         print('Токен курса: ${tokenSnapshot.value}');
         print('user $user');
