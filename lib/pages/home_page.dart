@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   late String courseNumber;
   String? _userId;
 
@@ -21,11 +20,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getCurrentUser();
-    userTokenInfo();
-    courseIteration();
+    compareTokens();
   }
 
-    void _getCurrentUser() async {
+  void _getCurrentUser() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       setState(() {
@@ -34,28 +32,52 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void courseIteration() {
-    String item = "course_";
-    int? counter = 100;
+  void compareTokens() async {
+    //! "counter" используется для итераций по бд
+    int? counter = 10;
+    DatabaseReference userTokenRef = FirebaseDatabase.instance
+        .ref()
+        .child("UserDetails/$_userId/courseProgress/courseToken");
+    DataSnapshot userTokenSnapshot = await userTokenRef.get();
+    String? userToken = userTokenSnapshot.value as String?;
 
+    String itemCourse = "course_";
     for (var i = 1; i <= counter; i++) {
-      String currentCourseNumber = item + i.toString();
-      compareTokens(currentCourseNumber);
+      String currentCourseNumber = itemCourse + i.toString();
+      DatabaseReference courseTokenRef = FirebaseDatabase.instance
+          .ref()
+          .child("Courses/$currentCourseNumber/token");
+      DataSnapshot courseTokenSnapshot = await courseTokenRef.get();
+      String? courseToken = courseTokenSnapshot.value as String?;
+
+      if (courseToken != null) {
+        if (userToken == courseToken) {
+          print('Эквивалентные токены найдены:');
+          print('Токен пользователя: $userToken');
+          print('Токен курса $currentCourseNumber: $courseToken');
+          DatabaseReference courseNameRef = FirebaseDatabase.instance
+              .ref()
+              .child("Courses/$currentCourseNumber/courseName");
+          DataSnapshot courseNameSnapShot = await courseNameRef.get();
+          String? courseName = courseNameSnapShot.value as String;
+          print('Название курса: $courseName');
+          String itemSubjects = "subject_";
+          for (var i = 1; i <= counter; i++) {
+            String currentSubjectNumber = itemSubjects + i.toString();
+            DatabaseReference subjectItemRef = FirebaseDatabase.instance
+                  .ref()
+                  .child("Courses/$currentCourseNumber/subjects/$currentSubjectNumber/name");
+            DataSnapshot subjectNameSnapShot = await subjectItemRef.get();
+            String? subjectName = subjectNameSnapShot.value as String?;
+            if(subjectName != null){
+              print("Названия предметов: $subjectName");
+            }
+          }
+        }
+      }
     }
   }
 
-  void userTokenInfo() async{
-    DatabaseReference userRef = FirebaseDatabase.instance.ref().child("UserDetails/$_userId/courseProgress/courseToken");
-    DataSnapshot userToken = await userRef.get();
-    print('info about user: $_userId token: ${userToken.value}');
-  }
-
-  void compareTokens(String currentCourseNumber) async {
-    DatabaseReference courseRef = FirebaseDatabase.instance.ref().child("Courses/$currentCourseNumber/token");
-    DataSnapshot courseToken = await courseRef.get();
-    print('info about course tokens: ${courseToken.value}');
-  }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

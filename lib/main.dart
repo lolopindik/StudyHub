@@ -24,6 +24,7 @@ void main() async {
   connectedRef.onValue.listen((event) {
     final connected = event.snapshot.value as bool? ?? false;
     if (connected) {
+      //TODO: заменить debugPrint на SnackBar
       debugPrint("Dataabse: Connected.");
     } else {
       debugPrint("Dataabse: Not connected.");
