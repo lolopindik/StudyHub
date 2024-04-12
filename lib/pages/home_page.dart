@@ -33,8 +33,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void compareTokens() async {
-    //! "counter" используется для итераций по бд
-    int? counter = 10;
+    int counter = 10; //! ограниченное число итераций по базе данных
+    List<Map<String, dynamic>> coursesData = [];
+
     DatabaseReference userTokenRef = FirebaseDatabase.instance
         .ref()
         .child("UserDetails/$_userId/courseProgress/courseToken");
@@ -50,32 +51,72 @@ class _HomePageState extends State<HomePage> {
       DataSnapshot courseTokenSnapshot = await courseTokenRef.get();
       String? courseToken = courseTokenSnapshot.value as String?;
 
-      if (courseToken != null) {
-        if (userToken == courseToken) {
-          print('Эквивалентные токены найдены:');
-          print('Токен пользователя: $userToken');
-          print('Токен курса $currentCourseNumber: $courseToken');
-          DatabaseReference courseNameRef = FirebaseDatabase.instance
-              .ref()
-              .child("Courses/$currentCourseNumber/courseName");
-          DataSnapshot courseNameSnapShot = await courseNameRef.get();
-          String? courseName = courseNameSnapShot.value as String;
-          print('Название курса: $courseName');
+      if (courseToken != null && userToken == courseToken) {
+        DatabaseReference courseNameRef = FirebaseDatabase.instance
+            .ref()
+            .child("Courses/$currentCourseNumber/courseName");
+        DataSnapshot courseNameSnapshot = await courseNameRef.get();
+        String? courseName = courseNameSnapshot.value as String?;
+
+        if (courseName != null) {
+          Map<String, dynamic> courseData = {
+            'courseName': courseName,
+            'subjects': <Map<String, dynamic>>[]
+          };
+
           String itemSubjects = "subject_";
-          for (var i = 1; i <= counter; i++) {
-            String currentSubjectNumber = itemSubjects + i.toString();
+          for (var j = 1; j <= counter; j++) {
+            String currentSubjectNumber = itemSubjects + j.toString();
             DatabaseReference subjectItemRef = FirebaseDatabase.instance
-                  .ref()
-                  .child("Courses/$currentCourseNumber/subjects/$currentSubjectNumber/name");
-            DataSnapshot subjectNameSnapShot = await subjectItemRef.get();
-            String? subjectName = subjectNameSnapShot.value as String?;
-            if(subjectName != null){
-              print("Названия предметов: $subjectName");
+                .ref()
+                .child(
+                    "Courses/$currentCourseNumber/subjects/$currentSubjectNumber");
+            DataSnapshot subjectSnapshot = await subjectItemRef.get();
+            Map<dynamic, dynamic>? subjectData =
+                subjectSnapshot.value as Map<dynamic, dynamic>?;
+
+            if (subjectData != null) {
+              Map<String, dynamic> subjectDetails = {
+                'name': subjectData['name'],
+                'lessons': <Map<String, dynamic>>[]
+              };
+
+              // Добавление параметра lessonComplete для каждого урока
+              subjectData['lessons'].forEach((key, value) {
+                Map<String, dynamic> lessonDetails = {
+                  'name': value['name'],
+                  'documents': value['documents'],
+                };
+
+                // Проверка, был ли урок уже отмечен как завершенный
+                if (value['lessonComplete'] == null) {
+                  // Если урок не был отмечен как завершенный, устанавливаем значение по умолчанию (0)
+                  lessonDetails['lessonComplete'] = 0;
+                } else {
+                  // Если урок уже был отмечен как завершенный, оставляем текущее значение
+                  lessonDetails['lessonComplete'] = value['lessonComplete'];
+                }
+
+                (subjectDetails['lessons'] as List<Map<String, dynamic>>)
+                    .add(lessonDetails);
+              });
+
+              (courseData['subjects'] as List<Map<String, dynamic>>)
+                  .add(subjectDetails);
             }
           }
+          coursesData.add(courseData);
         }
       }
     }
+
+    // Обновление данных пользователя в базе данных
+    DatabaseReference userCourseRef = FirebaseDatabase.instance
+        .ref()
+        .child("UserDetails/$_userId/courseProgress");
+    await userCourseRef.update({"coursesData": coursesData});
+
+    print(coursesData);
   }
 
   @override
