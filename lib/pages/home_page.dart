@@ -1,9 +1,8 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:study_hub/pages/user_details.dart';
 import 'package:study_hub/widgets/home_appbar.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getCurrentUser();
-    compareTokens(context);
+    compareTokens();
   }
 
   void _getCurrentUser() async {
@@ -32,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void compareTokens(BuildContext context) async {
+  void compareTokens() async {
     int counter = 10; //! ограниченное число итераций по базе данных
     List<Map<String, dynamic>> coursesData = [];
 
@@ -107,19 +106,7 @@ class _HomePageState extends State<HomePage> {
           }
           coursesData.add(courseData);
         }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Указан неверный токен!'),
-          ),
-        );
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const UserData(),
-          ),
-        );
-        return; // останавливаем выполнение функции
-      }
+      } 
     }
 
     // Обновление данных пользователя в базе данных
