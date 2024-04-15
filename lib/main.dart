@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:study_hub/fireauth.dart';
+import 'package:study_hub/fire%D0%B0func.dart';
 import 'package:study_hub/pages/home_page.dart';
 import 'package:study_hub/pages/sign_up_in.dart';
 import 'package:study_hub/pages/user_details.dart';
