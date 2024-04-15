@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getCurrentUser();
+    compareTokens(_userId);
   }
 
   void _getCurrentUser() async {

@@ -117,6 +117,14 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
     }
   }
 
+  // Обновление данных пользователя в базе данных
+    DatabaseReference userCourseRef = FirebaseDatabase.instance
+        .ref()
+        .child("UserDetails/$userId/courseProgress");
+    await userCourseRef.update({"coursesData": coursesData});
+
+    print(coursesData);
+
   if (!tokenFound) {
     // Проверяем, был ли найден токен после всех итераций
     return []; // возвращаем пустой список
@@ -124,4 +132,3 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
   return coursesData;
 }
-
