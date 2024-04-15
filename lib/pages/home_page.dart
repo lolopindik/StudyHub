@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:study_hub/pages/user_details.dart';
 import 'package:study_hub/widgets/home_appbar.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,8 +32,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void compareTokens() async {
+  Future<List<Map<String, dynamic>>> compareTokens() async {
     int counter = 10; //! ограниченное число итераций по базе данных
+    bool tokenFound = false;
     List<Map<String, dynamic>> coursesData = [];
 
     DatabaseReference userTokenRef = FirebaseDatabase.instance
@@ -51,6 +53,7 @@ class _HomePageState extends State<HomePage> {
       String? courseToken = courseTokenSnapshot.value as String?;
 
       if (courseToken != null && userToken == courseToken) {
+        tokenFound = true;
         DatabaseReference courseNameRef = FirebaseDatabase.instance
             .ref()
             .child("Courses/$currentCourseNumber/courseName");
@@ -106,7 +109,7 @@ class _HomePageState extends State<HomePage> {
           }
           coursesData.add(courseData);
         }
-      } 
+      }
     }
 
     // Обновление данных пользователя в базе данных
@@ -116,7 +119,25 @@ class _HomePageState extends State<HomePage> {
     await userCourseRef.update({"coursesData": coursesData});
 
     print(coursesData);
+
+    if (!tokenFound) {
+      // Проверяем, был ли найден токен после всех итераций
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Указан неверный токен!'),
+        ),
+      );
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const UserData(),
+        ),
+      );
+      return []; // возвращаем пустой список
+    }
+
+    return coursesData; // возвращаем данные о курсах
   }
+
 
   @override
   Widget build(BuildContext context) {
