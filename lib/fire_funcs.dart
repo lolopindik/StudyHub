@@ -132,3 +132,5 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
   return coursesData;
 }
+
+//TODO: нужно прописать функцию, которая будет проходить по курсу, переданным в пользователя

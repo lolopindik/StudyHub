@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/pages/signin_page.dart';
 import 'package:study_hub/pages/signup_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/widgets/CustomLoadingIndicator.dart';
 import 'package:study_hub/widgets/sign_appbar.dart';
 
 class SignUpInPage extends StatefulWidget {
@@ -18,9 +19,12 @@ class SignUpInPageState extends State<SignUpInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.mainColor,
       appBar: buildSignAppBar(context),
-      body: Stack(
+      body: 
+      Stack(
         children: <Widget>[
+          const CustomLoadingIndicator(),
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(

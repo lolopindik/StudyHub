@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:study_hub/pages/home_page.dart';
+import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/sign_appbar.dart';
 import 'package:study_hub/widgets/user_form.dart';
 
@@ -36,6 +37,7 @@ class _UserDataState extends State<UserData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.mainColor,
       appBar: buildSignAppBar(context),
       body: UserDataForm(
         fullnameController: fullnameController,
