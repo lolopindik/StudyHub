@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/CustomLoadingIndicator.dart';
 import 'package:study_hub/widgets/home_appbar.dart';
-import 'package:study_hub/fire%D0%B0func.dart';
+import 'package:study_hub/fire_funcs.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

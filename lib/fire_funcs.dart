@@ -77,10 +77,10 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
           DatabaseReference subjectItemRef = FirebaseDatabase.instance
               .ref()
               .child(
-                  "Courses/$currentCourseNumber/subjects/$currentSubjectNumber");
+              "Courses/$currentCourseNumber/subjects/$currentSubjectNumber");
           DataSnapshot subjectSnapshot = await subjectItemRef.get();
           Map<dynamic, dynamic>? subjectData =
-              subjectSnapshot.value as Map<dynamic, dynamic>?;
+          subjectSnapshot.value as Map<dynamic, dynamic>?;
 
           if (subjectData != null) {
             Map<String, dynamic> subjectDetails = {
@@ -118,19 +118,18 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   }
 
   // Обновление данных пользователя в базе данных
-    DatabaseReference userCourseRef = FirebaseDatabase.instance
-        .ref()
-        .child("UserDetails/$userId/courseProgress");
-    await userCourseRef.update({"coursesData": coursesData});
+  DatabaseReference userCourseRef = FirebaseDatabase.instance
+      .ref()
+      .child("UserDetails/$userId/courseProgress");
+  await userCourseRef.update({"coursesData": coursesData});
 
-    print(coursesData);
+  print(coursesData);
 
   if (!tokenFound) {
     // Проверяем, был ли найден токен после всех итераций
     return []; // возвращаем пустой список
   }
 
+  // Возвращаем только courseProgress
   return coursesData;
 }
-
-//TODO: нужно прописать функцию, которая будет проходить по курсу, переданным в пользователя
