@@ -42,88 +42,86 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   bool tokenFound = false;
   List<Map<String, dynamic>> coursesData = [];
 
-  DatabaseReference userTokenRef = FirebaseDatabase.instance
-      .ref()
-      .child("UserDetails/$userId/courseProgress/courseToken");
-  DataSnapshot userTokenSnapshot = await userTokenRef.get();
-  String? userToken = userTokenSnapshot.value as String?;
-
-  String itemCourse = "course_";
-  for (var i = 1; i <= counter; i++) {
-    String currentCourseNumber = itemCourse + i.toString();
-    DatabaseReference courseTokenRef = FirebaseDatabase.instance
-        .ref()
-        .child("Courses/$currentCourseNumber/token");
-    DataSnapshot courseTokenSnapshot = await courseTokenRef.get();
-    String? courseToken = courseTokenSnapshot.value as String?;
-
-    if (courseToken != null && userToken == courseToken) {
-      tokenFound = true;
-      DatabaseReference courseNameRef = FirebaseDatabase.instance
-          .ref()
-          .child("Courses/$currentCourseNumber/courseName");
-      DataSnapshot courseNameSnapshot = await courseNameRef.get();
-      String? courseName = courseNameSnapshot.value as String?;
-
-      if (courseName != null) {
-        Map<String, dynamic> courseData = {
-          'courseName': courseName,
-          'subjects': <Map<String, dynamic>>[]
-        };
-
-        String itemSubjects = "subject_";
-        for (var j = 1; j <= counter; j++) {
-          String currentSubjectNumber = itemSubjects + j.toString();
-          DatabaseReference subjectItemRef = FirebaseDatabase.instance
-              .ref()
-              .child(
-              "Courses/$currentCourseNumber/subjects/$currentSubjectNumber");
-          DataSnapshot subjectSnapshot = await subjectItemRef.get();
-          Map<dynamic, dynamic>? subjectData =
-          subjectSnapshot.value as Map<dynamic, dynamic>?;
-
-          if (subjectData != null) {
-            Map<String, dynamic> subjectDetails = {
-              'name': subjectData['name'],
-              'lessons': <Map<String, dynamic>>[]
-            };
-
-            // Добавление параметра lessonComplete для каждого урока
-            subjectData['lessons'].forEach((key, value) {
-              Map<String, dynamic> lessonDetails = {
-                'name': value['name'],
-                'documents': value['documents'],
-              };
-
-              // Проверка, был ли урок уже отмечен как завершенный
-              if (value['lessonComplete'] == null) {
-                // Если урок не был отмечен как завершенный, устанавливаем значение по умолчанию (0)
-                lessonDetails['lessonComplete'] = 0;
-              } else {
-                // Если урок уже был отмечен как завершенный, оставляем текущее значение
-                lessonDetails['lessonComplete'] = value['lessonComplete'];
-              }
-
-              (subjectDetails['lessons'] as List<Map<String, dynamic>>)
-                  .add(lessonDetails);
-            });
-
-            (courseData['subjects'] as List<Map<String, dynamic>>)
-                .add(subjectDetails);
-          }
-        }
-        coursesData.add(courseData);
-      }
-    }
-  }
-
-  // Обновление данных пользователя в базе данных
   DatabaseReference userCourseRef = FirebaseDatabase.instance
       .ref()
       .child("UserDetails/$userId/courseProgress");
-  await userCourseRef.update({"coursesData": coursesData});
+  
+  // Получаем текущие данные о прогрессе курса пользователя
+  DataSnapshot userCourseSnapshot = await userCourseRef.get();
+  Map<dynamic, dynamic>? userCourseData =
+      userCourseSnapshot.value as Map<dynamic, dynamic>?;
 
-  print(coursesData);
+  // Если данные о прогрессе курса пользователя существуют, обновляем их
+  if (userCourseData != null) {
+    // Получаем текущий токен пользователя
+    String? userToken = userCourseData['courseToken'] as String?;
+
+    String itemCourse = "course_";
+    for (var i = 1; i <= counter; i++) {
+      String currentCourseNumber = itemCourse + i.toString();
+      DatabaseReference courseTokenRef = FirebaseDatabase.instance
+          .ref()
+          .child("Courses/$currentCourseNumber/token");
+      DataSnapshot courseTokenSnapshot = await courseTokenRef.get();
+      String? courseToken = courseTokenSnapshot.value as String?;
+
+      if (courseToken != null && userToken == courseToken) {
+        tokenFound = true;
+        DatabaseReference courseNameRef = FirebaseDatabase.instance
+            .ref()
+            .child("Courses/$currentCourseNumber/courseName");
+        DataSnapshot courseNameSnapshot = await courseNameRef.get();
+        String? courseName = courseNameSnapshot.value as String?;
+
+        if (courseName != null) {
+          Map<String, dynamic> courseData = {
+            'courseName': courseName,
+            'subjects': <Map<String, dynamic>>[]
+          };
+
+          String itemSubjects = "subject_";
+          for (var j = 1; j <= counter; j++) {
+            String currentSubjectNumber = itemSubjects + j.toString();
+            DatabaseReference subjectItemRef = FirebaseDatabase.instance
+                .ref()
+                .child(
+                    "Courses/$currentCourseNumber/subjects/$currentSubjectNumber");
+            DataSnapshot subjectSnapshot = await subjectItemRef.get();
+            Map<dynamic, dynamic>? subjectData =
+                subjectSnapshot.value as Map<dynamic, dynamic>?;
+
+            if (subjectData != null) {
+              Map<String, dynamic> subjectDetails = {
+                'name': subjectData['name'],
+                'lessons': <Map<String, dynamic>>[]
+              };
+
+              // Добавление параметра lessonComplete для каждого урока
+              subjectData['lessons'].forEach((key, value) {
+                Map<String, dynamic> lessonDetails = {
+                  'name': value['name'],
+                  'documents': value['documents'],
+                  'lessonComplete': value['lessonComplete'] ?? 0,
+                };
+
+                (subjectDetails['lessons'] as List<Map<String, dynamic>>)
+                    .add(lessonDetails);
+              });
+
+              (courseData['subjects'] as List<Map<String, dynamic>>)
+                  .add(subjectDetails);
+            }
+          }
+          coursesData.add(courseData);
+        }
+      }
+    }
+
+    // Обновляем только courseData в текущих данных о прогрессе курса пользователя
+    await userCourseRef.update({
+      "coursesData": coursesData,
+    });
+  }
 
   if (!tokenFound) {
     // Проверяем, был ли найден токен после всех итераций
@@ -133,3 +131,6 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   // Возвращаем только courseProgress
   return coursesData;
 }
+
+
+
