@@ -45,7 +45,7 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   DatabaseReference userCourseRef = FirebaseDatabase.instance
       .ref()
       .child("UserDetails/$userId/courseProgress");
-  
+
   // Получаем текущие данные о прогрессе курса пользователя
   DataSnapshot userCourseSnapshot = await userCourseRef.get();
   Map<dynamic, dynamic>? userCourseData =
@@ -96,12 +96,22 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                 'lessons': <Map<String, dynamic>>[]
               };
 
-              // Добавление параметра lessonComplete для каждого урока
               subjectData['lessons'].forEach((key, value) {
+                int? lessonCompleteFromDB = value['lessonComplete'];
+                int defaultLessonComplete = 0;
+                if (userCourseData['coursesData'] != null && userCourseData['coursesData'][i - 1]['subjects'] != null && userCourseData['coursesData'][i - 1]['subjects'][j - 1] != null) {
+                  var userLessonComplete = userCourseData['coursesData'][i - 1]['subjects'][j - 1]['lessons'].firstWhere(
+                      (lesson) => lesson['name'] == value['name'],
+                      orElse: () => null);
+                  if (userLessonComplete != null && userLessonComplete['lessonComplete'] != null) {
+                    lessonCompleteFromDB = userLessonComplete['lessonComplete'];
+                  }
+                }
+
                 Map<String, dynamic> lessonDetails = {
                   'name': value['name'],
                   'documents': value['documents'],
-                  'lessonComplete': value['lessonComplete'] ?? 0,
+                  'lessonComplete': lessonCompleteFromDB ?? defaultLessonComplete,
                 };
 
                 (subjectDetails['lessons'] as List<Map<String, dynamic>>)
@@ -131,6 +141,4 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   // Возвращаем только courseProgress
   return coursesData;
 }
-
-
 
