@@ -1,20 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/CustomLoadingIndicator.dart';
 import 'package:study_hub/widgets/home_appbar.dart';
 import 'package:study_hub/fire_funcs.dart';
+import 'package:study_hub/pages/lesson_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   String? _userId;
 
   @override
@@ -92,43 +92,57 @@ class _HomePageState extends State<HomePage> {
                                     subjects[index];
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 15),
-                                        child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.95,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.08,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(40),
-                                            color: AppTheme.mainElementColor,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LessonPage(
+                                            lessonData:
+                                                subjectDetails, // Передача данных урока
                                           ),
-                                          child: Center(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 15, right: 15),
-                                              child: Text(
-                                                subjectDetails['name'] ??
-                                                    'Subject Name',
-                                                style:
-                                                    TextStyles.ruberoidLight20,
-                                                overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 15),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.95,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.08,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(40),
+                                              color: AppTheme.mainElementColor,
+                                            ),
+                                            child: Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.only(
+                                                        left: 15, right: 15),
+                                                child: Text(
+                                                  subjectDetails['name'] ??
+                                                      'Subject Name',
+                                                  style: TextStyles.ruberoidLight20,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
