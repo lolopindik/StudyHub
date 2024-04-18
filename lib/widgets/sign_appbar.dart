@@ -11,28 +11,5 @@ import 'package:study_hub/preferences/app_theme.dart';
         style: TextStyles.ruberoidRegular28,
       ),
       centerTitle: true,
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 15),
-          child: Container(
-            width: 38,
-            height: 38,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppTheme.secondaryColor,
-            ),
-            child: IconButton(
-              onPressed: () {
-                // переход к page-настройки 
-              },
-              icon: const Icon(
-                Icons.tune,
-                size: 23,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        )
-      ],
     );
   }
