@@ -12,6 +12,8 @@ class TextStyles {
   static const TextStyle ruberoidLight20 = TextStyle(fontFamily: 'Ruberoid-Light', fontSize: 20, color: Colors.white, );
   static const TextStyle ruberoidLight28 = TextStyle(fontFamily: 'Ruberoid-Light', fontSize: 28, color: Colors.white, );
   static const TextStyle ruberoidLight32 = TextStyle(fontFamily: 'Ruberoid-Light', fontSize: 32, color: Colors.white, );
-  static const TextStyle ruberoidRegular40 = TextStyle(fontFamily: 'Ruberoid-Regular', fontSize: 40, color: Colors.white, );
+
+  static const TextStyle ruberoidRegular20 = TextStyle(fontFamily: 'Ruberoid-Regular', fontSize: 20, color: Colors.white, );
   static const TextStyle ruberoidRegular28 = TextStyle(fontFamily: 'Ruberoid-Regular', fontSize: 28, color: Colors.white, );
+  static const TextStyle ruberoidRegular40 = TextStyle(fontFamily: 'Ruberoid-Regular', fontSize: 40, color: Colors.white, );
 }
