@@ -153,7 +153,8 @@ class _HomePageState extends State<HomePage> {
                 future: compareTokens(_userId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CustomTransparentLoadingIndicator());
+                    return const Center(
+                        child: CustomTransparentLoadingIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
@@ -196,10 +197,10 @@ class _HomePageState extends State<HomePage> {
     double progress = (completedLessons / totalLessons) * 100;
     sections.add(
       PieChartSectionData(
-        color: const Color.fromARGB(255, 14, 207, 123),
+        color: const Color.fromARGB(200, 14, 207, 123),
         value: progress,
         title: '',
-        radius: 50,
+        radius: 57,
       ),
     );
     sections.add(
