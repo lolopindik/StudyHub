@@ -91,15 +91,14 @@ class HomePageState extends State<HomePage> {
                                 final Map<String, dynamic> subjectDetails =
                                     subjects[index];
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.only(top: 2),
                                   child: GestureDetector(
                                     onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => LessonPage(
-                                            lessonData:
-                                                subjectDetails, // Передача данных урока
+                                            lessonData: subjectDetails,
                                           ),
                                         ),
                                       );
@@ -110,7 +109,7 @@ class HomePageState extends State<HomePage> {
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(bottom: 15),
+                                              const EdgeInsets.only(bottom: 10),
                                           child: Container(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -127,13 +126,13 @@ class HomePageState extends State<HomePage> {
                                             ),
                                             child: Center(
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.only(
-                                                        left: 15, right: 15),
+                                                padding: const EdgeInsets.only(
+                                                    left: 15, right: 15),
                                                 child: Text(
                                                   subjectDetails['name'] ??
                                                       'Subject Name',
-                                                  style: TextStyles.ruberoidLight20,
+                                                  style: TextStyles
+                                                      .ruberoidLight20,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
@@ -157,7 +156,7 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           Positioned(
-            top: 30,
+            top: 25,
             left: 0,
             right: 0,
             child: Container(
@@ -171,7 +170,7 @@ class HomePageState extends State<HomePage> {
                         child: CustomTransparentLoadingIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
+                  } else{
                     final List<Map<String, dynamic>> coursesData =
                         snapshot.data ?? [];
                     return PieChart(
@@ -211,7 +210,7 @@ class HomePageState extends State<HomePage> {
     double progress = (completedLessons / totalLessons) * 100;
     sections.add(
       PieChartSectionData(
-        color: const Color.fromARGB(200, 14, 207, 123),
+        color: const Color.fromARGB(227, 77, 167, 69),
         value: progress,
         title: '',
         radius: 57,
@@ -222,7 +221,7 @@ class HomePageState extends State<HomePage> {
         color: AppTheme.mainColor,
         value: 100 - progress,
         title: '',
-        radius: 50,
+        radius: 45,
       ),
     );
 
