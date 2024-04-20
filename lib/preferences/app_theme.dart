@@ -5,6 +5,9 @@ class AppTheme {
   static const Color secondaryColor = Color.fromARGB(255, 27, 27, 27); //1B1B1B
   static const Color signElementColor = Color.fromARGB(83, 27, 27, 27); //! цвет не совпадает с макетом
   static const Color mainElementColor = Color.fromARGB(120, 43, 40, 40); //! цвет не совпадает с макетом
+  static const Color lessonCompleteGreen = Color.fromARGB(150, 77, 167, 69);
+  static const Color lessonCompleteRed = Color.fromARGB(150, 167, 69, 69);
+  static const Color lessonCompleteYellow = Color.fromARGB(255, 167, 164, 69);
 }
 
 class TextStyles {
