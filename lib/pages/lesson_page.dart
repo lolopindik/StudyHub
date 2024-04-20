@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:study_hub/pages/lesson_details.dart';
+import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/widgets/lessons_appbar.dart';
 
 class LessonPage extends StatelessWidget {
   final Map<String, dynamic> lessonData;
@@ -7,21 +10,99 @@ class LessonPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> lessons = lessonData['lessons'] ?? []; //получение списка уроков
+    List<dynamic> lessons = lessonData['lessons'] ?? [];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(lessonData['name'] ?? 'Lesson'),
+      appBar: buildLessonAppBar(context),
+      backgroundColor: AppTheme.secondaryColor,
+      body: Column(
+        children: <Widget>[
+          Container(
+            height: MediaQuery.of(context).size.height * 0.103,
+            color: AppTheme.mainElementColor,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Text(
+                      lessonData['name'] ?? 'Lesson',
+                      style: constraints.maxWidth > 150
+                          ? TextStyles.ruberoidRegular20
+                          : TextStyles.ruberoidRegular28,
+                      overflow: TextOverflow.ellipsis,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: lessons.length,
+              itemBuilder: (context, index) {
+                Map<String, dynamic> lesson = lessons[index];
+                int lessonComplete = lesson['lessonComplete'] ?? 0;
+                BoxDecoration containerDecoration =
+                    _getGradientDecorationForLessonComplete(lessonComplete);
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LessonDetails(lessonData: lesson),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    decoration: containerDecoration,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Text(
+                          lesson['name'] ?? 'Lesson ${index + 1}',
+                          style: TextStyles.ruberoidLight20,
+                          overflow:TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
-      body: ListView.builder(
-        itemCount: lessons.length,
-        itemBuilder: (context, index) {
-          Map<String, dynamic> lesson = lessons[index];
-          return ListTile(
-            title: Text(lesson['name'] ?? 'Lesson ${index + 1}'),
-            onTap: () {},
-          );
-        },
+    );
+  }
+
+  BoxDecoration _getGradientDecorationForLessonComplete(int lessonComplete) {
+    List<Color> colors;
+    switch (lessonComplete) {
+      case 1:
+        colors = [AppTheme.mainColor, AppTheme.lessonCompleteRed];
+        break;
+      case 2:
+        colors = [AppTheme.mainColor, AppTheme.lessonCompleteGreen];
+        break;
+      case 3:
+        colors = [AppTheme.mainColor, AppTheme.lessonCompleteYellow];
+        break;
+      default:
+        colors = [AppTheme.mainElementColor, AppTheme.mainElementColor];
+    }
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(60),
+      gradient: LinearGradient(
+        colors: colors,
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
       ),
     );
   }
