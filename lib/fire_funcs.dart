@@ -93,17 +93,23 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
             if (subjectData != null) {
               Map<String, dynamic> subjectDetails = {
                 'name': subjectData['name'],
-                'lessons': <Map<String, dynamic>>[]
+                'lessons': <Map<String, dynamic>>[],
+                'documents': <Map<String, dynamic>>[],
               };
 
               subjectData['lessons'].forEach((key, value) {
                 int? lessonCompleteFromDB = value['lessonComplete'];
                 int defaultLessonComplete = 0;
-                if (userCourseData['coursesData'] != null && userCourseData['coursesData'][i - 1]['subjects'] != null && userCourseData['coursesData'][i - 1]['subjects'][j - 1] != null) {
-                  var userLessonComplete = userCourseData['coursesData'][i - 1]['subjects'][j - 1]['lessons'].firstWhere(
-                      (lesson) => lesson['name'] == value['name'],
-                      orElse: () => null);
-                  if (userLessonComplete != null && userLessonComplete['lessonComplete'] != null) {
+                if (userCourseData['coursesData'] != null &&
+                    userCourseData['coursesData'][i - 1]['subjects'] != null &&
+                    userCourseData['coursesData'][i - 1]['subjects'][j - 1] !=
+                        null) {
+                  var userLessonComplete = userCourseData['coursesData']
+                      [i - 1]['subjects'][j - 1]['lessons'].firstWhere(
+                          (lesson) => lesson['name'] == value['name'],
+                          orElse: () => null);
+                  if (userLessonComplete != null &&
+                      userLessonComplete['lessonComplete'] != null) {
                     lessonCompleteFromDB = userLessonComplete['lessonComplete'];
                   }
                 }
@@ -117,6 +123,16 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                 (subjectDetails['lessons'] as List<Map<String, dynamic>>)
                     .add(lessonDetails);
               });
+
+              if (subjectData['documents'] != null) {
+                subjectData['documents'].forEach((key, value) {
+                  Map<String, dynamic> documentDetails = {
+                    'name': value['name'],
+                  };
+                  (subjectDetails['documents'] as List<Map<String, dynamic>>)
+                      .add(documentDetails);
+                });
+              }
 
               (courseData['subjects'] as List<Map<String, dynamic>>)
                   .add(subjectDetails);
