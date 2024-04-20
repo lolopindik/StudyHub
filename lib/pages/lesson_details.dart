@@ -85,3 +85,4 @@ class LessonDetails extends StatelessWidget {
     );
   }
 }
+
