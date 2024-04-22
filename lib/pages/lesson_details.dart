@@ -7,8 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class LessonDetails extends StatelessWidget {
   final Map<String, dynamic> lessonData;
+  final inputAnswer = TextEditingController();
 
-  const LessonDetails({required this.lessonData, super.key});
+  LessonDetails({required this.lessonData, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +62,13 @@ class LessonDetails extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 15),
                         child: Row(
                           children: [
-                            const Icon(Icons.description, color: Colors.white54,),
-                            const SizedBox(width: 10,),
+                            const Icon(
+                              Icons.description,
+                              color: Colors.white54,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.75,
                               child: Text(
@@ -80,9 +86,64 @@ class LessonDetails extends StatelessWidget {
               },
             ),
           ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              decoration: const BoxDecoration(
+                color: AppTheme.mainColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                ),
+              ),
+              padding: const EdgeInsets.only(left: 20, top: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      cursorHeight: 18,
+                      controller: inputAnswer,
+                      decoration: const InputDecoration(
+                        hintText: 'Your Answer...',
+                        hintStyle: TextStyles.ruberoidLight20,
+                        enabledBorder: InputBorder.none,
+                      ),
+                      style: TextStyles.ruberoidLight16,
+                      cursorColor: Colors.white,
+                      textAlignVertical: TextAlignVertical.top,
+                      expands: true,
+                      maxLines: null,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10, bottom: 20),
+                      child: Container(
+                        width: 38,
+                        height: 38,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppTheme.secondaryColor,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.send,
+                            color: Colors.white54,
+                          ),
+                          onPressed: () {
+                            debugPrint('tap');
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
-
