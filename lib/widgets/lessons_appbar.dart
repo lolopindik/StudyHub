@@ -3,6 +3,7 @@ import 'package:study_hub/preferences/app_theme.dart';
 
   PreferredSizeWidget? buildLessonAppBar(BuildContext context) {
     return AppBar(
+      scrolledUnderElevation: 0.0,
       automaticallyImplyLeading: false,
       backgroundColor: AppTheme.mainColor,
       title: const Text(

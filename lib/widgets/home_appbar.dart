@@ -4,6 +4,7 @@ import 'package:study_hub/preferences/app_theme.dart';
   PreferredSizeWidget? buildHomeAppBar(BuildContext context) {
     return AppBar(
       //отключение автоматического arrow back
+      scrolledUnderElevation: 0.0,
       automaticallyImplyLeading: false,
       backgroundColor: AppTheme.mainColor,
       title: const Text(
