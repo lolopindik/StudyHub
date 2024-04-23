@@ -45,15 +45,11 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   DatabaseReference userCourseRef = FirebaseDatabase.instance
       .ref()
       .child("UserDetails/$userId/courseProgress");
-
-  // Получаем текущие данные о прогрессе курса пользователя
   DataSnapshot userCourseSnapshot = await userCourseRef.get();
   Map<dynamic, dynamic>? userCourseData =
       userCourseSnapshot.value as Map<dynamic, dynamic>?;
 
-  // Если данные о прогрессе курса пользователя существуют, обновляем их
   if (userCourseData != null) {
-    // Получаем текущий токен пользователя
     String? userToken = userCourseData['courseToken'] as String?;
 
     String itemCourse = "course_";
@@ -100,6 +96,8 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
               subjectData['lessons'].forEach((key, value) {
                 int? lessonCompleteFromDB = value['lessonComplete'];
                 int defaultLessonComplete = 0;
+                String? userAnswerFromDB;
+
                 if (userCourseData['coursesData'] != null &&
                     userCourseData['coursesData'][i - 1]['subjects'] != null &&
                     userCourseData['coursesData'][i - 1]['subjects'][j - 1] !=
@@ -112,6 +110,10 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                       userLessonComplete['lessonComplete'] != null) {
                     lessonCompleteFromDB = userLessonComplete['lessonComplete'];
                   }
+
+                  if (userLessonComplete != null && userLessonComplete['userAnswer'] != null) {
+                    userAnswerFromDB = userLessonComplete['userAnswer'];
+                  }
                 }
 
                 Map<String, dynamic> lessonDetails = {
@@ -119,6 +121,10 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                   'documents': value['documents'],
                   'lessonComplete': lessonCompleteFromDB ?? defaultLessonComplete,
                 };
+
+                if (userAnswerFromDB != null) {
+                  lessonDetails['userAnswer'] = userAnswerFromDB;
+                }
 
                 (subjectDetails['lessons'] as List<Map<String, dynamic>>)
                     .add(lessonDetails);
@@ -143,18 +149,15 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
       }
     }
 
-    // Обновляем только courseData в текущих данных о прогрессе курса пользователя
     await userCourseRef.update({
       "coursesData": coursesData,
     });
   }
 
   if (!tokenFound) {
-    // Проверяем, был ли найден токен после всех итераций
-    return []; // возвращаем пустой список
+    return []; 
   }
 
-  // Возвращаем только courseProgress
   return coursesData;
 }
 
