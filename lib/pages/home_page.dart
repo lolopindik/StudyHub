@@ -39,150 +39,159 @@ class HomePageState extends State<HomePage> {
       backgroundColor: AppTheme.mainColor,
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('lib/assets/images/background.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
+          Positioned.fill(
             child: Container(
-              alignment: Alignment.bottomCenter,
-              height: MediaQuery.of(context).size.height * 0.55,
               decoration: const BoxDecoration(
-                color: AppTheme.secondaryColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
+                image: DecorationImage(
+                  image: AssetImage('lib/assets/images/background.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: compareTokens(_userId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CustomLoadingIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
-                    final List<Map<String, dynamic>> coursesData =
-                        snapshot.data ?? [];
-                    return ListView.builder(
-                      itemCount: coursesData.length,
-                      itemBuilder: (context, index) {
-                        final Map<String, dynamic> courseData =
-                            coursesData[index];
-                        final List<Map<String, dynamic>> subjects =
-                            courseData['subjects'] ?? [];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 10),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: subjects.length,
-                              itemBuilder: (context, index) {
-                                final Map<String, dynamic> subjectDetails =
-                                    subjects[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 2),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => LessonPage(
-                                            lessonData: subjectDetails,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 10),
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.95,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.08,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(40),
-                                              color: AppTheme.mainElementColor,
-                                            ),
-                                            child: Center(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15, right: 15),
-                                                child: Text(
-                                                  subjectDetails['name'] ??
-                                                      'Subject Name',
-                                                  style: TextStyles
-                                                      .ruberoidLight20,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                },
-              ),
             ),
           ),
-          Positioned(
-            top: 25,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 230,
-              padding: const EdgeInsets.all(20),
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: compareTokens(_userId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                        child: CustomTransparentLoadingIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else{
-                    final List<Map<String, dynamic>> coursesData =
-                        snapshot.data ?? [];
-                    return PieChart(
-                      PieChartData(
-                        centerSpaceRadius: 50,
-                        sections: getSections(coursesData),
-                      ),
-                    );
-                  }
-                },
+          Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                    future: compareTokens(_userId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child: CustomTransparentLoadingIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else {
+                        final List<Map<String, dynamic>> coursesData =
+                            snapshot.data ?? [];
+                        return PieChart(
+                          PieChartData(
+                            centerSpaceRadius:
+                                MediaQuery.of(context).size.height * 0.07,
+                            sections: getSections(coursesData),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
               ),
-            ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.secondaryColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
+                    ),
+                  ),
+                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                    future: compareTokens(_userId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CustomLoadingIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else {
+                        final List<Map<String, dynamic>> coursesData =
+                            snapshot.data ?? [];
+                        return ListView.builder(
+                          itemCount: coursesData.length,
+                          itemBuilder: (context, index) {
+                            final Map<String, dynamic> courseData =
+                                coursesData[index];
+                            final List<Map<String, dynamic>> subjects =
+                                courseData['subjects'] ?? [];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: subjects.length,
+                                  itemBuilder: (context, index) {
+                                    final Map<String, dynamic> subjectDetails =
+                                        subjects[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 2),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => LessonPage(
+                                                lessonData: subjectDetails,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 10),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.95,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.08,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(40),
+                                                  color:
+                                                      AppTheme.mainElementColor,
+                                                ),
+                                                // ignore: sort_child_properties_last
+                                                child: Center(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 15,
+                                                            right: 15),
+                                                    child: Text(
+                                                      subjectDetails['name'] ??
+                                                          'Subject Name',
+                                                      style: TextStyles
+                                                          .ruberoidLight20,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                                constraints:
+                                                    const BoxConstraints(
+                                                        maxWidth: 600,
+                                                        minHeight: 60),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -213,7 +222,7 @@ class HomePageState extends State<HomePage> {
         color: const Color.fromARGB(227, 77, 167, 69),
         value: progress,
         title: '',
-        radius: 57,
+        radius: MediaQuery.of(context).size.height * 0.1,
       ),
     );
     sections.add(
@@ -221,10 +230,9 @@ class HomePageState extends State<HomePage> {
         color: AppTheme.mainColor,
         value: 100 - progress,
         title: '',
-        radius: 45,
+        radius: MediaQuery.of(context).size.height * 0.08,
       ),
     );
-
     return sections;
   }
 }
