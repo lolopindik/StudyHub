@@ -55,7 +55,8 @@ class LessonDetailsState extends State<LessonDetails> {
       );
     }
 
-    List<dynamic> documents = widget.lessonData['documents']?.values.toList() ?? [];
+    List<dynamic> documents =
+        widget.lessonData['documents']?.values.toList() ?? [];
 
     return Scaffold(
       appBar: buildLessonAppBar(context),
@@ -65,6 +66,7 @@ class LessonDetailsState extends State<LessonDetails> {
           Container(
             height: MediaQuery.of(context).size.height * 0.103,
             color: AppTheme.mainElementColor,
+            constraints: const BoxConstraints(minHeight: 60),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
@@ -98,6 +100,7 @@ class LessonDetailsState extends State<LessonDetails> {
                     ),
                     margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
                     height: MediaQuery.of(context).size.height * 0.08,
+                    constraints: const BoxConstraints(minHeight: 60),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -173,12 +176,13 @@ class LessonDetailsState extends State<LessonDetails> {
                             Icons.send,
                             color: Colors.white54,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             String answer = inputAnswer.text;
                             if (answer.isEmpty) {
                               return;
                             }
-                            int lessonComplete = widget.lessonData['lessonComplete'] ?? 0;
+                            int lessonComplete =
+                                widget.lessonData['lessonComplete'] ?? 0;
                             if (lessonComplete == 2) {
                               _showConfirmationDialog(answer);
                               return;
@@ -202,7 +206,8 @@ class LessonDetailsState extends State<LessonDetails> {
     );
   }
 
-  Future<void> sendDataToFirebase(String userId, String lessonName, String answer) async {
+  Future<void> sendDataToFirebase(
+      String userId, String lessonName, String answer) async {
     DatabaseReference userCourseRef = FirebaseDatabase.instance
         .reference()
         .child("UserDetails/$userId/courseProgress");
@@ -246,7 +251,7 @@ class LessonDetailsState extends State<LessonDetails> {
           'userAnswer': answer,
           'lessonComplete': 3,
         };
-        
+
         for (var courseData in coursesData) {
           List<dynamic>? subjects = courseData['subjects'];
           if (subjects != null && subjects.isNotEmpty) {
@@ -281,14 +286,23 @@ class LessonDetailsState extends State<LessonDetails> {
         return AlertDialog(
           backgroundColor: AppTheme.mainColor,
           surfaceTintColor: Colors.transparent,
-          title: const Text("Предупреждение!", style: TextStyles.ruberoidLight20,),
-          content: const Text("Вы уверены, что хотите заменить верный ответ? Для его подтверждения нужна будет повторная проверка" , style: TextStyles.ruberoidLight16,),
+          title: const Text(
+            "Предупреждение!",
+            style: TextStyles.ruberoidLight20,
+          ),
+          content: const Text(
+            "Вы уверены, что хотите заменить верный ответ? Для его подтверждения нужна будет повторная проверка",
+            style: TextStyles.ruberoidLight16,
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("Отмена", style: TextStyles.ruberoidLight16,),
+              child: const Text(
+                "Отмена",
+                style: TextStyles.ruberoidLight16,
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -299,7 +313,10 @@ class LessonDetailsState extends State<LessonDetails> {
                   answer,
                 );
               },
-              child: const Text("Подтвердить",style: TextStyles.ruberoidLight16,),
+              child: const Text(
+                "Подтвердить",
+                style: TextStyles.ruberoidLight16,
+              ),
             ),
           ],
         );
