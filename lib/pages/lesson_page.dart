@@ -20,6 +20,7 @@ class LessonPage extends StatelessWidget {
           Container(
             height: MediaQuery.of(context).size.height * 0.103,
             color: AppTheme.mainElementColor,
+            constraints: const BoxConstraints(minHeight: 60,),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
@@ -58,9 +59,10 @@ class LessonPage extends StatelessWidget {
                     );
                   },
                   child: Container(
+                    width: 10,
                     margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                    height: MediaQuery.of(context).size.height * 0.08,
                     decoration: containerDecoration,
+                    constraints: const BoxConstraints(maxWidth: 50, minHeight: 60),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -68,7 +70,7 @@ class LessonPage extends StatelessWidget {
                         child: Text(
                           lesson['name'] ?? 'Lesson ${index + 1}',
                           style: TextStyles.ruberoidLight20,
-                          overflow:TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
