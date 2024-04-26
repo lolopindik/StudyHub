@@ -89,7 +89,7 @@ class _UserDataState extends State<UserData> {
   }
 
   void navigateToHomepage() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const HomePage()),
     );
