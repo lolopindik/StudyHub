@@ -30,6 +30,15 @@ class FirebaseService {
     await auth.signOut();
   }
 
+  Future<void> deleteAcc(String userId) async {
+    try {
+      await FirebaseDatabase.instance.ref("UserDetails/$userId/").remove();
+      await FirebaseAuth.instance.currentUser?.delete();
+    } catch (error) {
+      print("Ошибка при удалении аккаунта: $error");
+    }
+  }
+
 // лучше не использовать из-за багов
   verifyemail() async {
     await currentUser?.sendEmailVerification();
@@ -102,16 +111,17 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                     userCourseData['coursesData'][i - 1]['subjects'] != null &&
                     userCourseData['coursesData'][i - 1]['subjects'][j - 1] !=
                         null) {
-                  var userLessonComplete = userCourseData['coursesData']
-                      [i - 1]['subjects'][j - 1]['lessons'].firstWhere(
-                          (lesson) => lesson['name'] == value['name'],
+                  var userLessonComplete = userCourseData['coursesData'][i - 1]
+                          ['subjects'][j - 1]['lessons']
+                      .firstWhere((lesson) => lesson['name'] == value['name'],
                           orElse: () => null);
                   if (userLessonComplete != null &&
                       userLessonComplete['lessonComplete'] != null) {
                     lessonCompleteFromDB = userLessonComplete['lessonComplete'];
                   }
 
-                  if (userLessonComplete != null && userLessonComplete['userAnswer'] != null) {
+                  if (userLessonComplete != null &&
+                      userLessonComplete['userAnswer'] != null) {
                     userAnswerFromDB = userLessonComplete['userAnswer'];
                   }
                 }
@@ -119,7 +129,8 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                 Map<String, dynamic> lessonDetails = {
                   'name': value['name'],
                   'documents': value['documents'],
-                  'lessonComplete': lessonCompleteFromDB ?? defaultLessonComplete,
+                  'lessonComplete':
+                      lessonCompleteFromDB ?? defaultLessonComplete,
                 };
 
                 if (userAnswerFromDB != null) {
@@ -155,9 +166,8 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   }
 
   if (!tokenFound) {
-    return []; 
+    return [];
   }
 
   return coursesData;
 }
-
