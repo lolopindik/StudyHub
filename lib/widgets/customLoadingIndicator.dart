@@ -18,8 +18,6 @@ class CustomLoadingIndicator extends StatelessWidget {
   }
 }
 
-
-//костыль🔧
 class CustomTransparentLoadingIndicator extends StatelessWidget {
   const CustomTransparentLoadingIndicator({super.key});
 
@@ -29,7 +27,7 @@ class CustomTransparentLoadingIndicator extends StatelessWidget {
       color: Colors.transparent,
       child: const Center(
         child: CircularProgressIndicator(
-          color: Colors.transparent,
+          color: Colors.white70, 
         ),
       ),
     );
