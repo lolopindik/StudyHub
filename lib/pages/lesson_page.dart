@@ -62,7 +62,7 @@ class LessonPage extends StatelessWidget {
                     width: 10,
                     margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
                     decoration: containerDecoration,
-                    constraints: const BoxConstraints(maxWidth: 50, minHeight: 60),
+                    constraints: const BoxConstraints(minHeight: 60),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(

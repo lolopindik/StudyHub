@@ -67,9 +67,10 @@ class SignUpPage extends StatelessWidget {
             ),
           );
 
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const UserData()),
+            
           );
 
         } catch (e) {

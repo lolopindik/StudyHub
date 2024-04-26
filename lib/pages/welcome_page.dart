@@ -14,7 +14,7 @@ class WelcomePage extends StatelessWidget {
           // Проверяем направление свайпа
           if (details.primaryVelocity! < 0) {
             // Переходим на SignUpIn страницу
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (_) => const SignUpInPage(),
               ),
