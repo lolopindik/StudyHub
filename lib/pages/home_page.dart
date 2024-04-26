@@ -49,152 +49,146 @@ class HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  child: FutureBuilder<List<Map<String, dynamic>>>(
-                    future: compareTokens(_userId),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                            child: CustomTransparentLoadingIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else {
-                        final List<Map<String, dynamic>> coursesData =
-                            snapshot.data ?? [];
-                        return PieChart(
-                          PieChartData(
-                            centerSpaceRadius:
-                                MediaQuery.of(context).size.height * 0.07,
-                            sections: getSections(coursesData),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.secondaryColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    ),
-                  ),
-                  child: FutureBuilder<List<Map<String, dynamic>>>(
-                    future: compareTokens(_userId),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CustomLoadingIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else {
-                        final List<Map<String, dynamic>> coursesData =
-                            snapshot.data ?? [];
-                        return ListView.builder(
-                          itemCount: coursesData.length,
-                          itemBuilder: (context, index) {
-                            final Map<String, dynamic> courseData =
-                                coursesData[index];
-                            final List<Map<String, dynamic>> subjects =
-                                courseData['subjects'] ?? [];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 10),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: subjects.length,
-                                  itemBuilder: (context, index) {
-                                    final Map<String, dynamic> subjectDetails =
-                                        subjects[index];
-                                    return Padding(
-                                      padding: const EdgeInsets.only(top: 2),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => LessonPage(
-                                                lessonData: subjectDetails,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 10),
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.95,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.08,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(40),
-                                                  color:
-                                                      AppTheme.mainElementColor,
-                                                ),
-                                                // ignore: sort_child_properties_last
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 15,
-                                                            right: 15),
-                                                    child: Text(
-                                                      subjectDetails['name'] ??
-                                                          'Subject Name',
-                                                      style: TextStyles
-                                                          .ruberoidLight20,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ),
-                                                constraints:
-                                                    const BoxConstraints(
-                                                        maxWidth: 600,
-                                                        minHeight: 60),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
+          _buildContent(),
         ],
       ),
+    );
+  }
+
+  Widget _buildContent() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: compareTokens(_userId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CustomTransparentLoadingIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final List<Map<String, dynamic>> coursesData = snapshot.data ?? [];
+          if (coursesData.isEmpty) {
+            return Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.2,
+                decoration: BoxDecoration(
+                  color: AppTheme.mainColor,
+                  borderRadius: BorderRadius.circular(40)
+                ),
+                child: const Padding(
+                  padding:EdgeInsetsDirectional.symmetric(horizontal: 10),
+                  child: Center(
+                    child: Text(
+                      'Данные курса отсутствуют',
+                      style: TextStyles.ruberoidLight20,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    child: PieChart(
+                      PieChartData(
+                        centerSpaceRadius:
+                            MediaQuery.of(context).size.height * 0.07,
+                        sections: getSections(coursesData),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.secondaryColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      ),
+                    ),
+                    child: _buildCourseList(coursesData),
+                  ),
+                ),
+              ],
+            );
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildCourseList(List<Map<String, dynamic>> coursesData) {
+    return ListView.builder(
+      itemCount: coursesData.length,
+      itemBuilder: (context, index) {
+        final Map<String, dynamic> courseData = coursesData[index];
+        final List<Map<String, dynamic>> subjects =
+            courseData['subjects'] ?? [];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: subjects.length,
+              itemBuilder: (context, index) {
+                final Map<String, dynamic> subjectDetails = subjects[index];
+                return Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LessonPage(
+                            lessonData: subjectDetails,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.95,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: AppTheme.mainElementColor,
+                            ),
+                            // ignore: sort_child_properties_last
+                            child: Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 15, right: 15),
+                                child: Text(
+                                  subjectDetails['name'] ?? 'Subject Name',
+                                  style: TextStyles.ruberoidLight20,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            constraints: const BoxConstraints(minHeight: 60),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
