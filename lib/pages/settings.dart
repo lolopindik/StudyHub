@@ -69,7 +69,6 @@ class _UserSettingsState extends State<UserSettings> {
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.08,
-                        width: MediaQuery.of(context).size.height * 0.5,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(60),
                             color: AppTheme.mainElementColor),
@@ -158,7 +157,6 @@ class _UserSettingsState extends State<UserSettings> {
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.08,
-                        width: MediaQuery.of(context).size.height * 0.5,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(60),
                             color: AppTheme.mainElementColor),
@@ -253,7 +251,6 @@ class _UserSettingsState extends State<UserSettings> {
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.08,
-                        width: MediaQuery.of(context).size.height * 0.5,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(60),
                             color: AppTheme.mainElementColor),
@@ -306,7 +303,6 @@ class _UserSettingsState extends State<UserSettings> {
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.08,
-                        width: MediaQuery.of(context).size.height * 0.5,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(60),
                             color: AppTheme.mainElementColor),
@@ -344,7 +340,6 @@ class _UserSettingsState extends State<UserSettings> {
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.08,
-                        width: MediaQuery.of(context).size.height * 0.5,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(60),
                             color: AppTheme.mainElementColor),
