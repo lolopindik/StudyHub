@@ -7,13 +7,19 @@ class UserDataForm extends StatelessWidget {
   final TextEditingController tokenController;
   final Function sendDataToFirebase;
   final Function navigateToHomepage;
+  final List<String> courses;
+  final String? selectedCourse;
+  final Function(String?) onCourseChanged;
 
   const UserDataForm({
-    super.key, 
+    super.key,
     required this.fullnameController,
     required this.tokenController,
     required this.sendDataToFirebase,
     required this.navigateToHomepage,
+    required this.courses,
+    this.selectedCourse, // Nullable selectedCourse
+    required this.onCourseChanged,
   });
 
   @override
@@ -97,16 +103,21 @@ class UserDataForm extends StatelessWidget {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.only(left: 20, top: 5),
-                                child: TextField(
-                                  obscureText: true,
-                                  controller: tokenController,
-                                  style: TextStyles.ruberoidLight16,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Course token:',
-                                    hintStyle: TextStyles.ruberoidLight20,
-                                    border: InputBorder.none,
-                                  ),
-                                  cursorColor: Colors.white70,
+                                child: DropdownButton<String>(
+                                  value: selectedCourse,
+                                  onChanged: onCourseChanged,
+                                  dropdownColor: AppTheme.mainColor,
+                                  iconEnabledColor: Colors.white54,
+                                  items: courses.map((String course) {
+                                    return DropdownMenuItem<String>(
+                                      value: course,
+                                      child: Text(
+                                        course,
+                                        style: TextStyles.ruberoidLight16,
+                                      ),
+                                    );
+                                  }).toList(),
+                                  underline: Container(),
                                 ),
                               ),
                             ),
