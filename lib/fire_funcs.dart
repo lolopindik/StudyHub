@@ -47,10 +47,6 @@ class FirebaseService {
 }
 
 Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
-  int counter = 10; //! ограниченное число итераций по базе данных
-  bool tokenFound = false;
-  List<Map<String, dynamic>> coursesData = [];
-
   DatabaseReference userCourseRef = FirebaseDatabase.instance
       .ref()
       .child("UserDetails/$userId/courseProgress");
@@ -61,113 +57,73 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   if (userCourseData != null) {
     String? userToken = userCourseData['courseToken'] as String?;
 
-    String itemCourse = "course_";
-    for (var i = 1; i <= counter; i++) {
-      String currentCourseNumber = itemCourse + i.toString();
-      DatabaseReference courseTokenRef = FirebaseDatabase.instance
-          .ref()
-          .child("Courses/$currentCourseNumber/token");
-      DataSnapshot courseTokenSnapshot = await courseTokenRef.get();
-      String? courseToken = courseTokenSnapshot.value as String?;
+    DatabaseReference coursesRef =
+        FirebaseDatabase.instance.ref().child("Courses");
+    DataSnapshot coursesSnapshot = await coursesRef.get();
+    Map<dynamic, dynamic>? coursesData =
+        coursesSnapshot.value as Map<dynamic, dynamic>?;
 
-      if (courseToken != null && userToken == courseToken) {
-        tokenFound = true;
-        DatabaseReference courseNameRef = FirebaseDatabase.instance
-            .ref()
-            .child("Courses/$currentCourseNumber/courseName");
-        DataSnapshot courseNameSnapshot = await courseNameRef.get();
-        String? courseName = courseNameSnapshot.value as String?;
+    if (coursesData != null) {
+      List<Map<String, dynamic>> matchedCourses = [];
 
-        if (courseName != null) {
-          Map<String, dynamic> courseData = {
-            'courseName': courseName,
+      coursesData.forEach((courseKey, courseValue) {
+        if (courseValue['token'] == userToken) {
+          Map<String, dynamic> matchedCourse = {
+            'courseName': courseValue['courseName'],
             'subjects': <Map<String, dynamic>>[]
           };
 
-          String itemSubjects = "subject_";
-          for (var j = 1; j <= counter; j++) {
-            String currentSubjectNumber = itemSubjects + j.toString();
-            DatabaseReference subjectItemRef = FirebaseDatabase.instance
-                .ref()
-                .child(
-                    "Courses/$currentCourseNumber/subjects/$currentSubjectNumber");
-            DataSnapshot subjectSnapshot = await subjectItemRef.get();
-            Map<dynamic, dynamic>? subjectData =
-                subjectSnapshot.value as Map<dynamic, dynamic>?;
+          courseValue['subjects'].forEach((subjectKey, subjectValue) {
+            Map<String, dynamic> matchedSubject = {
+              'name': subjectValue['name'],
+              'lessons': <Map<String, dynamic>>[]
+            };
 
-            if (subjectData != null) {
-              Map<String, dynamic> subjectDetails = {
-                'name': subjectData['name'],
-                'lessons': <Map<String, dynamic>>[],
-                'documents': <Map<String, dynamic>>[],
-              };
+            subjectValue['lessons'].forEach((lessonKey, lessonValue) {
+              int lessonComplete = 0;
+              String userAnswer = '';
 
-              subjectData['lessons'].forEach((key, value) {
-                int? lessonCompleteFromDB = value['lessonComplete'];
-                int defaultLessonComplete = 0;
-                String? userAnswerFromDB;
-
-                if (userCourseData['coursesData'] != null &&
-                    userCourseData['coursesData'][i - 1]['subjects'] != null &&
-                    userCourseData['coursesData'][i - 1]['subjects'][j - 1] !=
-                        null) {
-                  var userLessonComplete = userCourseData['coursesData'][i - 1]
-                          ['subjects'][j - 1]['lessons']
-                      .firstWhere((lesson) => lesson['name'] == value['name'],
-                          orElse: () => null);
-                  if (userLessonComplete != null &&
-                      userLessonComplete['lessonComplete'] != null) {
-                    lessonCompleteFromDB = userLessonComplete['lessonComplete'];
+              if (userCourseData['coursesData'] != null) {
+                userCourseData['coursesData'].forEach((userDataCourse) {
+                  if (userDataCourse['courseName'] ==
+                      courseValue['courseName']) {
+                    userDataCourse['subjects'].forEach((userDataSubject) {
+                      if (userDataSubject['name'] == subjectValue['name']) {
+                        userDataSubject['lessons'].forEach((userDataLesson) {
+                          if (userDataLesson['name'] == lessonValue['name']) {
+                            lessonComplete =
+                                userDataLesson['lessonComplete'] ?? 0;
+                            userAnswer = userDataLesson['userAnswer'] ?? '';
+                          }
+                        });
+                      }
+                    });
                   }
-
-                  if (userLessonComplete != null &&
-                      userLessonComplete['userAnswer'] != null) {
-                    userAnswerFromDB = userLessonComplete['userAnswer'];
-                  }
-                }
-
-                Map<String, dynamic> lessonDetails = {
-                  'name': value['name'],
-                  'documents': value['documents'],
-                  'lessonComplete':
-                      lessonCompleteFromDB ?? defaultLessonComplete,
-                };
-
-                if (userAnswerFromDB != null) {
-                  lessonDetails['userAnswer'] = userAnswerFromDB;
-                }
-
-                (subjectDetails['lessons'] as List<Map<String, dynamic>>)
-                    .add(lessonDetails);
-              });
-
-              if (subjectData['documents'] != null) {
-                subjectData['documents'].forEach((key, value) {
-                  Map<String, dynamic> documentDetails = {
-                    'name': value['name'],
-                  };
-                  (subjectDetails['documents'] as List<Map<String, dynamic>>)
-                      .add(documentDetails);
                 });
               }
 
-              (courseData['subjects'] as List<Map<String, dynamic>>)
-                  .add(subjectDetails);
-            }
-          }
-          coursesData.add(courseData);
+              Map<String, dynamic> matchedLesson = {
+                'name': lessonValue['name'],
+                'documents': lessonValue['documents'],
+                'lessonComplete': lessonComplete,
+                'userAnswer': userAnswer,
+              };
+
+              matchedSubject['lessons'].add(matchedLesson);
+            });
+
+            matchedCourse['subjects'].add(matchedSubject);
+          });
+
+          matchedCourses.add(matchedCourse);
         }
-      }
+      });
+
+      await userCourseRef.update({"coursesData": matchedCourses});
+
+      return matchedCourses;
     }
-
-    await userCourseRef.update({
-      "coursesData": coursesData,
-    });
   }
 
-  if (!tokenFound) {
-    return [];
-  }
-
-  return coursesData;
+  return [];
 }
