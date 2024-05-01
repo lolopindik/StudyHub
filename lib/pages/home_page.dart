@@ -66,26 +66,7 @@ class HomePageState extends State<HomePage> {
         } else {
           final List<Map<String, dynamic>> coursesData = snapshot.data ?? [];
           if (coursesData.isEmpty) {
-            return Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.2,
-                decoration: BoxDecoration(
-                  color: AppTheme.mainColor,
-                  borderRadius: BorderRadius.circular(40)
-                ),
-                child: const Padding(
-                  padding:EdgeInsetsDirectional.symmetric(horizontal: 10),
-                  child: Center(
-                    child: Text(
-                      'Данные курса отсутствуют',
-                      style: TextStyles.ruberoidLight20,
-                      overflow: TextOverflow.fade,
-                    ),
-                  ),
-                ),
-              ),
-            );
+            return _buildNoCoursesContainer();
           } else {
             return Column(
               children: [
@@ -121,6 +102,29 @@ class HomePageState extends State<HomePage> {
           }
         }
       },
+    );
+  }
+
+  Widget _buildNoCoursesContainer() {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: MediaQuery.of(context).size.height * 0.2,
+        decoration: BoxDecoration(
+          color: AppTheme.mainColor,
+          borderRadius: BorderRadius.circular(40)
+        ),
+        child: const Padding(
+          padding:EdgeInsetsDirectional.symmetric(horizontal: 10),
+          child: Center(
+            child: Text(
+              'Данные курса отсутствуют',
+              style: TextStyles.ruberoidLight20,
+              overflow: TextOverflow.fade,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
