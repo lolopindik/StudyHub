@@ -100,7 +100,7 @@ class _UserSettingsState extends State<UserSettings> {
                     label: 'Аккаунт',
                     onTap: () {
                       print('Account');
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AccountInfo()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountInfo()));
                     },
                   ),
                   const SizedBox(height: 20),

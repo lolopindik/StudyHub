@@ -82,7 +82,7 @@ class UserDataForm extends StatelessWidget {
                                   controller: fullnameController,
                                   style: TextStyles.ruberoidLight16,
                                   decoration: const InputDecoration(
-                                    hintText: 'Full name:',
+                                    hintText: 'ФИО:',
                                     hintStyle: TextStyles.ruberoidLight20,
                                     border: InputBorder.none,
                                   ),
