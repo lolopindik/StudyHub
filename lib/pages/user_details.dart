@@ -105,22 +105,21 @@ class _UserDataState extends State<UserData> {
       userDetailsRef.set(userData).then((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Данные успешно отправлены'),
+            content: Text('Данные успешно отправлены', style: TextStyles.ruberoidLight16),
           ),
         );
         navigateToHomepage();
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Не удалось отправить данные: $error'),
-            duration: const Duration(seconds: 2),
+            content: Text('Не удалось отправить данные: $error', style: TextStyles.ruberoidLight16),
           ),
         );
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Поля пусты или пользователь не аутентифицирован'),
+          content: Text('Поля пусты или пользователь не аутентифицирован', style: TextStyles.ruberoidLight16),
         ),
       );
     }

@@ -120,12 +120,21 @@ class AccountInfoState extends State<AccountInfo> {
     return null;
   }
 
+  void _showSuccessSnackbar() {
+    const snackBar = SnackBar(
+      content: Text('Данные успешно изменены', style: TextStyles.ruberoidLight16,),
+      backgroundColor: AppTheme.mainColor,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   void _updateFullNameInfo() {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       _userDetailsRef
           .child(user.uid)
           .update({'fullname': _fullnameController.text});
+          _showSuccessSnackbar();
     }
   }
 

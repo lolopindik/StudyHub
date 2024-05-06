@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_hub/pages/home_page.dart';
+import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/auth.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -32,7 +33,7 @@ class SignInPage extends StatelessWidget {
         if (!EmailValidator.validate(email)) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Неверный формат электронной почты'),
+              content: Text('Неверный формат электронной почты', style: TextStyles.ruberoidLight16),
             ),
           );
           return;
@@ -51,7 +52,7 @@ class SignInPage extends StatelessWidget {
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Аутентификация успешна'),
+              content: Text('Аутентификация успешна', style: TextStyles.ruberoidLight16),
             ),
           );
 
@@ -64,7 +65,7 @@ class SignInPage extends StatelessWidget {
           // Обработка ошибки аутентификации, например, вывод сообщения об ошибке
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Ошибка аутентификации: $e'),
+              content: Text('Ошибка аутентификации: $e', style: TextStyles.ruberoidLight16,),
             ),
           );
         }

@@ -150,7 +150,7 @@ class _UserSettingsState extends State<UserSettings> {
                         await FirebaseService().logOut();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Вы успешно вышли из аккаунта'),
+                            content: Text('Вы успешно вышли из аккаунта', style: TextStyles.ruberoidLight16,),
                             duration: Duration(seconds: 2),
                           ),
                         );
@@ -211,7 +211,7 @@ class _UserSettingsState extends State<UserSettings> {
                           await FirebaseService().deleteAcc(_userId!);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Аккаунт успешно удален'),
+                              content: Text('Аккаунт успешно удален', style: TextStyles.ruberoidLight16,),
                               duration: Duration(seconds: 2),
                             ),
                           );

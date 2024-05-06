@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_hub/pages/user_details.dart';
+import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -31,7 +32,7 @@ class SignUpPage extends StatelessWidget {
         if (!EmailValidator.validate(email)) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Неверный формат электронной почты'),
+              content: Text('Неверный формат электронной почты', style: TextStyles.ruberoidLight16),
             ),
           );
           return;
@@ -41,9 +42,9 @@ class SignUpPage extends StatelessWidget {
         User? currentUser = FirebaseAuth.instance.currentUser;
         if (currentUser != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content:
-                  Text('Пользователь уже аутентифицирован: ${currentUser.uid}'),
+                  Text('Пользователь уже аутентифицирован', style: TextStyles.ruberoidLight16),
             ),
           );
           // Выполните необходимые действия, если пользователь уже аутентифицирован
@@ -63,7 +64,7 @@ class SignUpPage extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content:
-                  Text('Пользователь успешно зарегистрирован: ${user?.uid}'),
+                  Text('Пользователь успешно зарегистрирован: ${user?.uid}', style: TextStyles.ruberoidLight16),
             ),
           );
 
@@ -77,7 +78,7 @@ class SignUpPage extends StatelessWidget {
           // Обработка ошибки регистрации, например, вывод сообщения об ошибке
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Ошибка регистрации: $e'),
+              content: Text('Ошибка регистрации: $e', style: TextStyles.ruberoidLight16),
             ),
           );
         }

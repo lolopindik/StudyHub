@@ -267,13 +267,13 @@ class LessonDetailsState extends State<LessonDetails> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Ответ успешно отправлен'),
+          content: Text('Ответ успешно отправлен', style: TextStyles.ruberoidLight16),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Данные не были отправлены'),
+          content: Text('Данные не были отправлены', style: TextStyles.ruberoidLight16),
         ),
       );
     }
