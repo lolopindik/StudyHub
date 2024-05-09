@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -122,19 +120,21 @@ class AccountInfoState extends State<AccountInfo> {
 
   void _showSuccessSnackbar() {
     const snackBar = SnackBar(
-      content: Text('Данные успешно изменены', style: TextStyles.ruberoidLight16,),
+      content: Text(
+        'Данные обновлены',
+        style: TextStyles.ruberoidLight16,
+      ),
       backgroundColor: AppTheme.mainColor,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void _updateFullNameInfo() {
+  void updateFullNameInfo() {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       _userDetailsRef
           .child(user.uid)
           .update({'fullname': _fullnameController.text});
-          _showSuccessSnackbar();
     }
   }
 
@@ -146,117 +146,62 @@ class AccountInfoState extends State<AccountInfo> {
           .child('courseProgress')
           .update({'courseToken': token});
     }
+    _showSuccessSnackbar();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'Аккаунт',
-          style: TextStyles.ruberoidRegular28,
-        ),
-        centerTitle: true,
-        backgroundColor: AppTheme.mainColor,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 15),
-          child: Container(
-            width: 38,
-            height: 38,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppTheme.secondaryColor,
-            ),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_new,
-                size: 23,
-                color: Colors.grey,
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            onChanged: (value) {
+              _fullnameController.text = value;
+              updateFullNameInfo();
+            },
+            controller: _fullnameController,
+            style: TextStyles.ruberoidLight20,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              labelText: 'ФИО',
+              labelStyle: TextStyles.ruberoidLight16,
             ),
           ),
-        ),
-      ),
-      backgroundColor: AppTheme.secondaryColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
-              ),
-              TextFormField(
-                controller: _fullnameController,
-                style: TextStyles.ruberoidLight16,
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'ФИО',
-                    labelStyle: TextStyles.ruberoidLight16),
-              ),
-              const SizedBox(height: 20),
-              DropdownButton<String>(
-                value: selectedCourse,
-                dropdownColor: AppTheme.mainColor,
-                onChanged: (String? newValue) async {
-                  if (newValue != null) {
-                    setState(() {
-                      selectedCourse = newValue;
-                    });
-                    String? token = await _fetchCourseTokenByName(newValue);
-                    if (token != null) {
-                      setState(() {
-                        selectedCourseToken = token;
-                      });
-                      _updateCourseInfo(selectedCourseToken!);
-                    }
-                  }
-                },
-                items: _courses.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyles.ruberoidLight16,
-                    ),
-                  );
-                }).toList(),
-                underline: Container(),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    print('chanched data');
-                    _updateFullNameInfo();
-                  },
-                  child: Container(
-                    width: 240,
-                    height: 51,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                      color: AppTheme.mainColor,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Редактировать',
-                        style: TextStyles.ruberoidLight20,
-                      ),
-                    ),
+          DropdownButton<String>(
+            value: selectedCourse,
+            dropdownColor: AppTheme.mainColor,
+            onChanged: (String? newValue) async {
+              if (newValue != null) {
+                setState(() {
+                  selectedCourse = newValue;
+                });
+                String? token =
+                    await _fetchCourseTokenByName(newValue);
+                if (token != null) {
+                  setState(() {
+                    selectedCourseToken = token;
+                  });
+                  _updateCourseInfo(selectedCourseToken!);
+                }
+              }
+            },
+            items: _courses.map<DropdownMenuItem<String>>(
+              (String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: TextStyles.ruberoidLight20,
                   ),
-                ),
-              ),
-            ],
+                );
+              },
+            ).toList(),
+            underline: Container(),
           ),
-        ),
+        ],
       ),
     );
   }

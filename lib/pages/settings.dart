@@ -9,7 +9,10 @@ import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/settings_appbar.dart';
 
 class UserSettings extends StatefulWidget {
-  const UserSettings(BuildContext context, {super.key});
+  const UserSettings(
+    BuildContext context, {
+    super.key,
+  });
 
   @override
   State<UserSettings> createState() => _UserSettingsState();
@@ -68,6 +71,43 @@ class _UserSettingsState extends State<UserSettings> {
     );
   }
 
+  Future<void> _showAccountInfoDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.mainColor,
+          surfaceTintColor: Colors.transparent,
+          content: const AccountInfo(),
+          actions: <Widget>[
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                width: 38,
+                height: 38,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppTheme.secondaryColor,
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 23,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +140,7 @@ class _UserSettingsState extends State<UserSettings> {
                     label: 'Аккаунт',
                     onTap: () {
                       print('Account');
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountInfo()));
+                      _showAccountInfoDialog();
                     },
                   ),
                   const SizedBox(height: 20),
@@ -150,7 +190,10 @@ class _UserSettingsState extends State<UserSettings> {
                         await FirebaseService().logOut();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Вы успешно вышли из аккаунта', style: TextStyles.ruberoidLight16,),
+                            content: Text(
+                              'Вы успешно вышли из аккаунта',
+                              style: TextStyles.ruberoidLight16,
+                            ),
                             duration: Duration(seconds: 2),
                           ),
                         );
@@ -209,9 +252,13 @@ class _UserSettingsState extends State<UserSettings> {
                         print('Deleting account...');
                         try {
                           await FirebaseService().deleteAcc(_userId!);
+                          await FirebaseService().logOut();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Аккаунт успешно удален', style: TextStyles.ruberoidLight16,),
+                              content: Text(
+                                'Аккаунт успешно удален',
+                                style: TextStyles.ruberoidLight16,
+                              ),
                               duration: Duration(seconds: 2),
                             ),
                           );
