@@ -26,7 +26,6 @@ PreferredSizeWidget? buildSettingsAppBar(BuildContext context) {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage()),
-                //todo: проверить
               );
             },
           icon: const Icon(
