@@ -62,7 +62,8 @@ class HomePageState extends State<HomePage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CustomTransparentLoadingIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          debugPrint('Error: ${snapshot.error}');
+          return _buildNoCoursesContainer();
         } else {
           final List<Map<String, dynamic>> coursesData = snapshot.data ?? [];
           if (coursesData.isEmpty) {
