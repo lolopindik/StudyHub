@@ -25,7 +25,7 @@ PreferredSizeWidget? buildHomeAppBar(BuildContext context) {
           ),
           child: IconButton(
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => UserSettings(context)),
               );
