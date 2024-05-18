@@ -134,6 +134,7 @@ class HomePageState extends State<HomePage> {
       itemCount: coursesData.length,
       itemBuilder: (context, index) {
         final Map<String, dynamic> courseData = coursesData[index];
+        debugPrint('проверка home_page: $courseData');
         final List<Map<String, dynamic>> subjects =
             courseData['subjects'] ?? [];
         return Column(
@@ -197,6 +198,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  //todo: переделать под новую структуру хранения прогресса
   List<PieChartSectionData> getSections(
       List<Map<String, dynamic>> coursesData) {
     List<PieChartSectionData> sections = [];

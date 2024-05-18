@@ -11,6 +11,7 @@ class LessonPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<dynamic> lessons = lessonData['lessons'] ?? [];
+    debugPrint('проверка LessonPage: $lessons');
 
     return Scaffold(
       appBar: buildLessonAppBar(context),
