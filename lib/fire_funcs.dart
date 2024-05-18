@@ -80,33 +80,9 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
             };
 
             subjectValue['lessons'].forEach((lessonKey, lessonValue) {
-              int lessonComplete = 0;
-              String userAnswer = '';
-
-              if (userCourseData['coursesData'] != null) {
-                userCourseData['coursesData'].forEach((userDataCourse) {
-                  if (userDataCourse['courseName'] ==
-                      courseValue['courseName']) {
-                    userDataCourse['subjects'].forEach((userDataSubject) {
-                      if (userDataSubject['name'] == subjectValue['name']) {
-                        userDataSubject['lessons'].forEach((userDataLesson) {
-                          if (userDataLesson['name'] == lessonValue['name']) {
-                            lessonComplete =
-                                userDataLesson['lessonComplete'] ?? 0;
-                            userAnswer = userDataLesson['userAnswer'] ?? '';
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
-              }
-
               Map<String, dynamic> matchedLesson = {
                 'name': lessonValue['name'],
-                'documents': lessonValue['documents'],
-                'lessonComplete': lessonComplete,
-                'userAnswer': userAnswer,
+                'materials': lessonValue['materials'],
               };
 
               matchedSubject['lessons'].add(matchedLesson);
