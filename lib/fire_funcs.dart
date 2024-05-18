@@ -73,17 +73,47 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
             'subjects': <Map<String, dynamic>>[]
           };
 
-          courseValue['subjects'].forEach((subjectKey, subjectValue) {
+          Map<dynamic, dynamic>? subjects = courseValue['subjects'] as Map<dynamic, dynamic>?;
+          subjects?.forEach((subjectKey, subjectValue) {
             Map<String, dynamic> matchedSubject = {
               'name': subjectValue['name'],
               'lessons': <Map<String, dynamic>>[]
             };
 
-            subjectValue['lessons'].forEach((lessonKey, lessonValue) {
+            Map<dynamic, dynamic>? lessons = subjectValue['lessons'] as Map<dynamic, dynamic>?;
+            lessons?.forEach((lessonKey, lessonValue) {
               Map<String, dynamic> matchedLesson = {
                 'name': lessonValue['name'],
-                'materials': lessonValue['materials'],
+                'materials': {}
               };
+
+              if (lessonValue['materials'] != null) {
+                matchedLesson['materials'] = {};
+
+                // Process materials
+                Map<dynamic, dynamic>? materials = lessonValue['materials'] as Map<dynamic, dynamic>?;
+                materials?.forEach((materialKey, materialValue) {
+                  matchedLesson['materials'][materialKey] = materialValue;
+                });
+
+                // Handle nested objects in materials
+                if (materials?['test'] != null) {
+                  Map<String, dynamic> test = {
+                    'question': materials?['test']['question'],
+                    'anwers': List<String>.from(materials?['test']['anwers']),
+                    'correct_anwer': materials?['test']['correct_anwer']
+                  };
+                  matchedLesson['materials']['test'] = test;
+                }
+
+                if (materials?['entry_field'] != null) {
+                  matchedLesson['materials']['entry_field'] = materials?['entry_field'];
+                }
+
+                if (materials?['theory'] != null) {
+                  matchedLesson['materials']['theory'] = materials?['theory'];
+                }
+              }
 
               matchedSubject['lessons'].add(matchedLesson);
             });
