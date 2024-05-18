@@ -18,9 +18,12 @@ class _LessonDetailsState extends State<LessonDetails> {
 
   @override
   Widget build(BuildContext context) {
+    // Получение данных теории
+    Map<String, dynamic>? test = widget.lessonData['materials']['test'];
+    List<dynamic>? answers = test?['anwers'];
     String theory = widget.lessonData['materials']['theory'] ?? '';
-    String question = widget.lessonData['materials']['test']?['question'] ?? '';
-    bool entryField = widget.lessonData['materials']['test']?['entry_field'] ?? false;
+    String question = test?['question'] ?? '';
+    bool entryField = widget.lessonData['materials']['entry_field'] ?? false;
 
     return Scaffold(
       appBar: buildLessonAppBar(context),
@@ -54,33 +57,59 @@ class _LessonDetailsState extends State<LessonDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (theory.isNotEmpty) ...[
-                      const Text(
-                        'Theory:',
-                        style: TextStyle(),
-                      ),
-                      const SizedBox(height: 5),
                       Text(
                         theory,
                         style: TextStyles.ruberoidLight16,
                       ),
                       const SizedBox(height: 20),
                     ],
-                    if (question.isNotEmpty)
+                    if (question.isNotEmpty) ...[
+                      const SizedBox(height: 5),
                       Text(
-                        'Question: $question',
-                        style: TextStyles.ruberoidLight20,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Entry field: $entryField',
+                        question,
                         style: TextStyles.ruberoidLight16,
                       ),
                       const SizedBox(height: 20),
+                      if (answers != null) ...[
+                        const Text(
+                          'Answers:',
+                          style: TextStyles.ruberoidLight16,
+                        ),
+                        const SizedBox(height: 5),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: answers.map<Widget>((answer) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Text(
+                                  answer.toString(),
+                                  style: TextStyles.ruberoidLight16,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ],
+                    if (entryField) ...[
+                      TextField(
+                        controller: inputAnswer,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Enter your answer',
+                          labelStyle: TextStyles.ruberoidLight16,
+                          hintStyle: TextStyles.ruberoidLight16
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ],
                 ),
               ),
