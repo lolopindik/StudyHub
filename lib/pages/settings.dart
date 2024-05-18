@@ -302,6 +302,7 @@ class _UserSettingsState extends State<UserSettings> {
                       print('Message to support');
                     },
                   ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ],
