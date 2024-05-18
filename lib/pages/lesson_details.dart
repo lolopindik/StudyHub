@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/lessons_appbar.dart';
 
