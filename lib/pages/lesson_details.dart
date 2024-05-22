@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/lessons_appbar.dart';
@@ -18,7 +16,6 @@ class _LessonDetailsState extends State<LessonDetails> {
 
   @override
   Widget build(BuildContext context) {
-    // Получение данных теории
     Map<String, dynamic>? test = widget.lessonData['materials']['test'];
     List<dynamic>? answers = test?['anwers'];
     String theory = widget.lessonData['materials']['theory'] ?? '';
@@ -41,19 +38,9 @@ class _LessonDetailsState extends State<LessonDetails> {
                 constraints: const BoxConstraints(minHeight: 60),
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Text(
-                          widget.lessonData['name'] ?? 'Lesson',
-                          style: constraints.maxWidth > 150
-                              ? TextStyles.ruberoidRegular20
-                              : TextStyles.ruberoidRegular28,
-                          overflow: TextOverflow.ellipsis,
-                        );
-                      },
-                    ),
-                  ),
+                      padding: const EdgeInsets.only(left: 15, right: 15),
+                      child: Text(widget.lessonData['name'] ?? 'Lesson',
+                          style: TextStyles.ruberoidRegular20)),
                 ),
               ),
               Padding(
@@ -64,40 +51,108 @@ class _LessonDetailsState extends State<LessonDetails> {
                     if (theory.isNotEmpty) ...[
                       Text(
                         theory,
-                        style: TextStyles.ruberoidLight16,
+                        style: TextStyles.ruberoidLight20,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                     ],
-                    if (question.isNotEmpty) ...[
-                      const SizedBox(height: 5),
-                      Text(
-                        question,
-                        style: TextStyles.ruberoidLight16,
-                      ),
-                      const SizedBox(height: 20),
-                      if (answers != null) ...[
-                        const Text(
-                          'Answers:',
-                          style: TextStyles.ruberoidLight16,
-                        ),
-                        const SizedBox(height: 5),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: answers.map<Widget>((answer) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text(
-                                  answer.toString(),
-                                  style: TextStyles.ruberoidLight16,
-                                ),
-                              );
-                            }).toList(),
+                    if (answers != null && question.isNotEmpty) ...[
+                      Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 450),
+                          decoration: const BoxDecoration(
+                            color: AppTheme.mainColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return Center(
+                                  child: Text(
+                                    question,
+                                    style: TextStyles.ruberoidLight20,
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow
+                                        .clip,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                      ],
+                      ),
+                      Center(
+                        child: Container(
+                          height: 10,
+                          color: AppTheme.mainElementColor,
+                          constraints: const BoxConstraints(maxWidth: 450),
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 450),
+                          child: ListView.builder(
+                            shrinkWrap:true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: answers.length,
+                            itemBuilder: (context, index) {
+                              bool isLastIndex = index == answers.length - 1;
+                              return LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        constraints:
+                                            const BoxConstraints(minHeight: 35),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.mainElementColor,
+                                          borderRadius: isLastIndex
+                                              ? const BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(20),
+                                                  bottomRight:
+                                                      Radius.circular(20),
+                                                )
+                                              : BorderRadius.zero,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 10),
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.08,
+                                            decoration: BoxDecoration(
+                                              color: AppTheme.mainColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                  answers[index].toString(),
+                                                  style: TextStyles
+                                                      .ruberoidLight18,
+                                                  textAlign: TextAlign.center,
+                                                  overflow: TextOverflow.clip),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ],
+                    const SizedBox(height: 40),
                     if (entryField) ...[
                       TextField(
                         controller: inputAnswer,
@@ -105,7 +160,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                           border: OutlineInputBorder(),
                           labelText: 'Enter your answer',
                           labelStyle: TextStyles.ruberoidLight16,
-                          hintStyle: TextStyles.ruberoidLight16
+                          hintStyle: TextStyles.ruberoidLight16,
                         ),
                       ),
                       const SizedBox(height: 20),
