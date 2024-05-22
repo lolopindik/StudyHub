@@ -60,7 +60,7 @@ class LessonPage extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    width: 10,
+                    height: MediaQuery.of(context).size.height * 0.08,
                     margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), color: AppTheme.mainElementColor),//!
                     constraints: const BoxConstraints(minHeight: 60),
