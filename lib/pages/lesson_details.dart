@@ -74,7 +74,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                                 return Center(
                                   child: Text(
                                     question,
-                                    style: TextStyles.ruberoidLight20,
+                                    style: TextStyles.ruberoidRegular20,
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow
                                         .clip,
@@ -130,7 +130,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                                             decoration: BoxDecoration(
                                               color: AppTheme.mainColor,
                                               borderRadius:
-                                                  BorderRadius.circular(20),
+                                                  BorderRadius.circular(60),
                                             ),
                                             child: Center(
                                               child: Text(
@@ -152,6 +152,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                         ),
                       ),
                     ],
+                    //todo: реализоать красивый TextField
                     const SizedBox(height: 40),
                     if (entryField) ...[
                       TextField(
