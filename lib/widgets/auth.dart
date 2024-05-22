@@ -57,17 +57,19 @@ class AuthPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(60),
                             color: AppTheme.signElementColor,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20, top: 23),
-                            child: TextField(
-                              controller: emailController,
-                              style: TextStyles.ruberoidLight16,
-                              decoration: const InputDecoration(
-                                hintText: 'Email:',
-                                hintStyle: TextStyles.ruberoidLight20,
-                                border: InputBorder.none,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: TextField(
+                                controller: emailController,
+                                style: TextStyles.ruberoidLight16,
+                                decoration: const InputDecoration(
+                                  hintText: 'Email:',
+                                  hintStyle: TextStyles.ruberoidLight20,
+                                  border: InputBorder.none,
+                                ),
+                                cursorColor: Colors.white70,
                               ),
-                              cursorColor: Colors.white70,
                             ),
                           ),
                         ),
@@ -81,18 +83,20 @@ class AuthPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(60),
                             color: AppTheme.signElementColor,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20, top: 23),
-                            child: TextField(
-                              obscureText: true,
-                              controller: passwordController,
-                              style: TextStyles.ruberoidLight16,
-                              decoration: const InputDecoration(
-                                hintText: 'Password:',
-                                hintStyle: TextStyles.ruberoidLight20,
-                                border: InputBorder.none,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: TextField(
+                                obscureText: true,
+                                controller: passwordController,
+                                style: TextStyles.ruberoidLight16,
+                                decoration: const InputDecoration(
+                                  hintText: 'Password:',
+                                  hintStyle: TextStyles.ruberoidLight20,
+                                  border: InputBorder.none,
+                                ),
+                                cursorColor: Colors.white70,
                               ),
-                              cursorColor: Colors.white70,
                             ),
                           ),
                         ),
