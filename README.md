@@ -1,16 +1,7 @@
-# study_hub
+<h1>Study Hub<h1>
 
-A new Flutter project.
+<h2>Demonstration of the program visual: <h2>
 
-## Getting Started
+![wellcome_page](https://github.com/lolopindik/StudyHub/assets/136455904/1f4bf672-6c91-45a2-895d-10bd709028c3)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![main](https://github.com/lolopindik/StudyHub/assets/136455904/3c8aed6f-b181-485b-acb3-49615b5ee763)
