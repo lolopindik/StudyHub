@@ -50,7 +50,8 @@ class _LessonDetailsState extends State<LessonDetails> {
                 children: [
                   if (theory.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.only(top: 20, left: 15, right: 10),
+                      padding:
+                          const EdgeInsets.only(top: 20, left: 15, right: 10),
                       child: Text(
                         theory,
                         style: TextStyles.ruberoidLight20,
@@ -94,32 +95,42 @@ class _LessonDetailsState extends State<LessonDetails> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: answers.length,
                                 itemBuilder: (context, index) {
-                                  bool isLastIndex = index == answers.length - 1;
+                                  bool isLastIndex =
+                                      index == answers.length - 1;
                                   return Column(
                                     children: [
                                       Container(
-                                        constraints: const BoxConstraints(minHeight: 60),
+                                        constraints:
+                                            const BoxConstraints(minHeight: 60),
                                         decoration: BoxDecoration(
                                           color: AppTheme.mainElementColor,
                                           borderRadius: isLastIndex
                                               ? const BorderRadius.only(
-                                                  bottomLeft: Radius.circular(20),
-                                                  bottomRight: Radius.circular(20),
+                                                  bottomLeft:
+                                                      Radius.circular(20),
+                                                  bottomRight:
+                                                      Radius.circular(20),
                                                 )
                                               : BorderRadius.zero,
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 12),
                                           child: Container(
-                                            height: MediaQuery.of(context).size.height * 0.08,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.08,
                                             decoration: BoxDecoration(
                                               color: AppTheme.mainColor,
-                                              borderRadius: BorderRadius.circular(60),
+                                              borderRadius:
+                                                  BorderRadius.circular(60),
                                             ),
                                             child: Center(
                                               child: Text(
                                                 answers[index].toString(),
-                                                style: TextStyles.ruberoidLight18,
+                                                style:
+                                                    TextStyles.ruberoidLight18,
                                                 textAlign: TextAlign.center,
                                                 overflow: TextOverflow.clip,
                                               ),
@@ -219,10 +230,10 @@ class _LessonDetailsState extends State<LessonDetails> {
           ),
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 20, bottom: 10),
+              padding: const EdgeInsets.only(top:25,right: 20, bottom: 10),
               child: Container(
                 width: 38,
                 height: 38,
@@ -230,9 +241,14 @@ class _LessonDetailsState extends State<LessonDetails> {
                   shape: BoxShape.circle,
                   color: AppTheme.secondaryColor,
                 ),
-                child: const Icon(
-                  Icons.send,
-                  color: Colors.white54,
+                child: IconButton(
+                  onPressed: () {
+                    debugPrint(inputAnswer.text);
+                  },
+                  icon: const Icon(
+                    Icons.send,
+                    color: Colors.white54,
+                  ),
                 ),
               ),
             ),
