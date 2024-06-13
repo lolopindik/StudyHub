@@ -214,6 +214,7 @@ class _LessonDetailsState extends State<LessonDetails> {
           child: Padding(
             padding: const EdgeInsets.only(top: 20, left: 15),
             child: TextField(
+              autofocus: true,
               controller: inputAnswer,
               cursorHeight: 18,
               decoration: const InputDecoration(
