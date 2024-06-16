@@ -26,8 +26,8 @@ class _LessonDetailsState extends State<LessonDetails> {
       appBar: buildLessonAppBar(context),
       backgroundColor: AppTheme.secondaryColor,
       body: RawScrollbar(
-        thumbColor: AppTheme.mainColor,
-        thickness: 4,
+        thumbColor: Colors.white70,
+        thickness: 2,
         radius: const Radius.circular(10.0),
         child: SingleChildScrollView(
           child: Column(
@@ -213,20 +213,22 @@ class _LessonDetailsState extends State<LessonDetails> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(top: 20, left: 15),
-            child: TextField(
-              autofocus: true,
-              controller: inputAnswer,
-              cursorHeight: 18,
-              decoration: const InputDecoration(
-                hintText: 'Введите ответ: ',
-                hintStyle: TextStyles.ruberoidLight20,
-                enabledBorder: InputBorder.none,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: TextField(
+                autofocus: true,
+                controller: inputAnswer,
+                cursorHeight: 18,
+                decoration: const InputDecoration(
+                  hintText: 'Введите ответ: ', //todo добавить изменение текста в state
+                  hintStyle: TextStyles.ruberoidLight20,
+                  enabledBorder: InputBorder.none,
+                  border: InputBorder.none
+                ),
+                style: TextStyles.ruberoidLight16,
+                cursorColor: Colors.white,
+                maxLines: 4,
               ),
-              style: TextStyles.ruberoidLight16,
-              cursorColor: Colors.white,
-              textAlignVertical: TextAlignVertical.top,
-              expands: true,
-              maxLines: null,
             ),
           ),
         ),
@@ -234,7 +236,7 @@ class _LessonDetailsState extends State<LessonDetails> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top:25,right: 20, bottom: 10),
+              padding: const EdgeInsets.only(top:25,right: 20, bottom: 10, left: 20),
               child: Container(
                 width: 38,
                 height: 38,
