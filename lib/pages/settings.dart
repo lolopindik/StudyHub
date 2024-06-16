@@ -102,14 +102,140 @@ class _UserSettingsState extends State<UserSettings> {
               ),
             ),
           ],
-          
         );
       },
     );
   }
 
+  Future<void> _confirmAction({
+    required String title,
+    required String content,
+    required Function onConfirm,
+  }) async {
+    bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.mainColor,
+          surfaceTintColor: Colors.transparent,
+          title: Text(
+            title,
+            style: TextStyles.ruberoidRegular20,
+          ),
+          content: Text(
+            content,
+            style: TextStyles.ruberoidLight16,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text(
+                'Отмена',
+                style: TextStyles.ruberoidLight16,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text(
+                'Подтвердить',
+                style: TextStyles.ruberoidLight16,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirm == true) {
+      await onConfirm();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> settings = [
+      {
+        'icon': Icons.person,
+        'label': 'Аккаунт',
+        'onTap': () => _showAccountInfoDialog(),
+      },
+      {
+        'icon': Icons.logout,
+        'label': 'Выход',
+        'onTap': () async {
+          await _confirmAction(
+            title: 'Подтвердите выход',
+            content: 'Вы уверены, что хотите выйти из аккаунта?',
+            onConfirm: () async {
+              await FirebaseService().logOut();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Вы успешно вышли из аккаунта',
+                    style: TextStyles.ruberoidLight16,
+                  ),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SignUpInPage(),
+                ),
+              );
+            },
+          );
+        },
+      },
+      {
+        'icon': Icons.delete_forever_outlined,
+        'label': 'Удалить аккаунт',
+        'onTap': () async {
+          await _confirmAction(
+            title: 'Подтвердите удаление аккаунта',
+            content:
+                'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить и приведет к потере всех данных.',
+            onConfirm: () async {
+              try {
+                await FirebaseService().deleteAcc(_userId!);
+                await FirebaseService().logOut();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Аккаунт успешно удален',
+                      style: TextStyles.ruberoidLight16,
+                    ),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignUpInPage(),
+                  ),
+                );
+              } catch (error) {
+                print("Ошибка при удалении аккаунта: $error");
+              }
+            },
+          );
+        },
+      },
+      {
+        'icon': Icons.code,
+        'label': 'О программе',
+        'onTap': () => print('About program'),
+      },
+      {
+        'icon': Icons.bug_report_outlined,
+        'label': 'Сообщить об ошибке',
+        'onTap': () => print('Message to support'),
+      },
+    ];
+
     return Scaffold(
       appBar: buildSettingsAppBar(context),
       backgroundColor: AppTheme.secondaryColor,
@@ -135,146 +261,16 @@ class _UserSettingsState extends State<UserSettings> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  _buildSettingItem(
-                    icon: Icons.person,
-                    label: 'Аккаунт',
-                    onTap: () {
-                      print('Account');
-                      _showAccountInfoDialog();
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  _buildSettingItem(
-                    icon: Icons.logout,
-                    label: 'Выход',
-                    onTap: () async {
-                      bool confirmLogout = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: AppTheme.mainColor,
-                            surfaceTintColor: Colors.transparent,
-                            title: const Text(
-                              'Подтвердите выход',
-                              style: TextStyles.ruberoidRegular20,
-                            ),
-                            content: const Text(
-                              'Вы уверены, что хотите выйти из аккаунта?',
-                              style: TextStyles.ruberoidLight16,
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                                child: const Text(
-                                  'Отмена',
-                                  style: TextStyles.ruberoidLight16,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                                child: const Text(
-                                  'Выйти',
-                                  style: TextStyles.ruberoidLight16,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      if (confirmLogout == true) {
-                        print('Exit from account');
-                        await FirebaseService().logOut();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Вы успешно вышли из аккаунта',
-                              style: TextStyles.ruberoidLight16,
-                            ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignUpInPage(),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  _buildSettingItem(
-                    icon: Icons.delete_forever_outlined,
-                    label: 'Удалить аккаунт',
-                    onTap: () async {
-                      bool confirmDelete = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: AppTheme.mainColor,
-                            surfaceTintColor: Colors.transparent,
-                            title: const Text(
-                              'Подтвердите удаление аккаунта',
-                              style: TextStyles.ruberoidRegular20,
-                            ),
-                            content: const Text(
-                              'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить и приведет к потере всех данных.',
-                              style: TextStyles.ruberoidLight16,
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                                child: const Text(
-                                  'Отмена',
-                                  style: TextStyles.ruberoidLight16,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                                child: const Text(
-                                  'Удалить',
-                                  style: TextStyles.ruberoidLight16,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      if (confirmDelete == true) {
-                        print('Deleting account...');
-                        try {
-                          await FirebaseService().deleteAcc(_userId!);
-                          await FirebaseService().logOut();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Аккаунт успешно удален',
-                                style: TextStyles.ruberoidLight16,
-                              ),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignUpInPage(),
-                            ),
-                          );
-                        } catch (error) {
-                          print("Ошибка при удалении аккаунта: $error");
-                        }
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
+                  ...settings.take(3).map((setting) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: _buildSettingItem(
+                        icon: setting['icon'],
+                        label: setting['label'],
+                        onTap: setting['onTap'],
+                      ),
+                    );
+                  }),
                   const Text(
                     'Дополнительные',
                     style: TextStyles.ruberoidLight28,
@@ -287,22 +283,16 @@ class _UserSettingsState extends State<UserSettings> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  _buildSettingItem(
-                    icon: Icons.code,
-                    label: 'О программе',
-                    onTap: () {
-                      print('About program');
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  _buildSettingItem(
-                    icon: Icons.bug_report_outlined,
-                    label: 'Сообщить об ошибке',
-                    onTap: () {
-                      print('Message to support');
-                    },
-                  ),
-                  const SizedBox(height: 20),
+                  ...settings.skip(3).map((setting) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: _buildSettingItem(
+                        icon: setting['icon'],
+                        label: setting['label'],
+                        onTap: setting['onTap'],
+                      ),
+                    );
+                  }),
                 ],
               ),
             ],
