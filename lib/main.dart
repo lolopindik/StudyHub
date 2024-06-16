@@ -9,6 +9,7 @@ import 'package:study_hub/pages/home_page.dart';
 import 'package:study_hub/pages/sign_up_in.dart';
 import 'package:study_hub/pages/user_details.dart';
 import 'package:study_hub/pages/welcome_page.dart';
+import 'package:study_hub/preferences/app_theme.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -61,6 +62,14 @@ void main() async {
 
     runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
+       theme: ThemeData(
+        primarySwatch: Colors.grey,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white70, 
+          selectionColor: AppTheme.secondaryColor, 
+          selectionHandleColor: Colors.white70 
+        ),
+      ),
       home: initialPage,
     ));
   });
