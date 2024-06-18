@@ -112,7 +112,7 @@ class _UserSettingsState extends State<UserSettings> {
     required String content,
     required Function onConfirm,
   }) async {
-    bool confirm = await showDialog(
+    bool? confirm = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -127,23 +127,28 @@ class _UserSettingsState extends State<UserSettings> {
             style: TextStyles.ruberoidLight16,
           ),
           actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text(
-                'Отмена',
-                style: TextStyles.ruberoidLight16,
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text(
-                'Подтвердить',
-                style: TextStyles.ruberoidLight16,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text(
+                    'Отмена',
+                    style: TextStyles.ruberoidLight15,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text(
+                    'Подтвердить',
+                    style: TextStyles.ruberoidLight15
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -197,7 +202,7 @@ class _UserSettingsState extends State<UserSettings> {
           await _confirmAction(
             title: 'Подтвердите удаление аккаунта',
             content:
-                'Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить и приведет к потере всех данных.',
+                'Вы уверены, что хотите удалить аккаунт?',
             onConfirm: () async {
               try {
                 await FirebaseService().deleteAcc(_userId!);
