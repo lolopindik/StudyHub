@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -21,29 +19,20 @@ void main() async {
 
   final FirebaseService firebaseService = FirebaseService();
 
-  final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
-  connectedRef.onValue.listen((event) {
-    final connected = event.snapshot.value as bool? ?? false;
-    if (connected) {
-      debugPrint("Dataabse: Connected.");
-    } else {
-      debugPrint("Dataabse: Not connected.");
-    }
-  });
 
   firebaseService.onListenUser((user) async {
     bool isFirstLaunch = await firebaseService.isFirstLaunch();
 
     Widget initialPage;
-
+    
     if (user == null) {
       if (isFirstLaunch) {
         await firebaseService.setFirstLaunch(false);
         initialPage = const WelcomePage();
-        print('first launch, no user');
+        debugPrint('first launch, no user');
       } else {
         initialPage = const SignUpInPage();
-        print('no user');
+        debugPrint('no user');
       }
     } else {
       final ref = FirebaseDatabase.instance.ref();
@@ -51,18 +40,18 @@ void main() async {
           .child('UserDetails/${user.uid}/courseProgress/courseToken')
           .get();
       if (tokenSnapshot.value != null) {
-        print('Токен курса: ${tokenSnapshot.value}');
-        print('user $user');
+        debugPrint('Токен курса: ${tokenSnapshot.value}');
+        debugPrint('user $user');
         initialPage = const HomePage();
       } else {
-        print('no token');
+        debugPrint('no token');
         initialPage = const UserData();
       }
     }
 
     runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
-       theme: ThemeData(
+      theme: ThemeData(
         primarySwatch: Colors.grey,
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.white70, 

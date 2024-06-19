@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, avoid_print
 
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,14 +75,16 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
             'subjects': <Map<String, dynamic>>[]
           };
 
-          Map<dynamic, dynamic>? subjects = courseValue['subjects'] as Map<dynamic, dynamic>?;
+          Map<dynamic, dynamic>? subjects =
+              courseValue['subjects'] as Map<dynamic, dynamic>?;
           subjects?.forEach((subjectKey, subjectValue) {
             Map<String, dynamic> matchedSubject = {
               'name': subjectValue['name'],
               'lessons': <Map<String, dynamic>>[]
             };
 
-            Map<dynamic, dynamic>? lessons = subjectValue['lessons'] as Map<dynamic, dynamic>?;
+            Map<dynamic, dynamic>? lessons =
+                subjectValue['lessons'] as Map<dynamic, dynamic>?;
             lessons?.forEach((lessonKey, lessonValue) {
               Map<String, dynamic> matchedLesson = {
                 'name': lessonValue['name'],
@@ -91,7 +95,8 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                 matchedLesson['materials'] = {};
 
                 // Process materials
-                Map<dynamic, dynamic>? materials = lessonValue['materials'] as Map<dynamic, dynamic>?;
+                Map<dynamic, dynamic>? materials =
+                    lessonValue['materials'] as Map<dynamic, dynamic>?;
                 materials?.forEach((materialKey, materialValue) {
                   matchedLesson['materials'][materialKey] = materialValue;
                 });
@@ -107,7 +112,8 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                 }
 
                 if (materials?['entry_field'] != null) {
-                  matchedLesson['materials']['entry_field'] = materials?['entry_field'];
+                  matchedLesson['materials']['entry_field'] =
+                      materials?['entry_field'];
                 }
 
                 if (materials?['theory'] != null) {

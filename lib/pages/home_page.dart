@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/CustomLoadingIndicator.dart';
+import 'package:study_hub/widgets/empty_container.dart';
 import 'package:study_hub/widgets/home_appbar.dart';
 import 'package:study_hub/fire_funcs.dart';
 import 'package:study_hub/pages/lesson_page.dart';
@@ -63,11 +64,11 @@ class HomePageState extends State<HomePage> {
           return const Center(child: CustomTransparentLoadingIndicator());
         } else if (snapshot.hasError) {
           debugPrint('Error: ${snapshot.error}');
-          return _buildNoCoursesContainer();
+          return buildEmptyContaine('Данные курса отсутствуют', context);
         } else {
-          final List<Map<String, dynamic>> coursesData = snapshot.data ?? [];
-          if (coursesData.isEmpty) {
-            return _buildNoCoursesContainer();
+          final List<Map<String, dynamic>>? coursesData = snapshot.data;
+          if (coursesData == null || coursesData.isEmpty) {
+            return buildEmptyContaine('Данные курса отсутствуют', context);
           } else {
             return Column(
               children: [
@@ -103,29 +104,6 @@ class HomePageState extends State<HomePage> {
           }
         }
       },
-    );
-  }
-
-  Widget _buildNoCoursesContainer() {
-    return Center(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        height: MediaQuery.of(context).size.height * 0.2,
-        decoration: BoxDecoration(
-          color: AppTheme.mainColor,
-          borderRadius: BorderRadius.circular(40)
-        ),
-        child: const Padding(
-          padding:EdgeInsetsDirectional.symmetric(horizontal: 10),
-          child: Center(
-            child: Text(
-              'Данные курса отсутствуют',
-              style: TextStyles.ruberoidLight20,
-              overflow: TextOverflow.fade,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -166,11 +144,10 @@ class HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(40),
                         color: AppTheme.mainElementColor,
                       ),
-                      // ignore: sort_child_properties_last
+                      constraints: const BoxConstraints(minHeight: 60),
                       child: Center(
                         child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 15, right: 15),
+                          padding: const EdgeInsets.only(left: 15, right: 15),
                           child: Text(
                             subjectDetails['name'] ?? 'Subject Name',
                             style: TextStyles.ruberoidLight20,
@@ -178,7 +155,6 @@ class HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      constraints: const BoxConstraints(minHeight: 60),
                     ),
                   ),
                 );
@@ -190,7 +166,6 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  //todo: переделать под новую структуру хранения прогресса
   List<PieChartSectionData> getSections(
       List<Map<String, dynamic>> coursesData) {
     List<PieChartSectionData> sections = [];
