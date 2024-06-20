@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   String? _userId;
+  late Future<List<Map<String, dynamic>>> _futureCoursesData;
 
   @override
   void initState() {
@@ -29,8 +30,15 @@ class HomePageState extends State<HomePage> {
     if (user != null) {
       setState(() {
         _userId = user.uid;
+        _futureCoursesData = compareTokens(_userId);
       });
     }
+  }
+
+  Future<void> _refreshData() async {
+    setState(() {
+      _futureCoursesData = compareTokens(_userId);
+    });
   }
 
   @override
@@ -58,7 +66,7 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildContent() {
     return FutureBuilder<List<Map<String, dynamic>>>(
-      future: compareTokens(_userId),
+      future: _futureCoursesData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CustomTransparentLoadingIndicator());
@@ -72,19 +80,7 @@ class HomePageState extends State<HomePage> {
           } else {
             return Column(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: PieChart(
-                      PieChartData(
-                        centerSpaceRadius:
-                            MediaQuery.of(context).size.height * 0.07,
-                        sections: getSections(coursesData),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildRefreshableHeader(context, coursesData),
                 Expanded(
                   flex: 1,
                   child: Container(
@@ -104,6 +100,27 @@ class HomePageState extends State<HomePage> {
           }
         }
       },
+    );
+  }
+
+  Widget _buildRefreshableHeader(BuildContext context, List<Map<String, dynamic>> coursesData) {
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      color: Colors.white70,
+      backgroundColor: AppTheme.signElementColor,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: PieChart(
+            PieChartData(
+              centerSpaceRadius: MediaQuery.of(context).size.height * 0.07,
+              sections: getSections(coursesData),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -166,8 +183,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  List<PieChartSectionData> getSections(
-      List<Map<String, dynamic>> coursesData) {
+  List<PieChartSectionData> getSections(List<Map<String, dynamic>> coursesData) {
     List<PieChartSectionData> sections = [];
     int totalLessons = 0;
     int completedLessons = 0;

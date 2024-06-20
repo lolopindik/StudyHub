@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/pages/home_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 
 PreferredSizeWidget? buildSettingsAppBar(BuildContext context) {
@@ -23,11 +22,8 @@ PreferredSizeWidget? buildSettingsAppBar(BuildContext context) {
         ),
         child: IconButton(
           onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            },
+            Navigator.pop(context, true);
+          },
           icon: const Icon(
             Icons.arrow_back_ios_new,
             size: 23,
