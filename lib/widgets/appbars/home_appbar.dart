@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/pages/settings.dart';
+import 'package:study_hub/pages/settings/settings.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 
 PreferredSizeWidget? buildHomeAppBar(BuildContext context) {

@@ -2,13 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:study_hub/fire_funcs.dart';
-import 'package:study_hub/pages/home_page.dart';
-import 'package:study_hub/pages/sign_up_in.dart';
-import 'package:study_hub/pages/user_details.dart';
-import 'package:study_hub/pages/welcome_page.dart';
+import 'package:study_hub/backend/fire_funcs.dart';
+import 'package:study_hub/pages/home/home_page.dart';
+import 'package:study_hub/pages/user/user_details.dart';
+import 'package:study_hub/pages/home/welcome_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'firebase_options.dart';
+import 'backend/firebase_options.dart';
+import 'pages/auth/sign_up_in.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:study_hub/pages/home_page.dart';
+import 'package:study_hub/pages/home/home_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/sign_appbar.dart';
-import 'package:study_hub/widgets/user_form.dart';
+import 'package:study_hub/widgets/appbars/sign_appbar.dart';
+import 'package:study_hub/widgets/forms/user_form.dart';
 
 class UserData extends StatefulWidget {
   const UserData({super.key});

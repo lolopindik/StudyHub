@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/lessons_appbar.dart';
+import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
 
 class LessonDetails extends StatefulWidget {
   final Map<String, dynamic> lessonData;

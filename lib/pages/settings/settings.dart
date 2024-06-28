@@ -2,11 +2,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:study_hub/fire_funcs.dart';
-import 'package:study_hub/pages/account_info.dart';
-import 'package:study_hub/pages/sign_up_in.dart';
+import 'package:study_hub/backend/fire_funcs.dart';
+import 'package:study_hub/pages/user/account_info.dart';
+import 'package:study_hub/pages/auth/sign_up_in.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/settings_appbar.dart';
+import 'package:study_hub/widgets/appbars/settings_appbar.dart';
 
 class UserSettings extends StatefulWidget {
   const UserSettings(

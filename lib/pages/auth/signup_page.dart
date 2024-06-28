@@ -3,9 +3,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_hub/pages/user_details.dart';
+import 'package:study_hub/pages/user/user_details.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/auth.dart';
+import 'package:study_hub/widgets/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatelessWidget {

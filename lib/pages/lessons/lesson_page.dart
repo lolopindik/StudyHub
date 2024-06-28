@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/pages/lesson_details.dart';
+import 'package:study_hub/pages/lessons/lesson_details.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/lessons_appbar.dart';
+import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
 
 class LessonPage extends StatelessWidget {
   final Map<String, dynamic> lessonData;
