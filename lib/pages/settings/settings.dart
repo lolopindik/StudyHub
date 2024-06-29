@@ -1,7 +1,7 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_hub/backend/fire_funcs.dart';
 import 'package:study_hub/pages/user/account_info.dart';
 import 'package:study_hub/pages/auth/sign_up_in.dart';
@@ -9,10 +9,7 @@ import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/settings_appbar.dart';
 
 class UserSettings extends StatefulWidget {
-  const UserSettings(
-    BuildContext context, {
-    super.key,
-  });
+  const UserSettings({super.key});
 
   @override
   State<UserSettings> createState() => _UserSettingsState();
@@ -145,7 +142,7 @@ class _UserSettingsState extends State<UserSettings> {
                   },
                   child: const Text(
                     'Подтвердить',
-                    style: TextStyles.ruberoidLight15
+                    style: TextStyles.ruberoidLight15,
                   ),
                 ),
               ],
@@ -201,8 +198,7 @@ class _UserSettingsState extends State<UserSettings> {
         'onTap': () async {
           await _confirmAction(
             title: 'Подтвердите удаление аккаунта',
-            content:
-                'Вы уверены, что хотите удалить аккаунт?',
+            content: 'Вы уверены, что хотите удалить аккаунт?',
             onConfirm: () async {
               try {
                 await FirebaseService().deleteAcc(_userId!);
@@ -223,7 +219,7 @@ class _UserSettingsState extends State<UserSettings> {
                   ),
                 );
               } catch (error) {
-                print("Ошибка при удалении аккаунта: $error");
+                debugPrint("Ошибка при удалении аккаунта: $error");
               }
             },
           );
@@ -232,75 +228,81 @@ class _UserSettingsState extends State<UserSettings> {
       {
         'icon': Icons.code,
         'label': 'О программе',
-        'onTap': () => print('About program'),
+        'onTap': () => debugPrint('About program'),
       },
       {
         'icon': Icons.bug_report_outlined,
         'label': 'Сообщить об ошибке',
-        'onTap': () => print('Message to support'),
+        'onTap': () => debugPrint('Message to support'),
       },
     ];
 
-    return Scaffold(
-      appBar: buildSettingsAppBar(context),
-      backgroundColor: AppTheme.secondaryColor,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'Основные',
-                    style: TextStyles.ruberoidLight28,
-                  ),
-                  SizedBox(
-                    width: 156,
-                    height: 4,
-                    child: Container(
-                      color: AppTheme.mainColor,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, true);
+        return true;
+      },
+      child: Scaffold(
+        appBar: buildSettingsAppBar(context),
+        backgroundColor: AppTheme.secondaryColor,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Основные',
+                      style: TextStyles.ruberoidLight28,
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ...settings.take(3).map((setting) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: _buildSettingItem(
-                        icon: setting['icon'],
-                        label: setting['label'],
-                        onTap: setting['onTap'],
+                    SizedBox(
+                      width: 156,
+                      height: 4,
+                      child: Container(
+                        color: AppTheme.mainColor,
                       ),
-                    );
-                  }),
-                  const Text(
-                    'Дополнительные',
-                    style: TextStyles.ruberoidLight28,
-                  ),
-                  SizedBox(
-                    width: 265,
-                    height: 4,
-                    child: Container(
-                      color: AppTheme.mainColor,
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ...settings.skip(3).map((setting) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: _buildSettingItem(
-                        icon: setting['icon'],
-                        label: setting['label'],
-                        onTap: setting['onTap'],
+                    const SizedBox(height: 20),
+                    ...settings.take(3).map((setting) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: _buildSettingItem(
+                          icon: setting['icon'],
+                          label: setting['label'],
+                          onTap: setting['onTap'],
+                        ),
+                      );
+                    }),
+                    const Text(
+                      'Дополнительные',
+                      style: TextStyles.ruberoidLight28,
+                    ),
+                    SizedBox(
+                      width: 265,
+                      height: 4,
+                      child: Container(
+                        color: AppTheme.mainColor,
                       ),
-                    );
-                  }),
-                ],
-              ),
-            ],
+                    ),
+                    const SizedBox(height: 20),
+                    ...settings.skip(3).map((setting) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: _buildSettingItem(
+                          icon: setting['icon'],
+                          label: setting['label'],
+                          onTap: setting['onTap'],
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

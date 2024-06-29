@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:study_hub/pages/settings/settings.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/elements/empty_container.dart';
-import 'package:study_hub/widgets/appbars/home_appbar.dart';
 import 'package:study_hub/backend/fire_funcs.dart';
 import 'package:study_hub/pages/lessons/lesson_page.dart';
 import 'package:study_hub/widgets/loading/customLoadingIndicator.dart';
@@ -41,6 +41,17 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> navigateToSettings() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const UserSettings()),
+    );
+
+    if (result == true) {
+      _refreshData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +74,44 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  PreferredSizeWidget? buildHomeAppBar(BuildContext context) {
+  return AppBar(
+    //отключение автоматического arrow back
+    scrolledUnderElevation: 0.0,
+    automaticallyImplyLeading: false,
+    backgroundColor: AppTheme.mainColor,
+    title: const Text(
+      'StudyHub',
+      style: TextStyles.ruberoidRegular28,
+    ),
+    centerTitle: true,
+    actions: [
+      Padding(
+        padding: const EdgeInsets.only(right: 15),
+        child: Container(
+          width: 38,
+          height: 38,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppTheme.secondaryColor,
+          ),
+          child: IconButton(
+            onPressed: () {
+              navigateToSettings();
+            },
+            icon: const Icon(
+              Icons.tune,
+              size: 23,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      )
+    ],
+  );
+}
+
 
   Widget _buildContent() {
     return FutureBuilder<List<Map<String, dynamic>>>(
