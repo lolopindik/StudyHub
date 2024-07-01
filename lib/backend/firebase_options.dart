@@ -68,4 +68,5 @@ class DefaultFirebaseOptions {
     databaseURL: dotenv.env['DATABASE_URL'] ?? 'DATABASE_URL NOT FOUND',
     iosBundleId: dotenv.env['IOS_BUNDLER'] ?? 'IOS_BUNDLER NOT FOUND',
   );
+
 }
