@@ -18,6 +18,7 @@ class _LessonDetailsState extends State<LessonDetails> {
   Widget build(BuildContext context) {
     Map<String, dynamic>? test = widget.lessonData['materials']['test'];
     List<dynamic>? answers = test?['anwers'];
+    String url = widget.lessonData['materials']['url'] ?? '';
     String theory = widget.lessonData['materials']['theory'] ?? '';
     String question = test?['question'] ?? '';
     bool entryField = widget.lessonData['materials']['entry_field'] ?? false;
@@ -52,22 +53,69 @@ class _LessonDetailsState extends State<LessonDetails> {
                     children: [
                       if (theory.isNotEmpty)
                         Padding(
-                          padding:
-                              const EdgeInsets.only(top: 20, left: 15, right: 10),
+                          padding: const EdgeInsets.only(
+                              top: 20, left: 15, right: 10),
                           child: Text(
                             theory,
                             style: TextStyles.ruberoidLight20,
                           ),
                         ),
-                      const SizedBox(height: 40),
-                      if (answers != null && question.isNotEmpty)
+                      if(url.isNotEmpty)...{
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        //todo: need to add webview
+                        onTap: () {
+                          debugPrint('link pushed');
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60),
+                            color: AppTheme.mainElementColor,
+                          ),
+                          margin: const EdgeInsets.only(
+                              left: 15, right: 15, top: 15),
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          constraints: const BoxConstraints(minHeight: 60),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.link,
+                                    color: Colors.white54,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.75,
+                                    child: Text(
+                                      url,
+                                      style: TextStyles.ruberoidLight16,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      },
+                      if (answers != null && question.isNotEmpty)...{
                         Column(
                           children: [
+                            const SizedBox(height: 40),
                             Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Container(
-                                  constraints: const BoxConstraints(maxWidth: 450),
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 450),
                                   decoration: const BoxDecoration(
                                     color: AppTheme.mainColor,
                                     borderRadius: BorderRadius.only(
@@ -89,12 +137,15 @@ class _LessonDetailsState extends State<LessonDetails> {
                             ),
                             Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Container(
-                                  constraints: const BoxConstraints(maxWidth: 450),
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 450),
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: answers.length,
                                     itemBuilder: (context, index) {
                                       bool isLastIndex =
@@ -102,8 +153,8 @@ class _LessonDetailsState extends State<LessonDetails> {
                                       return Column(
                                         children: [
                                           Container(
-                                            constraints:
-                                                const BoxConstraints(minHeight: 60),
+                                            constraints: const BoxConstraints(
+                                                minHeight: 60),
                                             decoration: BoxDecoration(
                                               color: AppTheme.mainElementColor,
                                               borderRadius: isLastIndex
@@ -116,8 +167,10 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                   : BorderRadius.zero,
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 10, vertical: 12),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 12),
                                               child: Container(
                                                 height: MediaQuery.of(context)
                                                         .size
@@ -131,8 +184,8 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                 child: Center(
                                                   child: Text(
                                                     answers[index].toString(),
-                                                    style:
-                                                        TextStyles.ruberoidLight18,
+                                                    style: TextStyles
+                                                        .ruberoidLight18,
                                                     textAlign: TextAlign.center,
                                                     overflow: TextOverflow.clip,
                                                   ),
@@ -149,9 +202,9 @@ class _LessonDetailsState extends State<LessonDetails> {
                             ),
                           ],
                         ),
+                      },
                       const SizedBox(height: 40),
-                      if (entryField)
-                      const SizedBox(height: 80),
+                      if (entryField) const SizedBox(height: 80),
                     ],
                   ),
                 ],
@@ -260,8 +313,8 @@ class _LessonDetailsState extends State<LessonDetails> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                        right: 20, bottom: 10, left: 20),
+                    padding:
+                        const EdgeInsets.only(right: 20, bottom: 10, left: 20),
                     child: Container(
                       width: 38,
                       height: 38,
