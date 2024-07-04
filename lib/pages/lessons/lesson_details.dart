@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
@@ -57,55 +60,58 @@ class _LessonDetailsState extends State<LessonDetails> {
                               top: 20, left: 15, right: 10),
                           child: Text(
                             theory,
-                            style: TextStyles.ruberoidLight20,
+                            style: TextStyles.ruberoidLight18,
                           ),
                         ),
-                      if(url.isNotEmpty)...{
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        //todo: need to add webview
-                        onTap: () {
-                          debugPrint('link pushed');
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60),
-                            color: AppTheme.mainElementColor,
-                          ),
-                          margin: const EdgeInsets.only(
-                              left: 15, right: 15, top: 15),
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          constraints: const BoxConstraints(minHeight: 60),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.link,
-                                    color: Colors.white54,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.75,
-                                    child: Text(
-                                      url,
-                                      style: TextStyles.ruberoidLight16,
-                                      overflow: TextOverflow.ellipsis,
+                      if (url.isNotEmpty) ...{
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          //todo: need to add webview
+                          onTap: () {
+                            debugPrint('link pushed');
+                            if (Platform.isAndroid) {
+                              _showDialog(url);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60),
+                              color: AppTheme.mainElementColor,
+                            ),
+                            margin: const EdgeInsets.only(
+                                left: 15, right: 15, top: 15),
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            constraints: const BoxConstraints(minHeight: 60),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.link,
+                                      color: Colors.white54,
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.75,
+                                      child: Text(
+                                        url,
+                                        style: TextStyles.ruberoidLight16,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
                       },
-                      if (answers != null && question.isNotEmpty)...{
+                      if (answers != null && question.isNotEmpty) ...{
                         Column(
                           children: [
                             const SizedBox(height: 40),
@@ -340,5 +346,87 @@ class _LessonDetailsState extends State<LessonDetails> {
         ),
       ),
     );
+  }
+
+  Future<void> _showDialog(String url) async {
+    if (Platform.isAndroid) {
+      await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: AppTheme.mainColor,
+            surfaceTintColor: Colors.transparent,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Text(
+                    url,
+                    style: TextStyles.ruberoidLight16,
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  
+                  TextButton(
+                    child: const Text('Нет', style: TextStyles.ruberoidLight16),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: const Text(
+                      'Да',
+                      style: TextStyles.ruberoidLight16,
+                    ),
+                    onPressed: () {
+                      //todo: add func to open webview or url_launcher
+                      debugPrint('url confirmed');
+                    },
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    }
+    if (Platform.isIOS) {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          content: Text(
+            url,
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: [CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                isDefaultAction: true,
+                child: const Text(
+                  'Нет',
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                )),
+            CupertinoDialogAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  //todo: add func to open webview or url_launcher
+                  debugPrint('url confirmed');
+                },
+                child: const Text(
+                  'Да',
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ))
+          ],
+        ),
+      );
+    }
   }
 }
