@@ -55,7 +55,6 @@ class DefaultFirebaseOptions {
     appId: dotenv.env['APP_ID_ANDROID'] ?? 'APP_ID NOT FOUND',
     messagingSenderId: dotenv.env['MESSAGING_ID'] ?? 'MESSAGING_ID NOT FOUND',
     projectId: dotenv.env['PROJECT_ID'] ?? 'PROJECT_ID NOT FOUND',
-    storageBucket: dotenv.env['STTORAGE_ID'] ?? 'STTORAGE_ID NOT FOUND',
     databaseURL: dotenv.env['DATABASE_URL'] ?? 'DATABASE_URL NOT FOUND',
   );
 
@@ -64,7 +63,6 @@ class DefaultFirebaseOptions {
     appId: dotenv.env['APP_ID_IOS'] ?? 'APP_ID NOT FOUND',
     messagingSenderId: dotenv.env['MESSAGING_ID'] ?? 'MESSAGING_ID NOT FOUND',
     projectId: dotenv.env['PROJECT_ID'] ?? 'PROJECT_ID NOT FOUND',
-    storageBucket: dotenv.env['STTORAGE_ID'] ?? 'STTORAGE_ID NOT FOUND',
     databaseURL: dotenv.env['DATABASE_URL'] ?? 'DATABASE_URL NOT FOUND',
     iosBundleId: dotenv.env['IOS_BUNDLER'] ?? 'IOS_BUNDLER NOT FOUND',
   );
