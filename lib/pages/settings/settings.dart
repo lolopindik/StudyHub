@@ -71,27 +71,40 @@ class _UserSettingsState extends State<UserSettings> {
   }
 
   Future<void> _showAccountInfoDialog() async {
-    //todo: this part dosn't work witth ios due to <<content: const AccountInfo(),>>
-    // if (Platform.isIOS) {
-    //   await showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) => CupertinoAlertDialog(
-    //       content: const AccountInfo(),
-    //       actions: [
-    //         CupertinoDialogAction(
-    //           onPressed: () {
-    //             Navigator.pop(context);
-    //           },
-    //           isDefaultAction: true,
-    //           child: const Text(
-    //             'Назад',
-    //             style: TextStyle(fontSize: 18, color: Colors.black),
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // } else 
+    if (Platform.isIOS) {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color.fromARGB(255, 148, 148, 148),
+            surfaceTintColor: Colors.transparent,
+            content: const AccountInfo(),
+            actions: <Widget>[
+              Center(
+                child: Container(
+                  width: 76,
+                  height: 38,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 179, 173, 173),
+                    borderRadius: BorderRadius.all(Radius.circular(40))
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 23,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } else 
     if (Platform.isAndroid) {
       await showDialog(
         context: context,
@@ -101,14 +114,13 @@ class _UserSettingsState extends State<UserSettings> {
             surfaceTintColor: Colors.transparent,
             content: const AccountInfo(),
             actions: <Widget>[
-              Align(
-                alignment: Alignment.bottomLeft,
+              Center(
                 child: Container(
-                  width: 38,
+                  width: 76,
                   height: 38,
                   decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
                     color: AppTheme.secondaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(40))
                   ),
                   child: IconButton(
                     onPressed: () {
