@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
@@ -46,8 +47,12 @@ class _LessonDetailsState extends State<LessonDetails> {
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(widget.lessonData['name'] ?? 'Lesson',
-                            style: TextStyles.ruberoidRegular20),
+                        child: AutoSizeText(
+                          widget.lessonData['name'] ?? 'Lesson',
+                          style: TextStyles.ruberoidRegular20,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                        ),
                       ),
                     ),
                   ),
@@ -59,6 +64,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                           padding: const EdgeInsets.only(
                               top: 20, left: 15, right: 10),
                           child: Text(
+                            textAlign: TextAlign.start,
                             theory,
                             style: TextStyles.ruberoidLight18,
                           ),
@@ -373,7 +379,6 @@ class _LessonDetailsState extends State<LessonDetails> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  
                   TextButton(
                     child: const Text('Нет', style: TextStyles.ruberoidLight16),
                     onPressed: () {
@@ -405,7 +410,8 @@ class _LessonDetailsState extends State<LessonDetails> {
             url,
             style: const TextStyle(fontSize: 16),
           ),
-          actions: [CupertinoDialogAction(
+          actions: [
+            CupertinoDialogAction(
                 onPressed: () {
                   Navigator.pop(context);
                 },

@@ -3,6 +3,8 @@ import 'package:study_hub/pages/lessons/lesson_details.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
 
+import 'package:auto_size_text/auto_size_text.dart';
+
 class LessonPage extends StatelessWidget {
   final Map<String, dynamic> lessonData;
 
@@ -27,12 +29,11 @@ class LessonPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    return Text(
+                    return AutoSizeText(
                       lessonData['name'] ?? 'Lesson',
-                      style: constraints.maxWidth > 150
-                          ? TextStyles.ruberoidRegular20
-                          : TextStyles.ruberoidRegular28,
-                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.ruberoidLight20,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
                     );
                   },
                 ),
@@ -68,10 +69,10 @@ class LessonPage extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15),
-                        child: Text(
+                        child: AutoSizeText(
                           lesson['name'] ?? 'Lesson ${index + 1}',
                           style: TextStyles.ruberoidLight20,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ),
                     ),
