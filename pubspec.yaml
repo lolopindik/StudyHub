@@ -36,6 +36,8 @@ dependencies:
   firebase_auth: ^5.1.1
   firebase_database: ^11.0.2
 
+  auto_size_text: ^3.0.0
+
   fl_chart: ^0.68.0
 
   flutter_dotenv: ^5.0.2
