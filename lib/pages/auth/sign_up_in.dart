@@ -4,7 +4,6 @@ import 'package:study_hub/pages/auth/signin_page.dart';
 import 'package:study_hub/pages/auth/signup_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/sign_appbar.dart';
-import 'package:study_hub/widgets/loading/customLoadingIndicator.dart';
 
 class SignUpInPage extends StatefulWidget {
   const SignUpInPage({super.key});
@@ -24,7 +23,6 @@ class SignUpInPageState extends State<SignUpInPage> {
       body: 
       Stack(
         children: <Widget>[
-          const CustomLoadingIndicator(),
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
