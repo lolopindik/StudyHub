@@ -79,53 +79,51 @@ class HomePageState extends State<HomePage> {
   }
 
   PreferredSizeWidget? buildHomeAppBar(BuildContext context) {
-  return AppBar(
-    //отключение автоматического arrow back
-    scrolledUnderElevation: 0.0,
-    automaticallyImplyLeading: false,
-    backgroundColor: AppTheme.mainColor,
-    title: const Text(
-      'StudyHub',
-      style: TextStyles.ruberoidRegular28,
-    ),
-    centerTitle: true,
-    actions: [
-      Padding(
-        padding: const EdgeInsets.only(right: 15),
-        child: Container(
-          width: 38,
-          height: 38,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppTheme.secondaryColor,
-          ),
-          child: IconButton(
-            onPressed: () {
-              navigateToSettings();
-            },
-            icon: const Icon(
-              Icons.tune,
-              size: 23,
-              color: Colors.grey,
+    return AppBar(
+      //отключение автоматического arrow back
+      scrolledUnderElevation: 0.0,
+      automaticallyImplyLeading: false,
+      backgroundColor: AppTheme.mainColor,
+      title: const Text(
+        'StudyHub',
+        style: TextStyles.ruberoidRegular28,
+      ),
+      centerTitle: true,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 15),
+          child: Container(
+            width: 38,
+            height: 38,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppTheme.secondaryColor,
+            ),
+            child: IconButton(
+              onPressed: () {
+                navigateToSettings();
+              },
+              icon: const Icon(
+                Icons.tune,
+                size: 23,
+                color: Colors.grey,
+              ),
             ),
           ),
-        ),
-      )
-    ],
-  );
-}
-
+        )
+      ],
+    );
+  }
 
   Widget _buildContent() {
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: _futureCoursesData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          if (Platform.isIOS){
+          if (Platform.isIOS) {
             return const CupertinoTransparentIndicator();
-          }
-          else {
-             return const CustomTransparentLoadingIndicator();
+          } else {
+            return const CustomTransparentLoadingIndicator();
           }
         } else if (snapshot.hasError) {
           debugPrint('Error: ${snapshot.error}');
@@ -160,23 +158,27 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRefreshableHeader(BuildContext context, List<Map<String, dynamic>> coursesData) {
-    return RefreshIndicator(
+  Widget _buildRefreshableHeader(
+      BuildContext context, List<Map<String, dynamic>> coursesData) {
+      return RefreshIndicator(
       onRefresh: _refreshData,
       color: Colors.white70,
       backgroundColor: AppTheme.signElementColor,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
-          padding: const EdgeInsets.all(20),
-          height: MediaQuery.of(context).size.height * 0.4,
-          child: PieChart(
-            PieChartData(
-              centerSpaceRadius: MediaQuery.of(context).size.height * 0.07,
-              sections: getSections(coursesData),
-            ),
-          ),
-        ),
+            padding: const EdgeInsets.all(20),
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: _buildPiechart(context, coursesData)),
+      ),
+    );
+  }
+
+  Widget _buildPiechart(BuildContext context, List<Map<String, dynamic>> coursesData) {
+    return PieChart(
+      PieChartData(
+        centerSpaceRadius: MediaQuery.of(context).size.height * 0.07,
+        sections: getSections(coursesData),
       ),
     );
   }
@@ -240,7 +242,8 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  List<PieChartSectionData> getSections(List<Map<String, dynamic>> coursesData) {
+  List<PieChartSectionData> getSections(
+      List<Map<String, dynamic>> coursesData) {
     List<PieChartSectionData> sections = [];
     int totalLessons = 0;
     int completedLessons = 0;
