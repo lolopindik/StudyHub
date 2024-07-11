@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:study_hub/pages/lessons/webview_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
 
@@ -391,8 +392,9 @@ class _LessonDetailsState extends State<LessonDetails> {
                       style: TextStyles.ruberoidLight16,
                     ),
                     onPressed: () {
-                      //todo: add func to open webview or url_launcher
                       debugPrint('url confirmed');
+                      Navigator.pop(context);
+                      openWebView(url);
                     },
                   ),
                 ],
@@ -423,8 +425,9 @@ class _LessonDetailsState extends State<LessonDetails> {
             CupertinoDialogAction(
                 isDefaultAction: true,
                 onPressed: () {
-                  //todo: add func to open webview or url_launcher
                   debugPrint('url confirmed');
+                  Navigator.pop(context);
+                  openWebView(url);
                 },
                 child: const Text(
                   'Да',
@@ -434,5 +437,16 @@ class _LessonDetailsState extends State<LessonDetails> {
         ),
       );
     }
+  }
+
+  Future<void> openWebView(String url) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WebviewPage(
+          link: url,
+        ),
+      ),
+    );
   }
 }
