@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 
-  PreferredSizeWidget? buildWebViewAppBar(BuildContext context) {
+  PreferredSizeWidget? buildWebViewAppBar(BuildContext context, String title) {
     return AppBar(
       scrolledUnderElevation: 0.0,
       automaticallyImplyLeading: false,
       backgroundColor: AppTheme.mainColor,
-      title: const Text(
-        'Testing WebView',
-        style: TextStyles.ruberoidRegular28,
+      title: Text(
+        title,
+        style: TextStyles.ruberoidLight16,
       ),
       centerTitle: true,
       leading: Padding(
