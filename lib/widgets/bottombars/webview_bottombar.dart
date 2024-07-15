@@ -3,8 +3,8 @@ import 'package:study_hub/preferences/app_theme.dart';
 
 BottomAppBar buildWebViewBottomBar(BuildContext context) {
   return BottomAppBar(
+    height: MediaQuery.of(context).size.height * 0.09,
     color: AppTheme.mainColor,
-    height: MediaQuery.of(context).size.height * 0.08,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -18,13 +18,13 @@ BottomAppBar buildWebViewBottomBar(BuildContext context) {
                   showMessage(context, true);
                 },
                 icon: const Icon(Icons.arrow_back_ios_new,
-                    color: Colors.white70)),
+                    color: Colors.white70, size: 25)),
             IconButton(
                 onPressed: () {
                   showMessage(context, false);
                 },
                 icon:
-                    const Icon(Icons.arrow_forward_ios, color: Colors.white70)),
+                    const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 25,)),
           ]),
         ),
         Padding(
@@ -49,13 +49,13 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showMessage(
       ? ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Назад', style: TextStyles.ruberoidLight16),
-            duration: Duration.zero,
+            duration: Duration(seconds: 1)
           ),
         )
       : ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Далее', style: TextStyles.ruberoidLight16),
-            duration: Duration.zero,
+            duration: Duration(seconds: 1)
           ),
         );
 }
