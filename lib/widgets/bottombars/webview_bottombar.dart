@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-BottomAppBar buildWebViewBottomBar(BuildContext context) {
+BottomAppBar buildWebViewBottomBar(BuildContext context, WebViewController controller) {
   return BottomAppBar(
     height: MediaQuery.of(context).size.height * 0.09,
     color: AppTheme.mainColor,
@@ -11,26 +12,32 @@ BottomAppBar buildWebViewBottomBar(BuildContext context) {
         Container(
           width: 120,
           margin: const EdgeInsets.only(left: 20),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             IconButton(
-                onPressed: () {
+                onPressed: () async {
+                  if (await controller.canGoBack()) {
+                    controller.goBack();
+                  }
                   showMessage(context, true);
                 },
                 icon: const Icon(Icons.arrow_back_ios_new,
                     color: Colors.white70, size: 25)),
             IconButton(
-                onPressed: () {
+                onPressed: () async {
+                  if (await controller.canGoForward()) {
+                    controller.goForward();
+                  }
                   showMessage(context, false);
                 },
-                icon:
-                    const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 25,)),
+                icon: const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 25)),
           ]),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 40),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              controller.reload();
+            },
             icon: const Icon(
               Icons.refresh,
               color: Colors.white70,
@@ -44,18 +51,14 @@ BottomAppBar buildWebViewBottomBar(BuildContext context) {
 }
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showMessage(
-    BuildContext context, bool position) {
-  return (position)
-      ? ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Назад', style: TextStyles.ruberoidLight16),
-            duration: Duration(seconds: 1)
-          ),
-        )
-      : ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Далее', style: TextStyles.ruberoidLight16),
-            duration: Duration(seconds: 1)
-          ),
-        );
+    BuildContext context, bool isBack) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        isBack ? 'Назад' : 'Далее',
+        style: TextStyles.ruberoidLight16
+      ),
+      duration: const Duration(seconds: 1),
+    ),
+  );
 }

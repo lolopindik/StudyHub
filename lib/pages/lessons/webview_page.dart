@@ -21,15 +21,14 @@ class _WebviewPageState extends State<WebviewPage> {
     url = widget.link;
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(url)
-    );
+      ..loadRequest(Uri.parse(url));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildWebViewAppBar(context, url),
-      bottomNavigationBar: buildWebViewBottomBar(context),
+      bottomNavigationBar: buildWebViewBottomBar(context, controller),
       body: WebViewWidget(controller: controller),
     );
   }
