@@ -73,7 +73,6 @@ class _LessonDetailsState extends State<LessonDetails> {
                       if (url.isNotEmpty) ...{
                         const SizedBox(height: 20),
                         GestureDetector(
-                          //todo: need to add webview
                           onTap: () {
                             debugPrint('link pushed');
                             if (Platform.isAndroid) {
@@ -138,11 +137,12 @@ class _LessonDetailsState extends State<LessonDetails> {
                                   ),
                                   padding: const EdgeInsets.all(15),
                                   child: Center(
-                                    child: Text(
+                                    child: AutoSizeText(
                                       question,
                                       style: TextStyles.ruberoidRegular20,
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.clip,
+                                      maxLines: 2,
                                     ),
                                   ),
                                 ),
@@ -195,12 +195,18 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                       BorderRadius.circular(60),
                                                 ),
                                                 child: Center(
-                                                  child: Text(
-                                                    answers[index].toString(),
-                                                    style: TextStyles
-                                                        .ruberoidLight18,
-                                                    textAlign: TextAlign.center,
-                                                    overflow: TextOverflow.clip,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 5, right: 5),
+                                                    child: AutoSizeText(
+                                                      answers[index].toString(),
+                                                      style: TextStyles
+                                                          .ruberoidLight18,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      maxLines: 2,
+                                                    ),
                                                   ),
                                                 ),
                                               ),

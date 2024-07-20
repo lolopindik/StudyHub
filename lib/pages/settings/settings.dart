@@ -152,7 +152,7 @@ class _UserSettingsState extends State<UserSettings> {
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
           title: Text(title),
-          content: Text(content),
+          content: Text(content, style: const TextStyle(fontSize: 16),),
           actions: [
             CupertinoDialogAction(
               onPressed: () {
