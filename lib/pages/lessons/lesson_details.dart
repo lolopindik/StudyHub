@@ -376,6 +376,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                   padding: const EdgeInsets.only(top: 15),
                   child: Text(
                     url,
+                    textAlign: TextAlign.center,
                     style: TextStyles.ruberoidLight16,
                     overflow: TextOverflow.clip,
                   ),
@@ -384,10 +385,10 @@ class _LessonDetailsState extends State<LessonDetails> {
             ),
             actions: <Widget>[
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(
-                    child: const Text('Нет', style: TextStyles.ruberoidLight16),
+                    child: const Text('Нет', style: TextStyles.ruberoidRegular20),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
