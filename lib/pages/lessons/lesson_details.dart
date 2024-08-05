@@ -21,12 +21,14 @@ class _LessonDetailsState extends State<LessonDetails> {
 
   @override
   Widget build(BuildContext context) {
+    //*data from cloud
     Map<String, dynamic>? test = widget.lessonData['materials']['test'];
     List<dynamic>? answers = test?['anwers'];
     String url = widget.lessonData['materials']['url'] ?? '';
     String theory = widget.lessonData['materials']['theory'] ?? '';
     String question = test?['question'] ?? '';
     bool entryField = widget.lessonData['materials']['entry_field'] ?? false;
+    //*variables for working with response processing
 
     return Scaffold(
       appBar: buildLessonAppBar(context),
