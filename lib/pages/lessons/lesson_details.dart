@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ class LessonDetails extends StatefulWidget {
 
 class _LessonDetailsState extends State<LessonDetails> {
   TextEditingController inputAnswer = TextEditingController();
+  int? selectedAnswerIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +27,14 @@ class _LessonDetailsState extends State<LessonDetails> {
     String url = widget.lessonData['materials']['url'] ?? '';
     String theory = widget.lessonData['materials']['theory'] ?? '';
     String question = test?['question'] ?? '';
+    String correctAnswer = test?['correct_anwer'] ?? '';
     bool entryField = widget.lessonData['materials']['entry_field'] ?? false;
-    //*variables for working with response processing
+    
+    //*parse
+    int? correctIntAnswer;
+    if (correctAnswer.isNotEmpty) {
+      correctIntAnswer = int.tryParse(correctAnswer);
+    }
 
     return Scaffold(
       appBar: buildLessonAppBar(context),
@@ -165,49 +171,67 @@ class _LessonDetailsState extends State<LessonDetails> {
                                     itemBuilder: (context, index) {
                                       bool isLastIndex =
                                           index == answers.length - 1;
+                                      bool isSelected =
+                                          selectedAnswerIndex == index;
+                                      bool isCorrect = isSelected &&
+                                          index == correctIntAnswer;
+
                                       return Column(
                                         children: [
-                                          Container(
-                                            constraints: const BoxConstraints(
-                                                minHeight: 60),
-                                            decoration: BoxDecoration(
-                                              color: AppTheme.mainElementColor,
-                                              borderRadius: isLastIndex
-                                                  ? const BorderRadius.only(
-                                                      bottomLeft:
-                                                          Radius.circular(20),
-                                                      bottomRight:
-                                                          Radius.circular(20),
-                                                    )
-                                                  : BorderRadius.zero,
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 12),
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.08,
-                                                decoration: BoxDecoration(
-                                                  color: AppTheme.mainColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(60),
-                                                ),
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 5, right: 5),
-                                                    child: AutoSizeText(
-                                                      answers[index].toString(),
-                                                      style: TextStyles
-                                                          .ruberoidLight18,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      maxLines: 2,
+                                          InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(60),
+                                            onTap: () {
+                                              setState(() {
+                                                selectedAnswerIndex = index;
+                                                debugPrint(
+                                                    'Индекс ответа: $index, Правильный ответ: $correctIntAnswer, Соответсвие: $isCorrect');
+                                              });
+                                            },
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                  minHeight: 60),
+                                              decoration: BoxDecoration(
+                                                color: AppTheme.mainElementColor,
+                                                borderRadius: isLastIndex
+                                                    ? const BorderRadius.only(
+                                                        bottomLeft:
+                                                            Radius.circular(20),
+                                                        bottomRight:
+                                                            Radius.circular(20),
+                                                      )
+                                                    : BorderRadius.zero,
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 12),
+                                                child: Container(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.08,
+                                                  decoration: BoxDecoration(
+                                                    color: AppTheme.mainColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            60),
+                                                  ),
+                                                  child: Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 5,
+                                                              right: 5),
+                                                      child: AutoSizeText(
+                                                        answers[index],
+                                                        style: TextStyles
+                                                            .ruberoidLight18,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        maxLines: 2,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -390,7 +414,8 @@ class _LessonDetailsState extends State<LessonDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(
-                    child: const Text('Нет', style: TextStyles.ruberoidRegular20),
+                    child:
+                        const Text('Нет', style: TextStyles.ruberoidRegular20),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
