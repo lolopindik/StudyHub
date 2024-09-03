@@ -29,7 +29,7 @@ class _LessonDetailsState extends State<LessonDetails> {
     String question = test?['question'] ?? '';
     String correctAnswer = test?['correct_anwer'] ?? '';
     bool entryField = widget.lessonData['materials']['entry_field'] ?? false;
-    
+
     //*parse
     int? correctIntAnswer;
     if (correctAnswer.isNotEmpty) {
@@ -171,11 +171,11 @@ class _LessonDetailsState extends State<LessonDetails> {
                                     itemBuilder: (context, index) {
                                       bool isLastIndex =
                                           index == answers.length - 1;
+                                      selectedAnswerIndex = index;
                                       bool isSelected =
                                           selectedAnswerIndex == index;
                                       bool isCorrect = isSelected &&
                                           index == correctIntAnswer;
-
                                       return Column(
                                         children: [
                                           InkWell(
@@ -183,7 +183,6 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                 BorderRadius.circular(60),
                                             onTap: () {
                                               setState(() {
-                                                selectedAnswerIndex = index;
                                                 debugPrint(
                                                     'Индекс ответа: $index, Правильный ответ: $correctIntAnswer, Соответсвие: $isCorrect');
                                               });
@@ -192,7 +191,8 @@ class _LessonDetailsState extends State<LessonDetails> {
                                               constraints: const BoxConstraints(
                                                   minHeight: 60),
                                               decoration: BoxDecoration(
-                                                color: AppTheme.mainElementColor,
+                                                color:
+                                                    AppTheme.mainElementColor,
                                                 borderRadius: isLastIndex
                                                     ? const BorderRadius.only(
                                                         bottomLeft:
