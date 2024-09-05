@@ -171,7 +171,6 @@ class _LessonDetailsState extends State<LessonDetails> {
                                     itemBuilder: (context, index) {
                                       bool isLastIndex =
                                           index == answers.length - 1;
-                                      selectedAnswerIndex = index;
                                       bool isSelected =
                                           selectedAnswerIndex == index;
                                       bool isCorrect = isSelected &&
@@ -183,8 +182,9 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                 BorderRadius.circular(60),
                                             onTap: () {
                                               setState(() {
+                                                selectedAnswerIndex = index;
                                                 debugPrint(
-                                                    'Индекс ответа: $index, Правильный ответ: $correctIntAnswer, Соответсвие: $isCorrect');
+                                                    'Индекс ответа: $selectedAnswerIndex, Правильный ответ: $correctIntAnswer, Соответсвие: $isCorrect');
                                               });
                                             },
                                             child: Container(
@@ -213,7 +213,13 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                           .height *
                                                       0.08,
                                                   decoration: BoxDecoration(
-                                                    color: AppTheme.mainColor,
+                                                    //*i need to +COLOR SWITCHER
+                                                    color: isSelected
+                                                        ? (isCorrect
+                                                            ? Colors.green
+                                                            : Colors.red)
+                                                        : AppTheme
+                                                            .mainElementColor,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             60),
