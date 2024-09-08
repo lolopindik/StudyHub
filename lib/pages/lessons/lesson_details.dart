@@ -182,6 +182,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                 BorderRadius.circular(60),
                                             onTap: () {
                                               setState(() {
+                                                //!it will be necessary to make at the stage of modifying the database, logic for selecting one answer and sending it to the database
                                                 selectedAnswerIndex = index;
                                                 debugPrint(
                                                     'Индекс ответа: $selectedAnswerIndex, Правильный ответ: $correctIntAnswer, Соответсвие: $isCorrect');
@@ -213,13 +214,46 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                           .height *
                                                       0.08,
                                                   decoration: BoxDecoration(
-                                                    //*i need to +COLOR SWITCHER
-                                                    color: isSelected
+                                                    gradient: isSelected
                                                         ? (isCorrect
-                                                            ? Colors.green
-                                                            : Colors.red)
-                                                        : AppTheme
-                                                            .mainElementColor,
+                                                            ? const LinearGradient(
+                                                                colors: [
+                                                                  AppTheme
+                                                                      .mainElementColor,
+                                                                  AppTheme
+                                                                      .lessonCompleteGreen
+                                                                ],
+                                                                begin: Alignment
+                                                                    .topLeft,
+                                                                end: Alignment
+                                                                    .bottomRight,
+                                                              )
+                                                            : const LinearGradient(
+                                                                colors: [
+                                                                  AppTheme
+                                                                      .mainColor,
+                                                                  AppTheme
+                                                                      .lessonCompleteRed
+                                                                ],
+                                                                begin: Alignment
+                                                                    .topLeft,
+                                                                end: Alignment
+                                                                    .bottomRight,
+                                                              ))
+                                                        : LinearGradient(
+                                                            colors: [
+                                                              AppTheme
+                                                                  .mainElementColor
+                                                                  .withOpacity(
+                                                                      0.8),
+                                                              AppTheme
+                                                                  .mainElementColor
+                                                            ],
+                                                            begin: Alignment
+                                                                .topLeft,
+                                                            end: Alignment
+                                                                .bottomRight,
+                                                          ),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             60),
