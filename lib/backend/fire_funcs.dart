@@ -68,7 +68,7 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
     if (coursesData != null) {
       List<Map<String, dynamic>> matchedCourses = [];
 
-      coursesData.forEach((courseKey, courseValue) {
+      coursesData.forEach((courseKey, courseValue) async {
         if (courseValue['token'] == userToken) {
           Map<String, dynamic> matchedCourse = {
             'courseName': courseValue['courseName'],
@@ -77,7 +77,7 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
           Map<dynamic, dynamic>? subjects =
               courseValue['subjects'] as Map<dynamic, dynamic>?;
-          subjects?.forEach((subjectKey, subjectValue) {
+          subjects?.forEach((subjectKey, subjectValue) async {
             Map<String, dynamic> matchedSubject = {
               'name': subjectValue['name'],
               'lessons': <Map<String, dynamic>>[]
@@ -85,7 +85,7 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
             Map<dynamic, dynamic>? lessons =
                 subjectValue['lessons'] as Map<dynamic, dynamic>?;
-            lessons?.forEach((lessonKey, lessonValue) {
+            lessons?.forEach((lessonKey, lessonValue) async {
               Map<String, dynamic> matchedLesson = {
                 'name': lessonValue['name'],
                 'materials': {}
@@ -121,6 +121,16 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                 }
               }
 
+              // Record user progress (save answer/status to 'progress' table)
+              //! Need too add comleted check
+              await FirebaseDatabase.instance
+                  .ref()
+                  .child('progress/$userId/$courseKey/$subjectKey/$lessonKey')
+                  .set({
+                'lesson_name': lessonValue['name'],
+                'completed': 0,
+              });
+
               matchedSubject['lessons'].add(matchedLesson);
             });
 
@@ -139,5 +149,3 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
   return [];
 }
-
-//todo need to add a new func for processing a UserProgress
