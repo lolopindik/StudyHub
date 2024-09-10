@@ -58,94 +58,96 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
   if (userCourseData != null) {
     String? userToken = userCourseData['courseToken'] as String?;
-
     DatabaseReference coursesRef =
         FirebaseDatabase.instance.ref().child("Courses");
     DataSnapshot coursesSnapshot = await coursesRef.get();
     Map<dynamic, dynamic>? coursesData =
         coursesSnapshot.value as Map<dynamic, dynamic>?;
-
     if (coursesData != null) {
       List<Map<String, dynamic>> matchedCourses = [];
-
-      coursesData.forEach((courseKey, courseValue) async {
+      for (var courseEntry in coursesData.entries) {
+        var courseKey = courseEntry.key;
+        var courseValue = courseEntry.value;
         if (courseValue['token'] == userToken) {
           Map<String, dynamic> matchedCourse = {
             'courseName': courseValue['courseName'],
             'subjects': <Map<String, dynamic>>[]
           };
-
           Map<dynamic, dynamic>? subjects =
               courseValue['subjects'] as Map<dynamic, dynamic>?;
-          subjects?.forEach((subjectKey, subjectValue) async {
-            Map<String, dynamic> matchedSubject = {
-              'name': subjectValue['name'],
-              'lessons': <Map<String, dynamic>>[]
-            };
-
-            Map<dynamic, dynamic>? lessons =
-                subjectValue['lessons'] as Map<dynamic, dynamic>?;
-            lessons?.forEach((lessonKey, lessonValue) async {
-              Map<String, dynamic> matchedLesson = {
-                'name': lessonValue['name'],
-                'materials': {}
+          if (subjects != null) {
+            for (var subjectEntry in subjects.entries) {
+              var subjectKey = subjectEntry.key;
+              var subjectValue = subjectEntry.value;
+              Map<String, dynamic> matchedSubject = {
+                'name': subjectValue['name'],
+                'lessons': <Map<String, dynamic>>[]
               };
-
-              if (lessonValue['materials'] != null) {
-                matchedLesson['materials'] = {};
-
-                // Process materials
-                Map<dynamic, dynamic>? materials =
-                    lessonValue['materials'] as Map<dynamic, dynamic>?;
-                materials?.forEach((materialKey, materialValue) {
-                  matchedLesson['materials'][materialKey] = materialValue;
-                });
-
-                // Handle nested objects in materials
-                if (materials?['test'] != null) {
-                  Map<String, dynamic> test = {
-                    'question': materials?['test']['question'],
-                    'anwers': List<String>.from(materials?['test']['anwers']),
-                    'correct_anwer': materials?['test']['correct_anwer']
+              Map<dynamic, dynamic>? lessons =
+                  subjectValue['lessons'] as Map<dynamic, dynamic>?;
+              if (lessons != null) {
+                for (var lessonEntry in lessons.entries) {
+                  var lessonKey = lessonEntry.key;
+                  var lessonValue = lessonEntry.value;
+                  Map<String, dynamic> matchedLesson = {
+                    'name': lessonValue['name'],
+                    'materials': {}
                   };
-                  matchedLesson['materials']['test'] = test;
-                }
+                  if (lessonValue['materials'] != null) {
+                    matchedLesson['materials'] = {};
+                    // Обработка материалов
+                    Map<dynamic, dynamic>? materials =
+                        lessonValue['materials'] as Map<dynamic, dynamic>?;
+                    materials?.forEach((materialKey, materialValue) {
+                      matchedLesson['materials'][materialKey] = materialValue;
+                    });
+                    // Обработка вложенных объектов в материалах
+                    if (materials?['test'] != null) {
+                      Map<String, dynamic> test = {
+                        'question': materials?['test']['question'],
+                        'anwers':
+                            List<String>.from(materials?['test']['anwers']),
+                        'correct_anwer': materials?['test']['correct_anwer']
+                      };
+                      matchedLesson['materials']['test'] = test;
+                    }
+                    if (materials?['entry_field'] != null) {
+                      matchedLesson['materials']['entry_field'] =
+                          materials?['entry_field'];
+                    }
+                    if (materials?['theory'] != null) {
+                      matchedLesson['materials']['theory'] =
+                          materials?['theory'];
+                    }
+                  }
+                  // Проверка прогресса: если 'completed' уже существует и > 0, не перезаписываем
+                  DatabaseReference progressRef = FirebaseDatabase.instance
+                      .ref()
+                      .child(
+                          'progress/$userId/$courseKey/$subjectKey/$lessonKey');
+                  DataSnapshot progressSnapshot = await progressRef.get();
 
-                if (materials?['entry_field'] != null) {
-                  matchedLesson['materials']['entry_field'] =
-                      materials?['entry_field'];
-                }
-
-                if (materials?['theory'] != null) {
-                  matchedLesson['materials']['theory'] = materials?['theory'];
+                  var progressData =
+                      progressSnapshot.value as Map<dynamic, dynamic>?;
+                  if (progressData == null ||
+                      (progressData['completed'] ?? 0) <= 0) {
+                    // Обновляем, если не существует или значение 'completed' <= 0
+                    await progressRef.set({
+                      'lesson_name': lessonValue['name'],
+                      'completed': 0,
+                    });
+                  }
+                  matchedSubject['lessons'].add(matchedLesson);
                 }
               }
-
-              // Record user progress (save answer/status to 'progress' table)
-              //! Need too add comleted check
-              await FirebaseDatabase.instance
-                  .ref()
-                  .child('progress/$userId/$courseKey/$subjectKey/$lessonKey')
-                  .set({
-                'lesson_name': lessonValue['name'],
-                'completed': 0,
-              });
-
-              matchedSubject['lessons'].add(matchedLesson);
-            });
-
-            matchedCourse['subjects'].add(matchedSubject);
-          });
-
+              matchedCourse['subjects'].add(matchedSubject);
+            }
+          }
           matchedCourses.add(matchedCourse);
         }
-      });
-
-      await userCourseRef.update({"coursesData": matchedCourses});
-
+      }
       return matchedCourses;
     }
   }
-
   return [];
 }
