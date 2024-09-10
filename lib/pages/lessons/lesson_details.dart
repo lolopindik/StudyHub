@@ -21,14 +21,21 @@ class _LessonDetailsState extends State<LessonDetails> {
 
   @override
   Widget build(BuildContext context) {
-    //*data from cloud
-    Map<String, dynamic>? test = widget.lessonData['materials']['test'];
+    Map<String, dynamic>? test;
+
+    if (widget.lessonData['materials']?['test'] != null) {
+      test = Map<String, dynamic>.from(
+          widget.lessonData['materials']?['test'] as Map);
+    } else {
+      test = null;
+    }
+
     List<dynamic>? answers = test?['anwers'];
-    String url = widget.lessonData['materials']['url'] ?? '';
-    String theory = widget.lessonData['materials']['theory'] ?? '';
+    String url = widget.lessonData['materials']?['url'] ?? '';
+    String theory = widget.lessonData['materials']?['theory'] ?? '';
     String question = test?['question'] ?? '';
     String correctAnswer = test?['correct_anwer'] ?? '';
-    bool entryField = widget.lessonData['materials']['entry_field'] ?? false;
+    bool entryField = widget.lessonData['materials']?['entry_field'] ?? false;
 
     //*parse
     int? correctIntAnswer;
@@ -185,7 +192,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                                                 //!it will be necessary to make at the stage of modifying the database, logic for selecting one answer and sending it to the database
                                                 selectedAnswerIndex = index;
                                                 debugPrint(
-                                                    'Индекс ответа: $selectedAnswerIndex, Правильный ответ: $correctIntAnswer, Соответсвие: $isCorrect');
+                                                    'Индекс ответа: $selectedAnswerIndex, Правильный ответ: $correctIntAnswer');
                                               });
                                             },
                                             child: Container(

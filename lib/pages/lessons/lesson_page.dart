@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/pages/lessons/lesson_details.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
-
 import 'package:auto_size_text/auto_size_text.dart';
 
 class LessonPage extends StatelessWidget {
@@ -48,9 +47,9 @@ class LessonPage extends StatelessWidget {
               itemCount: lessons.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> lesson = lessons[index];
-                // int lessonComplete = lesson['lessonComplete'] ?? 0;
-                // BoxDecoration containerDecoration =
-                //     _getGradientDecorationForLessonComplete(lessonComplete);
+                int lessonComplete = lesson['lessonComplete'] ?? 0;
+                BoxDecoration containerDecoration =
+                    _getGradientDecorationForLessonComplete(lessonComplete);
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -63,7 +62,7 @@ class LessonPage extends StatelessWidget {
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.08,
                     margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), color: AppTheme.mainElementColor),//!
+                    decoration: containerDecoration,
                     constraints: const BoxConstraints(minHeight: 60),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -86,29 +85,28 @@ class LessonPage extends StatelessWidget {
     );
   }
 
-//   BoxDecoration _getGradientDecorationForLessonComplete(int lessonComplete) {
-//     List<Color> colors;
-//     switch (lessonComplete) {
-//       case 1:
-//         colors = [AppTheme.mainColor, AppTheme.lessonCompleteRed];
-//         break;
-//       case 2:
-//         colors = [AppTheme.mainColor, AppTheme.lessonCompleteGreen];
-//         break;
-//       case 3:
-//         colors = [AppTheme.mainColor, AppTheme.lessonCompleteYellow];
-//         break;
-//       default:
-//         colors = [AppTheme.mainElementColor, AppTheme.mainElementColor];
-//     }
-//     return BoxDecoration(
-//       borderRadius: BorderRadius.circular(60),
-//       gradient: LinearGradient(
-//         colors: colors,
-//         begin: Alignment.centerLeft,
-//         end: Alignment.centerRight,
-//       ),
-//     );
-//   }
-// }
+  BoxDecoration _getGradientDecorationForLessonComplete(int lessonComplete) {
+    List<Color> colors;
+    switch (lessonComplete) {
+      case 1:
+        colors = [AppTheme.mainColor, AppTheme.lessonCompleteRed];
+        break;
+      case 3:
+        colors = [AppTheme.mainColor, AppTheme.lessonCompleteGreen];
+        break;
+      case 2:
+        colors = [AppTheme.mainColor, AppTheme.lessonCompleteYellow];
+        break;
+      default:
+        colors = [AppTheme.mainElementColor, AppTheme.mainElementColor];
+    }
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(60),
+      gradient: LinearGradient(
+        colors: colors,
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      ),
+    );
+  }
 }
