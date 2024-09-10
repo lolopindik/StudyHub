@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:study_hub/pages/lessons/lesson_page.dart';
 import 'package:study_hub/pages/settings/settings.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/elements/empty_container.dart';
-import 'package:study_hub/backend/fire_funcs.dart';
-import 'package:study_hub/pages/lessons/lesson_page.dart';
 import 'package:study_hub/widgets/loading/cupertinoLoadingIndicator.dart';
 import 'package:study_hub/widgets/loading/customLoadingIndicator.dart';
 
@@ -80,7 +79,6 @@ class HomePageState extends State<HomePage> {
 
   PreferredSizeWidget? buildHomeAppBar(BuildContext context) {
     return AppBar(
-      //отключение автоматического arrow back
       scrolledUnderElevation: 0.0,
       automaticallyImplyLeading: false,
       backgroundColor: AppTheme.mainColor,
@@ -160,7 +158,7 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildRefreshableHeader(
       BuildContext context, List<Map<String, dynamic>> coursesData) {
-      return RefreshIndicator(
+    return RefreshIndicator(
       onRefresh: _refreshData,
       color: Colors.white70,
       backgroundColor: AppTheme.signElementColor,
@@ -253,17 +251,17 @@ class HomePageState extends State<HomePage> {
         final List<Map<String, dynamic>> lessons = subject['lessons'] ?? [];
         for (var lesson in lessons) {
           totalLessons++;
-          if (lesson['lessonComplete'] == 2) {
+          if (lesson['lessonComplete'] == 3) {
             completedLessons++;
           }
         }
       }
     }
 
-    double progress = (completedLessons / totalLessons) * 100;
+    double progress = totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
     sections.add(
       PieChartSectionData(
-        color: const Color.fromARGB(227, 77, 167, 69),
+        color:AppTheme.lessonCompleteGreen,
         value: progress,
         title: '',
         radius: MediaQuery.of(context).size.height * 0.1,
@@ -278,5 +276,72 @@ class HomePageState extends State<HomePage> {
       ),
     );
     return sections;
+  }
+
+  Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
+    if (userId == null) {
+      return [];
+    }
+
+    final database = FirebaseDatabase.instance;
+
+    // Fetch courses data
+    final coursesRef = database.ref('Courses');
+    final coursesSnapshot = await coursesRef.get();
+
+    // Если данные курсов отсутствуют, возвращаем пустой список
+    if (coursesSnapshot.value == null) {
+      return [];
+    }
+
+    final coursesData = Map<String, dynamic>.from(coursesSnapshot.value as Map);
+
+    // Fetch progress data
+    final progressRef = database.ref('progress').child(userId);
+    final progressSnapshot = await progressRef.get();
+
+    // Если данные прогресса отсутствуют, создаем пустой Map
+    final progressData = progressSnapshot.value != null
+        ? Map<String, dynamic>.from(progressSnapshot.value as Map)
+        : {};
+
+    // Combine courses and progress data
+    List<Map<String, dynamic>> combinedData = [];
+    coursesData.forEach((courseId, course) {
+      final courseName = course['courseName'] ?? 'Unknown Course';
+      final subjects = Map<String, dynamic>.from(course['subjects'] ?? {});
+
+      List<Map<String, dynamic>> subjectList = [];
+      subjects.forEach((subjectId, subject) {
+        final subjectName = subject['name'] ?? 'Unknown Subject';
+        final lessons = Map<String, dynamic>.from(subject['lessons'] ?? {});
+
+        List<Map<String, dynamic>> lessonList = [];
+        lessons.forEach((lessonId, lesson) {
+          final lessonName = lesson['name'] ?? 'Unknown Lesson';
+
+          // Проверяем наличие данных прогресса
+          final progress = progressData[courseId]?[subjectId]?[lessonId]?['completed'] ?? 0;
+
+          lessonList.add({
+            'name': lessonName,
+            'lessonComplete': progress,
+            'materials': lesson['materials'] ?? {}, // добавляем материалы
+          });
+        });
+
+        subjectList.add({
+          'name': subjectName,
+          'lessons': lessonList,
+        });
+      });
+
+      combinedData.add({
+        'courseName': courseName,
+        'subjects': subjectList,
+      });
+    });
+
+    return combinedData;
   }
 }
