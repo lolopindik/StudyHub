@@ -76,7 +76,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (theory.isNotEmpty) bulldTheory(context, theory),
+                      if (theory.isNotEmpty) buildTheory(context, theory),
                       if (url.isNotEmpty) ...{
                         const SizedBox(height: 20),
                         buildUrl(context, url),
