@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:study_hub/backend/fire_funcs.dart';
 import 'package:study_hub/pages/lessons/lesson_page.dart';
 import 'package:study_hub/pages/settings/settings.dart';
 import 'package:study_hub/preferences/app_theme.dart';
@@ -191,7 +191,6 @@ class HomePageState extends State<HomePage> {
       itemCount: coursesData.length,
       itemBuilder: (context, index) {
         final Map<String, dynamic> courseData = coursesData[index];
-        debugPrint('проверка home_page: $courseData');
         final List<Map<String, dynamic>> subjects =
             courseData['subjects'] ?? [];
         return Column(
@@ -246,29 +245,36 @@ class HomePageState extends State<HomePage> {
   }
 
   List<PieChartSectionData> getSections(
-      List<Map<String, dynamic>> coursesData) {
+    List<Map<String, dynamic>> coursesData) {
     List<PieChartSectionData> sections = [];
     int totalLessons = 0;
     int completedLessons = 0;
+
+    // Проходим по всем курсам и урокам
     for (var courseData in coursesData) {
       final List<Map<String, dynamic>> subjects = courseData['subjects'] ?? [];
       for (var subject in subjects) {
         final List<Map<String, dynamic>> lessons = subject['lessons'] ?? [];
         for (var lesson in lessons) {
           totalLessons++;
-          if (lesson['lessonComplete'] == 3) {
+          // Проверяем прогресс каждого урока
+          if (lesson['progress'] == 3) { // Если урок завершен корректно
             completedLessons++;
           }
         }
       }
     }
 
+    // Рассчитываем процент завершения
     double progress = totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
+
+    // Добавляем секции диаграммы
     sections.add(
       PieChartSectionData(
-        color:AppTheme.lessonCompleteGreen,
+        color: AppTheme.lessonCompleteGreen,
         value: progress,
-        title: '',
+        title: '${progress.toStringAsFixed(1)}%',
+        titleStyle: TextStyles.ruberoidRegular20,
         radius: MediaQuery.of(context).size.height * 0.1,
       ),
     );
@@ -280,73 +286,7 @@ class HomePageState extends State<HomePage> {
         radius: MediaQuery.of(context).size.height * 0.08,
       ),
     );
+
     return sections;
-  }
-
-  Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
-    if (userId == null) {
-      return [];
-    }
-
-    final database = FirebaseDatabase.instance;
-
-    // Fetch courses data
-    final coursesRef = database.ref('Courses');
-    final coursesSnapshot = await coursesRef.get();
-
-    // Если данные курсов отсутствуют, возвращаем пустой список
-    if (coursesSnapshot.value == null) {
-      return [];
-    }
-
-    final coursesData = Map<String, dynamic>.from(coursesSnapshot.value as Map);
-
-    // Fetch progress data
-    final progressRef = database.ref('progress').child(userId);
-    final progressSnapshot = await progressRef.get();
-
-    // Если данные прогресса отсутствуют, создаем пустой Map
-    final progressData = progressSnapshot.value != null
-        ? Map<String, dynamic>.from(progressSnapshot.value as Map)
-        : {};
-
-    // Combine courses and progress data
-    List<Map<String, dynamic>> combinedData = [];
-    coursesData.forEach((courseId, course) {
-      final courseName = course['courseName'] ?? 'Unknown Course';
-      final subjects = Map<String, dynamic>.from(course['subjects'] ?? {});
-
-      List<Map<String, dynamic>> subjectList = [];
-      subjects.forEach((subjectId, subject) {
-        final subjectName = subject['name'] ?? 'Unknown Subject';
-        final lessons = Map<String, dynamic>.from(subject['lessons'] ?? {});
-
-        List<Map<String, dynamic>> lessonList = [];
-        lessons.forEach((lessonId, lesson) {
-          final lessonName = lesson['name'] ?? 'Unknown Lesson';
-
-          // Проверяем наличие данных прогресса
-          final progress = progressData[courseId]?[subjectId]?[lessonId]?['completed'] ?? 0;
-
-          lessonList.add({
-            'name': lessonName,
-            'lessonComplete': progress,
-            'materials': lesson['materials'] ?? {}, // добавляем материалы
-          });
-        });
-
-        subjectList.add({
-          'name': subjectName,
-          'lessons': lessonList,
-        });
-      });
-
-      combinedData.add({
-        'courseName': courseName,
-        'subjects': subjectList,
-      });
-    });
-
-    return combinedData;
   }
 }

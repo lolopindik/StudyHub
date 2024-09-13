@@ -19,10 +19,11 @@ class LessonPage extends StatelessWidget {
       backgroundColor: AppTheme.secondaryColor,
       body: Column(
         children: <Widget>[
+          // Заголовок с названием курса
           Container(
             height: MediaQuery.of(context).size.height * 0.103,
             color: AppTheme.mainElementColor,
-            constraints: const BoxConstraints(minHeight: 60,),
+            constraints: const BoxConstraints(minHeight: 60),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
@@ -39,23 +40,27 @@ class LessonPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
+          // Список уроков
           Expanded(
             child: ListView.builder(
               itemCount: lessons.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> lesson = lessons[index];
-                int lessonComplete = lesson['lessonComplete'] ?? 0;
+                int lessonProgress = lesson['progress'] ?? 0; // Прогресс урока
+
+                // Получаем цвет для прогресса урока
                 BoxDecoration containerDecoration =
-                    _getGradientDecorationForLessonComplete(lessonComplete);
+                    _getGradientDecorationForLessonComplete(lessonProgress);
+
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LessonDetails(lessonData: lesson),
+                        builder: (context) => LessonDetails(
+                          lessonData: lesson,
+                        ),
                       ),
                     );
                   },
@@ -85,19 +90,20 @@ class LessonPage extends StatelessWidget {
     );
   }
 
-  BoxDecoration _getGradientDecorationForLessonComplete(int lessonComplete) {
+  // Функция для получения градиентной заливки в зависимости от состояния прогресса урока
+  BoxDecoration _getGradientDecorationForLessonComplete(int lessonProgress) {
     List<Color> colors;
-    switch (lessonComplete) {
-      case 1:
+    switch (lessonProgress) {
+      case 1: // Урок выполнен неправильно
         colors = [AppTheme.mainColor, AppTheme.lessonCompleteRed];
         break;
-      case 3:
+      case 3: // Урок выполнен правильно
         colors = [AppTheme.mainColor, AppTheme.lessonCompleteGreen];
         break;
-      case 2:
+      case 2: // Урок ожидает проверки
         colors = [AppTheme.mainColor, AppTheme.lessonCompleteYellow];
         break;
-      default:
+      default: // Урок не выполнен
         colors = [AppTheme.mainElementColor, AppTheme.mainElementColor];
     }
     return BoxDecoration(
