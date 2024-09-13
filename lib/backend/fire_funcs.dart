@@ -41,6 +41,14 @@ class FirebaseService {
     }
   }
 
+  Future<void> deleteProgress(String? userId) async {
+    try {
+      await FirebaseDatabase.instance.ref("progress/$userId/").remove();
+    } catch (error) {
+      print("Ошибка при удалении прогресса: $error");
+    }
+  }
+
 // лучше не использовать из-за багов
   verifyemail() async {
     await currentUser?.sendEmailVerification();
@@ -91,52 +99,82 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                   var lessonValue = lessonEntry.value;
                   Map<String, dynamic> matchedLesson = {
                     'name': lessonValue['name'],
-                    'materials': {}
+                    'materials': {},
+                    'progress': 0 // Инициализируем поле прогресса
                   };
-                  if (lessonValue['materials'] != null) {
+
+                  // Обработка материалов урока
+                  Map<dynamic, dynamic>? materials =
+                      lessonValue['materials'] as Map<dynamic, dynamic>?;
+
+                  // Если есть материалы, то обрабатываем их
+                  if (materials != null) {
                     matchedLesson['materials'] = {};
-                    // Обработка материалов
-                    Map<dynamic, dynamic>? materials =
-                        lessonValue['materials'] as Map<dynamic, dynamic>?;
-                    materials?.forEach((materialKey, materialValue) {
+                    materials.forEach((materialKey, materialValue) {
                       matchedLesson['materials'][materialKey] = materialValue;
                     });
-                    // Обработка вложенных объектов в материалах
-                    if (materials?['test'] != null) {
+
+                    if (materials['test'] != null) {
                       Map<String, dynamic> test = {
-                        'question': materials?['test']['question'],
+                        'question': materials['test']['question'],
                         'anwers':
-                            List<String>.from(materials?['test']['anwers']),
-                        'correct_anwer': materials?['test']['correct_anwer']
+                            List<String>.from(materials['test']['anwers']),
+                        'correct_anwer': materials['test']['correct_anwer']
                       };
                       matchedLesson['materials']['test'] = test;
                     }
-                    if (materials?['entry_field'] != null) {
-                      matchedLesson['materials']['entry_field'] =
-                          materials?['entry_field'];
-                    }
-                    if (materials?['theory'] != null) {
+
+                    if (materials['theory'] != null) {
                       matchedLesson['materials']['theory'] =
-                          materials?['theory'];
+                          materials['theory'];
                     }
                   }
-                  // Проверка прогресса: если 'completed' уже существует и > 0, не перезаписываем
+
+                  // Получаем прогресс урока
                   DatabaseReference progressRef = FirebaseDatabase.instance
                       .ref()
                       .child(
                           'progress/$userId/$courseKey/$subjectKey/$lessonKey');
                   DataSnapshot progressSnapshot = await progressRef.get();
-
                   var progressData =
                       progressSnapshot.value as Map<dynamic, dynamic>?;
+
+                  // Проверка на наличие entry_field
+                  if (materials?['entry_field'] == true) {
+                    if (progressData == null ||
+                        !(progressData.containsKey('entry_field') &&
+                            progressData['entry_field'].isNotEmpty)) {
+                      // Если entry_field == true и в прогрессе пустое значение, создаем его
+                      await progressRef.update({
+                        'lesson_name': lessonValue['name'],
+                        'entry_field': '', // Инициализируем пустым значением
+                      });
+                    }
+                  }
+
+                  // Если прогресс не существует или completed == 0, записываем прогресс
                   if (progressData == null ||
-                      (progressData['completed'] ?? 0) <= 0) {
-                    // Обновляем, если не существует или значение 'completed' <= 0
-                    await progressRef.set({
+                      (progressData['completed'] ?? 0) == 0) {
+                    await progressRef.update({
                       'lesson_name': lessonValue['name'],
                       'completed': 0,
                     });
                   }
+
+                  // Если данные прогресса существуют, добавляем их в результат
+                  if (progressData != null) {
+                    if (progressData['completed'] != null) {
+                      matchedLesson['progress'] = progressData['completed'];
+                    }
+                    // Если поле entry_field уже заполнено, не обновляем его
+                    if (materials?['entry_field'] == true &&
+                        progressData.containsKey('entry_field') &&
+                        progressData['entry_field'].isNotEmpty) {
+                      matchedLesson['materials']['entry_field'] =
+                          progressData['entry_field'];
+                    }
+                  }
+
                   matchedSubject['lessons'].add(matchedLesson);
                 }
               }
