@@ -166,13 +166,6 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                     if (progressData['completed'] != null) {
                       matchedLesson['progress'] = progressData['completed'];
                     }
-                    // Если поле entry_field уже заполнено, не обновляем его
-                    if (materials?['entry_field'] == true &&
-                        progressData.containsKey('entry_field') &&
-                        progressData['entry_field'].isNotEmpty) {
-                      matchedLesson['materials']['entry_field'] =
-                          progressData['entry_field'];
-                    }
                   }
 
                   matchedSubject['lessons'].add(matchedLesson);
