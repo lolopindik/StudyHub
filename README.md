@@ -1,6 +1,8 @@
-<h1>Study Hub<h1>
+# Study Hub
 
-<h2>Demonstration of the program visual: <h2>
+**Study Hub** is an interactive learning platform built using Flutter, designed to help users engage with lessons through tests, theories, and entry fields. The app provides dynamic content loading and a user-friendly interface for education.
+
+## 📸 Demonstration of the Program Visual
 
 ![Screenshot_1726162108](https://github.com/user-attachments/assets/63bc62eb-aa1a-42a3-bddc-7df88f4b5074)
 
@@ -15,3 +17,10 @@
 ![скрины проекта (4)](https://github.com/user-attachments/assets/ab4f8b10-11ca-4d09-8ceb-077adec823c4)
 
 ![скрины проекта (5)](https://github.com/user-attachments/assets/b6a46ddc-44c0-4cb9-8a28-7fbd921f98f5)
+
+## 🌟 Key Features
+
+- **Dynamic Lessons**: Includes tests, theory, and custom entry fields for diverse learning experiences.
+- **Progress Tracking**: Real-time tracking of lesson completion with Firebase integration.
+- **Responsive Design**: Optimized for mobile, providing an intuitive user experience.
+- **Easy Navigation**: Effortless transitions between lessons and topics.
