@@ -39,8 +39,9 @@ class _LessonDetailsState extends State<LessonDetails> {
     bool entryField = widget.lessonData['materials']?['entry_field'] ?? false;
 
     String lessonId = widget.lessonData['lessonId'] ?? '';
+    String subjectId = widget.lessonData['subjectId'] ?? '';
 
-    debugPrint('LessonID for compare course and progress: $lessonId');
+    debugPrint('LessonID and subjectId for compare course and progress: $lessonId & $subjectId');
 
 
     //*parse

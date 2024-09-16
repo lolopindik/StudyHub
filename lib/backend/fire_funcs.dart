@@ -113,6 +113,7 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                     var lessonValue = lessonEntry.value;
 
                     Map<String, dynamic> matchedLesson = {
+                      'subjectId': subjectKey,
                       'lessonId': lessonKey, // Добавляем lessonId
                       'name': lessonValue['name'],
                       'materials': {},
@@ -200,7 +201,7 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
   }
   return [];
 }
-  
+
 
 // Получение ответа
 Future<String?> getEntryFieldResponse(String subjectId, String lessonId) async {
