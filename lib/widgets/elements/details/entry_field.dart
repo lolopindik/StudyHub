@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/elements/details/bottomsheet.dart';
 
-Widget buildEntryField(
-    BuildContext context, TextEditingController inputAnswer) {
+Widget buildEntryField(BuildContext context, TextEditingController inputAnswer, Function submitAnswer) {
   return Align(
     alignment: Alignment.bottomCenter,
     child: GestureDetector(
@@ -13,7 +12,7 @@ Widget buildEntryField(
           context: context,
           isScrollControlled: true,
           builder: (BuildContext context) {
-            return buildBottomSheet(context, inputAnswer);
+            return buildBottomSheet(context, inputAnswer, submitAnswer);
           },
         );
       },
@@ -34,9 +33,16 @@ Widget buildEntryField(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Text(
-                  'Введите ответ: ',
-                  style: TextStyles.ruberoidRegular20,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      inputAnswer.text.isNotEmpty ? inputAnswer.text : 'Введите ответ:',
+                      style: TextStyles.ruberoidRegular20,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
                 Container(
                   width: 38,

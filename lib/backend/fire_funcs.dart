@@ -113,6 +113,7 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                     var lessonValue = lessonEntry.value;
 
                     Map<String, dynamic> matchedLesson = {
+                      'courseId': courseKey,
                       'subjectId': subjectKey,
                       'lessonId': lessonKey, // Добавляем lessonId
                       'name': lessonValue['name'],
@@ -162,8 +163,8 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
                     // Проверяем наличие entry_field и инициализируем, если нужно
                     if (materials?['entry_field'] == true) {
                       if (progressData == null ||
-                          !(progressData.containsKey('entry_field') &&
-                              progressData['entry_field'].isNotEmpty)) {
+                          !(progressData.containsKey('entryFieldResponse') &&
+                              progressData['entryFieldResponse'].isNotEmpty)) {
                         await progressRef.update({
                           'lesson_name': lessonValue['name'],
                           'entryFieldResponse': '',
@@ -204,10 +205,10 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
 
 // Получение ответа
-Future<String?> getEntryFieldResponse(String subjectId, String lessonId) async {
+Future<String?> getEntryFieldResponse(String courseId,   String subjectId, String lessonId) async {
   final userId = FirebaseAuth.instance.currentUser!.uid;
   final DatabaseReference ref = FirebaseDatabase.instance
-      .ref('progress/$userId/subjects/$subjectId/lessons/$lessonId/entryFieldResponse');
+      .ref('progress/$userId/$courseId/$subjectId/$lessonId/entryFieldResponse');
   
   final snapshot = await ref.get();
   if (snapshot.exists) {
@@ -217,12 +218,13 @@ Future<String?> getEntryFieldResponse(String subjectId, String lessonId) async {
 }
 
 // Отправка ответа
-Future<void> setEntryFieldResponse(String subjectId, String lessonId, String response) async {
+Future<void> setEntryFieldResponse(String courseId,  String subjectId, String lessonId, String response) async {
   final userId = FirebaseAuth.instance.currentUser!.uid;
   final DatabaseReference ref = FirebaseDatabase.instance
-      .ref('progress/$userId/subjects/$subjectId/lessons/$lessonId');
+      .ref('progress/$userId/$courseId/$subjectId/$lessonId');
   
   await ref.update({
     'entryFieldResponse': response,
+    'completed': 2
   });
 }

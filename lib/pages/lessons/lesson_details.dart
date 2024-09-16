@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:study_hub/backend/fire_funcs.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
 import 'package:study_hub/widgets/elements/details/entry_field.dart';
@@ -19,6 +20,41 @@ class LessonDetails extends StatefulWidget {
 class _LessonDetailsState extends State<LessonDetails> {
   TextEditingController inputAnswer = TextEditingController();
   int? selectedAnswerIndex;
+  late String subjectId;
+  late String lessonId;
+  late String courseId;
+
+  @override
+  void initState() {
+    super.initState();
+    courseId = widget.lessonData['courseId'];
+    subjectId = widget.lessonData['subjectId'];
+    lessonId = widget.lessonData['lessonId'];
+    debugPrint('subjectId and lessonId: $subjectId & $lessonId');
+    _loadEntryFieldResponse();
+  }
+
+  void _loadEntryFieldResponse() async {
+    String? savedResponse =
+        await getEntryFieldResponse(courseId, subjectId, lessonId);
+    if (savedResponse != null) {
+      setState(() {
+        inputAnswer.text = savedResponse;
+        debugPrint('savedResponse: $savedResponse');
+      });
+    }
+  }
+
+  void submitAnswer() async {
+    await setEntryFieldResponse(
+        courseId, subjectId, lessonId, inputAnswer.text);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Ответ отправлен на проверку',
+            style: TextStyles.ruberoidLight16),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +74,7 @@ class _LessonDetailsState extends State<LessonDetails> {
     String correctAnswer = test?['correct_anwer'] ?? '';
     bool entryField = widget.lessonData['materials']?['entry_field'] ?? false;
 
-    String lessonId = widget.lessonData['lessonId'] ?? '';
-    String subjectId = widget.lessonData['subjectId'] ?? '';
-
-    debugPrint('LessonID and subjectId for compare course and progress: $lessonId & $subjectId');
-
-
-    //*parse
+    // Parse correct answer
     int? correctIntAnswer;
     if (correctAnswer.isNotEmpty) {
       correctIntAnswer = int.tryParse(correctAnswer);
@@ -110,7 +140,7 @@ class _LessonDetailsState extends State<LessonDetails> {
               ),
             ),
           ),
-          if (entryField) buildEntryField(context, inputAnswer),
+          if (entryField) buildEntryField(context, inputAnswer, submitAnswer),
         ],
       ),
     );
