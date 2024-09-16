@@ -38,6 +38,11 @@ class _LessonDetailsState extends State<LessonDetails> {
     String correctAnswer = test?['correct_anwer'] ?? '';
     bool entryField = widget.lessonData['materials']?['entry_field'] ?? false;
 
+    String lessonId = widget.lessonData['lessonId'] ?? '';
+
+    debugPrint('LessonID for compare course and progress: $lessonId');
+
+
     //*parse
     int? correctIntAnswer;
     if (correctAnswer.isNotEmpty) {

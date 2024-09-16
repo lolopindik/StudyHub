@@ -57,6 +57,7 @@ class FirebaseService {
 }
 
 Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
+  // Получаем данные прогресса пользователя
   DatabaseReference userCourseRef = FirebaseDatabase.instance
       .ref()
       .child("UserDetails/$userId/courseProgress");
@@ -66,119 +67,161 @@ Future<List<Map<String, dynamic>>> compareTokens(String? userId) async {
 
   if (userCourseData != null) {
     String? userToken = userCourseData['courseToken'] as String?;
-    DatabaseReference coursesRef =
-        FirebaseDatabase.instance.ref().child("Courses");
-    DataSnapshot coursesSnapshot = await coursesRef.get();
-    Map<dynamic, dynamic>? coursesData =
-        coursesSnapshot.value as Map<dynamic, dynamic>?;
-    if (coursesData != null) {
-      List<Map<String, dynamic>> matchedCourses = [];
-      for (var courseEntry in coursesData.entries) {
-        var courseKey = courseEntry.key;
-        var courseValue = courseEntry.value;
-        if (courseValue['token'] == userToken) {
-          Map<String, dynamic> matchedCourse = {
-            'courseName': courseValue['courseName'],
-            'subjects': <Map<String, dynamic>>[]
-          };
-          Map<dynamic, dynamic>? subjects =
-              courseValue['subjects'] as Map<dynamic, dynamic>?;
-          if (subjects != null) {
-            for (var subjectEntry in subjects.entries) {
-              var subjectKey = subjectEntry.key;
-              var subjectValue = subjectEntry.value;
-              Map<String, dynamic> matchedSubject = {
-                'name': subjectValue['name'],
-                'lessons': <Map<String, dynamic>>[]
-              };
-              Map<dynamic, dynamic>? lessons =
-                  subjectValue['lessons'] as Map<dynamic, dynamic>?;
-              if (lessons != null) {
-                for (var lessonEntry in lessons.entries) {
-                  var lessonKey = lessonEntry.key;
-                  var lessonValue = lessonEntry.value;
-                  Map<String, dynamic> matchedLesson = {
-                    'name': lessonValue['name'],
-                    'materials': {},
-                    'progress': 0 // Инициализируем поле прогресса
-                  };
+    if (userToken != null) {
+      // Получаем все курсы
+      DatabaseReference coursesRef =
+          FirebaseDatabase.instance.ref().child("Courses");
+      DataSnapshot coursesSnapshot = await coursesRef.get();
+      Map<dynamic, dynamic>? coursesData =
+          coursesSnapshot.value as Map<dynamic, dynamic>?;
 
-                  // Обработка материалов урока
-                  Map<dynamic, dynamic>? materials =
-                      lessonValue['materials'] as Map<dynamic, dynamic>?;
+      if (coursesData != null) {
+        List<Map<String, dynamic>> matchedCourses = [];
 
-                  // Если есть материалы, то обрабатываем их
-                  if (materials != null) {
-                    matchedLesson['materials'] = {};
-                    materials.forEach((materialKey, materialValue) {
-                      matchedLesson['materials'][materialKey] = materialValue;
-                    });
+        for (var courseEntry in coursesData.entries) {
+          var courseKey = courseEntry.key;
+          var courseValue = courseEntry.value;
 
-                    if (materials['test'] != null) {
-                      Map<String, dynamic> test = {
-                        'question': materials['test']['question'],
-                        'anwers':
-                            List<String>.from(materials['test']['anwers']),
-                        'correct_anwer': materials['test']['correct_anwer']
-                      };
-                      matchedLesson['materials']['test'] = test;
+          // Сопоставляем курсы по token
+          if (courseValue['token'] == userToken) {
+            Map<String, dynamic> matchedCourse = {
+              'courseName': courseValue['courseName'],
+              'subjects': <Map<String, dynamic>>[],
+            };
+
+            // Получаем предметы курса
+            Map<dynamic, dynamic>? subjects =
+                courseValue['subjects'] as Map<dynamic, dynamic>?;
+
+            if (subjects != null) {
+              for (var subjectEntry in subjects.entries) {
+                var subjectKey = subjectEntry.key;
+                var subjectValue = subjectEntry.value;
+
+                Map<String, dynamic> matchedSubject = {
+                  'name': subjectValue['name'],
+                  'lessons': <Map<String, dynamic>>[],
+                };
+
+                // Получаем уроки предмета
+                Map<dynamic, dynamic>? lessons =
+                    subjectValue['lessons'] as Map<dynamic, dynamic>?;
+
+                if (lessons != null) {
+                  for (var lessonEntry in lessons.entries) {
+                    var lessonKey = lessonEntry.key; // lessonId
+                    var lessonValue = lessonEntry.value;
+
+                    Map<String, dynamic> matchedLesson = {
+                      'lessonId': lessonKey, // Добавляем lessonId
+                      'name': lessonValue['name'],
+                      'materials': {},
+                      'progress': 0, // Инициализация прогресса
+                    };
+
+                    // Получаем материалы урока
+                    Map<dynamic, dynamic>? materials =
+                        lessonValue['materials'] as Map<dynamic, dynamic>?;
+
+                    if (materials != null) {
+                      matchedLesson['materials'] = {};
+
+                      // Добавляем материалы (тест, теория)
+                      materials.forEach((materialKey, materialValue) {
+                        matchedLesson['materials'][materialKey] = materialValue;
+                      });
+
+                      // Обрабатываем тест
+                      if (materials['test'] != null) {
+                        Map<String, dynamic> test = {
+                          'question': materials['test']['question'],
+                          'anwers':
+                              List<String>.from(materials['test']['anwers']),
+                          'correct_anwer': materials['test']['correct_anwer'],
+                        };
+                        matchedLesson['materials']['test'] = test;
+                      }
+
+                      // Обрабатываем теорию
+                      if (materials['theory'] != null) {
+                        matchedLesson['materials']['theory'] =
+                            materials['theory'];
+                      }
                     }
 
-                    if (materials['theory'] != null) {
-                      matchedLesson['materials']['theory'] =
-                          materials['theory'];
+                    // Получаем прогресс урока
+                    DatabaseReference progressRef = FirebaseDatabase.instance
+                        .ref()
+                        .child(
+                            'progress/$userId/$courseKey/$subjectKey/$lessonKey');
+                    DataSnapshot progressSnapshot = await progressRef.get();
+                    var progressData =
+                        progressSnapshot.value as Map<dynamic, dynamic>?;
+
+                    // Проверяем наличие entry_field и инициализируем, если нужно
+                    if (materials?['entry_field'] == true) {
+                      if (progressData == null ||
+                          !(progressData.containsKey('entry_field') &&
+                              progressData['entry_field'].isNotEmpty)) {
+                        await progressRef.update({
+                          'lesson_name': lessonValue['name'],
+                          'entryFieldResponse': '',
+                        });
+                      }
                     }
-                  }
 
-                  // Получаем прогресс урока
-                  DatabaseReference progressRef = FirebaseDatabase.instance
-                      .ref()
-                      .child(
-                          'progress/$userId/$courseKey/$subjectKey/$lessonKey');
-                  DataSnapshot progressSnapshot = await progressRef.get();
-                  var progressData =
-                      progressSnapshot.value as Map<dynamic, dynamic>?;
-
-                  // Проверка на наличие entry_field
-                  if (materials?['entry_field'] == true) {
+                    // Инициализация прогресса урока, если он не существует
                     if (progressData == null ||
-                        !(progressData.containsKey('entry_field') &&
-                            progressData['entry_field'].isNotEmpty)) {
-                      // Если entry_field == true и в прогрессе пустое значение, создаем его
+                        (progressData['completed'] ?? 0) == 0) {
                       await progressRef.update({
                         'lesson_name': lessonValue['name'],
-                        'entry_field': '', // Инициализируем пустым значением
+                        'completed': 0,
                       });
                     }
-                  }
 
-                  // Если прогресс не существует или completed == 0, записываем прогресс
-                  if (progressData == null ||
-                      (progressData['completed'] ?? 0) == 0) {
-                    await progressRef.update({
-                      'lesson_name': lessonValue['name'],
-                      'completed': 0,
-                    });
-                  }
-
-                  // Если данные прогресса существуют, добавляем их в результат
-                  if (progressData != null) {
-                    if (progressData['completed'] != null) {
+                    // Если данные прогресса существуют, обновляем их в уроке
+                    if (progressData != null &&
+                        progressData['completed'] != null) {
                       matchedLesson['progress'] = progressData['completed'];
                     }
-                  }
 
-                  matchedSubject['lessons'].add(matchedLesson);
+                    matchedSubject['lessons'].add(matchedLesson);
+                  }
                 }
+                matchedCourse['subjects'].add(matchedSubject);
               }
-              matchedCourse['subjects'].add(matchedSubject);
             }
+            matchedCourses.add(matchedCourse);
           }
-          matchedCourses.add(matchedCourse);
         }
+        return matchedCourses;
       }
-      return matchedCourses;
     }
   }
   return [];
+}
+  
+
+// Получение ответа
+Future<String?> getEntryFieldResponse(String subjectId, String lessonId) async {
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+  final DatabaseReference ref = FirebaseDatabase.instance
+      .ref('progress/$userId/subjects/$subjectId/lessons/$lessonId/entryFieldResponse');
+  
+  final snapshot = await ref.get();
+  if (snapshot.exists) {
+    return snapshot.value as String?;
+  }
+  return null;
+}
+
+// Отправка ответа
+Future<void> setEntryFieldResponse(String subjectId, String lessonId, String response) async {
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+  final DatabaseReference ref = FirebaseDatabase.instance
+      .ref('progress/$userId/subjects/$subjectId/lessons/$lessonId');
+  
+  await ref.update({
+    'entryFieldResponse': response,
+  });
 }
