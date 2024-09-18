@@ -20,7 +20,7 @@ import 'package:study_hub/widgets/elements/moving_home.dart';
             ),
             child: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, true);
               },
               icon: const Icon(
                 Icons.arrow_back_ios_new,

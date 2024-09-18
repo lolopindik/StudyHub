@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/elements/details/open_webview.dart';
 
-Future<void> showWebviewDialog(BuildContext context, String url) async {
+Future<void> showWebviewDialog(BuildContext context, String url, VoidCallback sendingReply) async {
   if (Platform.isAndroid) {
     await showDialog<void>(
       context: context,
@@ -45,6 +45,7 @@ Future<void> showWebviewDialog(BuildContext context, String url) async {
                     debugPrint('url confirmed');
                     Navigator.pop(context);
                     openWebView(context, url);
+                    sendingReply();
                   },
                 ),
               ],
@@ -79,6 +80,7 @@ Future<void> showWebviewDialog(BuildContext context, String url) async {
               debugPrint('url confirmed');
               Navigator.pop(context);
               openWebView(context, url);
+              sendingReply();
             },
             child: const Text(
               'Да',

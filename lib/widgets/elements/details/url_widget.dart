@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/elements/details/webview_dialog.dart';
 
-Widget buildUrl(BuildContext context, String url) {
+Widget buildUrl(BuildContext context, String url, VoidCallback sendingReply) {
   return GestureDetector(
     onTap: () {
       debugPrint('link pushed');
       if (Platform.isAndroid) {
-        showWebviewDialog(context, url);
+        showWebviewDialog(context, url, sendingReply);
       }
     },
     child: Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/widgets/elements/details/entryfield_dialog.dart';
 
 Widget buildBottomSheet(BuildContext context, TextEditingController inputAnswer, Function submitAnswer) {
   return Padding(
@@ -30,7 +31,7 @@ Widget buildBottomSheet(BuildContext context, TextEditingController inputAnswer,
                           enabledBorder: InputBorder.none,
                           border: InputBorder.none,
                         ),
-                        style: TextStyles.ruberoidLight16,
+                        style: TextStyles.ruberoidLight20,
                         cursorColor: Colors.white,
                         maxLines: null,
                         minLines: 1,
@@ -54,8 +55,12 @@ Widget buildBottomSheet(BuildContext context, TextEditingController inputAnswer,
                     ),
                     child: IconButton(
                       onPressed: () {
-                        submitAnswer();
-                        Navigator.pop(context);
+                        if(inputAnswer.text.isEmpty){
+                          showEntryFieldInCorrectDialog(context, 'Поле ввода не заполненно, заполните поле');
+                        }
+                        else{
+                          showEntryFieldCorrectDialog(context, 'Хотите отправить или обновить Ваш ответ?', submitAnswer);
+                        }
                       },
                       icon: const Icon(
                         Icons.send,

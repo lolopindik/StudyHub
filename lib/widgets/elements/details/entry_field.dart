@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/elements/details/bottomsheet.dart';
 
-Widget buildEntryField(BuildContext context, TextEditingController inputAnswer, Function submitAnswer) {
+Widget buildEntryField(BuildContext context, TextEditingController inputAnswer,Function submitAnswer) {
   return Align(
     alignment: Alignment.bottomCenter,
     child: GestureDetector(
