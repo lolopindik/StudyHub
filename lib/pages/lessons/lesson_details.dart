@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/backend/fire_funcs.dart';
@@ -40,7 +42,7 @@ class _LessonDetailsState extends State<LessonDetails> {
     if (savedResponse != null) {
       setState(() {
         inputAnswer.text = savedResponse;
-        debugPrint('savedResponse: $savedResponse');
+        debugPrint('savedResponse: "$savedResponse"');
       });
     }
   }
@@ -54,6 +56,11 @@ class _LessonDetailsState extends State<LessonDetails> {
             style: TextStyles.ruberoidLight16),
       ),
     );
+  }
+
+  void sendingReply() async {
+    await setCompleted(courseId, subjectId, lessonId);
+    debugPrint('Пользователь перешел по ссылке');
   }
 
   @override
@@ -80,68 +87,74 @@ class _LessonDetailsState extends State<LessonDetails> {
       correctIntAnswer = int.tryParse(correctAnswer);
     }
 
-    return Scaffold(
-      appBar: buildLessonAppBar(context),
-      backgroundColor: AppTheme.secondaryColor,
-      body: Stack(
-        children: [
-          RawScrollbar(
-            thumbColor: Colors.white70,
-            thickness: 2,
-            radius: const Radius.circular(10.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.103,
-                    color: AppTheme.mainElementColor,
-                    constraints: const BoxConstraints(minHeight: 60),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: AutoSizeText(
-                          widget.lessonData['name'] ?? 'Lesson',
-                          style: TextStyles.ruberoidRegular20,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, true);
+        return true;
+      },
+      child: Scaffold(
+        appBar: buildLessonAppBar(context),
+        backgroundColor: AppTheme.secondaryColor,
+        body: Stack(
+          children: [
+            RawScrollbar(
+              thumbColor: Colors.white70,
+              thickness: 2,
+              radius: const Radius.circular(10.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.103,
+                      color: AppTheme.mainElementColor,
+                      constraints: const BoxConstraints(minHeight: 60),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: AutoSizeText(
+                            widget.lessonData['name'] ?? 'Lesson',
+                            style: TextStyles.ruberoidRegular20,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (theory.isNotEmpty) buildTheory(context, theory),
-                      if (url.isNotEmpty) ...{
-                        const SizedBox(height: 20),
-                        buildUrl(context, url),
-                      },
-                      if (answers != null && question.isNotEmpty) ...{
-                        buildTestWidget(
-                          question,
-                          answers,
-                          correctIntAnswer,
-                          selectedAnswerIndex,
-                          (index) {
-                            setState(() {
-                              selectedAnswerIndex = index;
-                              debugPrint(
-                                  'Индекс ответа: $selectedAnswerIndex, Правильный ответ: $correctIntAnswer');
-                            });
-                          },
-                        ),
-                      },
-                      const SizedBox(height: 40),
-                      if (entryField) const SizedBox(height: 80),
-                    ],
-                  ),
-                ],
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (theory.isNotEmpty) buildTheory(context, theory),
+                        if (url.isNotEmpty) ...{
+                          const SizedBox(height: 20),
+                          buildUrl(context, url, sendingReply),
+                        },
+                        if (answers != null && question.isNotEmpty) ...{
+                          buildTestWidget(
+                            question,
+                            answers,
+                            correctIntAnswer,
+                            selectedAnswerIndex,
+                            (index) {
+                              setState(() {
+                                selectedAnswerIndex = index;
+                                debugPrint(
+                                    'Индекс ответа: $selectedAnswerIndex, Правильный ответ: $correctIntAnswer');
+                              });
+                            },
+                          ),
+                        },
+                        const SizedBox(height: 40),
+                        if (entryField) const SizedBox(height: 80),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          if (entryField) buildEntryField(context, inputAnswer, submitAnswer),
-        ],
+            if (entryField) buildEntryField(context, inputAnswer, submitAnswer),
+          ],
+        ),
       ),
     );
   }

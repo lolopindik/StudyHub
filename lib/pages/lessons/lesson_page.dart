@@ -4,14 +4,21 @@ import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class LessonPage extends StatelessWidget {
+class LessonPage extends StatefulWidget {
   final Map<String, dynamic> lessonData;
+  final VoidCallback refreshData;
 
-  const LessonPage({super.key, required this.lessonData});
+  const LessonPage(
+      {super.key, required this.lessonData, required this.refreshData});
 
   @override
+  State<LessonPage> createState() => LessonPageState();
+}
+
+class LessonPageState extends State<LessonPage> {
+  @override
   Widget build(BuildContext context) {
-    List<dynamic> lessons = lessonData['lessons'] ?? [];
+    List<dynamic> lessons = widget.lessonData['lessons'] ?? [];
     debugPrint('проверка LessonPage: $lessons');
 
     return Scaffold(
@@ -30,7 +37,7 @@ class LessonPage extends StatelessWidget {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return AutoSizeText(
-                      lessonData['name'] ?? 'Lesson',
+                      widget.lessonData['name'] ?? 'Lesson',
                       style: TextStyles.ruberoidLight20,
                       textAlign: TextAlign.center,
                       maxLines: 2,
@@ -58,11 +65,16 @@ class LessonPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LessonDetails(
-                          lessonData: lesson,
-                        ),
+                        builder: (context) => LessonDetails(lessonData: lesson),
                       ),
-                    );
+                    ).then((value) {
+                      if (value == true) {
+                        setState(() {
+                          widget.refreshData();
+                          debugPrint('Data refreshed');
+                        });
+                      }
+                    });
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.08,

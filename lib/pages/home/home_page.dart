@@ -38,9 +38,10 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _refreshData() async {
+  Future<void> refreshData() async {
     setState(() {
       _futureCoursesData = compareTokens(_userId);
+      compareTokens(_userId);
     });
   }
 
@@ -51,7 +52,7 @@ class HomePageState extends State<HomePage> {
     );
 
     if (result == true) {
-      _refreshData();
+      refreshData();
     }
   }
 
@@ -164,7 +165,7 @@ class HomePageState extends State<HomePage> {
   Widget _buildRefreshableHeader(
       BuildContext context, List<Map<String, dynamic>> coursesData) {
     return RefreshIndicator(
-      onRefresh: _refreshData,
+      onRefresh: refreshData,
       color: Colors.white70,
       backgroundColor: AppTheme.signElementColor,
       child: SingleChildScrollView(
@@ -209,6 +210,7 @@ class HomePageState extends State<HomePage> {
                       MaterialPageRoute(
                         builder: (context) => LessonPage(
                           lessonData: subjectDetails,
+                          refreshData: refreshData, 
                         ),
                       ),
                     );
