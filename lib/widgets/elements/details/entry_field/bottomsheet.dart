@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/elements/details/entryfield_dialog.dart';
+import 'package:study_hub/widgets/elements/details/entry_field/entryfield_dialog.dart';
 
 Widget buildBottomSheet(BuildContext context, TextEditingController inputAnswer, Function submitAnswer) {
   return Padding(
