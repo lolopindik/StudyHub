@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:study_hub/backend/fire_funcs.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
-import 'package:study_hub/widgets/elements/details/entry_field.dart';
-import 'package:study_hub/widgets/elements/details/test_widget.dart';
-import 'package:study_hub/widgets/elements/details/url_widget.dart';
+import 'package:study_hub/widgets/elements/details/entry_field/entry_field.dart';
+import 'package:study_hub/widgets/elements/details/test_/test_widget.dart';
+import 'package:study_hub/widgets/elements/details/webview/url_widget.dart';
 import 'package:study_hub/widgets/elements/details/theory_widget.dart';
 
 class LessonDetails extends StatefulWidget {

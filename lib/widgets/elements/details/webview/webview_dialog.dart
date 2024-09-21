@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/elements/details/open_webview.dart';
+import 'package:study_hub/widgets/elements/details/webview/open_webview.dart';
 
 Future<void> showWebviewDialog(BuildContext context, String url, VoidCallback sendingReply) async {
   if (Platform.isAndroid) {

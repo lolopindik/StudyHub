@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/elements/details/bottomsheet.dart';
+import 'package:study_hub/widgets/elements/details/entry_field/bottomsheet.dart';
 
 Widget buildEntryField(BuildContext context, TextEditingController inputAnswer,Function submitAnswer) {
   return Align(
