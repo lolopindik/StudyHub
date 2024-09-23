@@ -7,7 +7,8 @@ Widget buildTestWidget(
     List<dynamic> answers,
     int? correctIntAnswer,
     int? selectedAnswerIndex,
-    Function(int) onAnswerSelected) {
+    bool enebled,
+    Function(int) onAnswerSelected, Function disableTest) {
   return Column(
     children: [
       const SizedBox(height: 40),
@@ -54,7 +55,20 @@ Widget buildTestWidget(
                     InkWell(
                       borderRadius: BorderRadius.circular(60),
                       onTap: () {
-                        onAnswerSelected(index);
+                        if (enebled) {
+                          onAnswerSelected(index);
+                          disableTest(); 
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              duration: Duration(seconds: 1),
+                              content: Text(
+                                'Ответ уже выбран',
+                                style: TextStyles.ruberoidLight16,
+                              ),
+                            ),
+                          );
+                        }
                       },
                       child: Container(
                         constraints: const BoxConstraints(minHeight: 60),
@@ -68,7 +82,8 @@ Widget buildTestWidget(
                               : BorderRadius.zero,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 12),
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.08,
                             decoration: BoxDecoration(
@@ -92,7 +107,8 @@ Widget buildTestWidget(
                                         ))
                                   : LinearGradient(
                                       colors: [
-                                        AppTheme.mainElementColor.withOpacity(0.8),
+                                        AppTheme.mainElementColor
+                                            .withOpacity(0.8),
                                         AppTheme.mainElementColor
                                       ],
                                       begin: Alignment.topLeft,
@@ -102,7 +118,8 @@ Widget buildTestWidget(
                             ),
                             child: Center(
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 5, right: 5),
+                                padding:
+                                    const EdgeInsets.only(left: 5, right: 5),
                                 child: AutoSizeText(
                                   answers[index],
                                   style: TextStyles.ruberoidLight18,

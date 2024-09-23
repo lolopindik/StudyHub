@@ -1,7 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:study_hub/backend/fire_funcs.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
@@ -9,6 +13,8 @@ import 'package:study_hub/widgets/elements/details/entry_field/entry_field.dart'
 import 'package:study_hub/widgets/elements/details/test_/test_widget.dart';
 import 'package:study_hub/widgets/elements/details/webview/url_widget.dart';
 import 'package:study_hub/widgets/elements/details/theory_widget.dart';
+import 'package:study_hub/widgets/elements/loading/cupertinoLoadingIndicator.dart';
+import 'package:study_hub/widgets/elements/loading/customLoadingIndicator.dart';
 
 class LessonDetails extends StatefulWidget {
   final Map<String, dynamic> lessonData;
@@ -22,6 +28,8 @@ class LessonDetails extends StatefulWidget {
 class _LessonDetailsState extends State<LessonDetails> {
   TextEditingController inputAnswer = TextEditingController();
   int? selectedAnswerIndex;
+  bool enebled = true;
+  bool isLoading = true;
   late String subjectId;
   late String lessonId;
   late String courseId;
@@ -33,10 +41,50 @@ class _LessonDetailsState extends State<LessonDetails> {
     subjectId = widget.lessonData['subjectId'];
     lessonId = widget.lessonData['lessonId'];
     debugPrint('subjectId and lessonId: $subjectId & $lessonId');
-    _loadEntryFieldResponse();
+    loadData();
   }
 
-  void _loadEntryFieldResponse() async {
+  Future<void> loadData() async {
+    loadEntryFieldResponse();
+    await loadSelectedAnswerFromFirebase();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> saveSelectedAnswerToFirebase(
+      int selectedIndex, int? correctIntAnswer) async {
+    setState(() {
+      selectedAnswerIndex = selectedIndex;
+      enebled = false;
+    });
+
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final DatabaseReference ref = FirebaseDatabase.instance
+        .ref('progress/$userId/$courseId/$subjectId/$lessonId');
+    int completionStatus = (selectedIndex == correctIntAnswer) ? 3 : 1;
+
+    await ref.update({
+      'selectedAnswer': selectedIndex,
+      'completed': completionStatus,
+    });
+  }
+
+  Future<void> loadSelectedAnswerFromFirebase() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final DatabaseReference ref = FirebaseDatabase.instance
+        .ref('progress/$userId/$courseId/$subjectId/$lessonId/selectedAnswer');
+
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      setState(() {
+        selectedAnswerIndex = snapshot.value as int?;
+        enebled = false;
+      });
+    }
+  }
+
+  void loadEntryFieldResponse() async {
     String? savedResponse =
         await getEntryFieldResponse(courseId, subjectId, lessonId);
     if (savedResponse != null) {
@@ -63,6 +111,12 @@ class _LessonDetailsState extends State<LessonDetails> {
     debugPrint('Пользователь перешел по ссылке');
   }
 
+  void _disableTest() {
+    setState(() {
+      enebled = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic>? test;
@@ -81,10 +135,16 @@ class _LessonDetailsState extends State<LessonDetails> {
     String correctAnswer = test?['correct_anwer'] ?? '';
     bool entryField = widget.lessonData['materials']?['entry_field'] ?? false;
 
-    // Parse correct answer
     int? correctIntAnswer;
     if (correctAnswer.isNotEmpty) {
       correctIntAnswer = int.tryParse(correctAnswer);
+    }
+
+    if (isLoading) {
+      return Center(
+          child: Platform.isIOS
+              ? const CupertinoTransparentIndicator()
+              : const CustomTransparentLoadingIndicator());
     }
 
     return WillPopScope(
@@ -135,13 +195,16 @@ class _LessonDetailsState extends State<LessonDetails> {
                             answers,
                             correctIntAnswer,
                             selectedAnswerIndex,
+                            enebled,
                             (index) {
                               setState(() {
-                                selectedAnswerIndex = index;
+                                saveSelectedAnswerToFirebase(
+                                    index, correctIntAnswer);
                                 debugPrint(
                                     'Индекс ответа: $selectedAnswerIndex, Правильный ответ: $correctIntAnswer');
                               });
                             },
+                            _disableTest,
                           ),
                         },
                         const SizedBox(height: 40),
