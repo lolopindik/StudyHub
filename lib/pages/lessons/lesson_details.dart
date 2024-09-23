@@ -14,7 +14,7 @@ import 'package:study_hub/widgets/elements/details/test_/test_widget.dart';
 import 'package:study_hub/widgets/elements/details/webview/url_widget.dart';
 import 'package:study_hub/widgets/elements/details/theory_widget.dart';
 import 'package:study_hub/widgets/elements/loading/cupertinoLoadingIndicator.dart';
-import 'package:study_hub/widgets/elements/loading/customLoadingIndicator.dart';
+import 'package:study_hub/widgets/elements/loading/mainColorIndicator.dart';
 
 class LessonDetails extends StatefulWidget {
   final Map<String, dynamic> lessonData;
@@ -45,18 +45,27 @@ class _LessonDetailsState extends State<LessonDetails> {
   }
 
   Future<void> loadData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
     loadEntryFieldResponse();
     await loadSelectedAnswerFromFirebase();
+
     setState(() {
-      isLoading = false;
+      isLoading = false; 
     });
   }
 
   Future<void> saveSelectedAnswerToFirebase(
       int selectedIndex, int? correctIntAnswer) async {
     setState(() {
-      selectedAnswerIndex = selectedIndex;
-      enebled = false;
+      if (selectedIndex > -1) {
+        selectedAnswerIndex = selectedIndex;
+        enebled = false;
+      }
     });
 
     final userId = FirebaseAuth.instance.currentUser!.uid;
@@ -67,6 +76,22 @@ class _LessonDetailsState extends State<LessonDetails> {
     await ref.update({
       'selectedAnswer': selectedIndex,
       'completed': completionStatus,
+    });
+  }
+
+  Future<void> removeSelectedAnswerToFirebase() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final DatabaseReference ref = FirebaseDatabase.instance
+        .ref('progress/$userId/$courseId/$subjectId/$lessonId');
+    await ref.update({
+      'completed': 0,
+    });
+    await ref.child('selectedAnswer').remove();
+
+    await loadData();
+    setState(() {
+      enebled = true;
+      selectedAnswerIndex = null;
     });
   }
 
@@ -142,9 +167,10 @@ class _LessonDetailsState extends State<LessonDetails> {
 
     if (isLoading) {
       return Center(
-          child: Platform.isIOS
-              ? const CupertinoTransparentIndicator()
-              : const CustomTransparentLoadingIndicator());
+        child: Platform.isIOS
+            ? const CupertinoTransparentIndicator()
+            : const CustomMainColorLoadingIndicator(),
+      );
     }
 
     return WillPopScope(
@@ -196,6 +222,7 @@ class _LessonDetailsState extends State<LessonDetails> {
                             correctIntAnswer,
                             selectedAnswerIndex,
                             enebled,
+                            removeSelectedAnswerToFirebase,
                             (index) {
                               setState(() {
                                 saveSelectedAnswerToFirebase(

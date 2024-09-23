@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/widgets/elements/details/test_/test_dialog.dart';
 
 Widget buildTestWidget(
     String question,
@@ -8,6 +9,7 @@ Widget buildTestWidget(
     int? correctIntAnswer,
     int? selectedAnswerIndex,
     bool enebled,
+    VoidCallback removeSelectedAnswerToFirebase,
     Function(int) onAnswerSelected, Function disableTest) {
   return Column(
     children: [
@@ -59,15 +61,7 @@ Widget buildTestWidget(
                           onAnswerSelected(index);
                           disableTest(); 
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              duration: Duration(seconds: 1),
-                              content: Text(
-                                'Ответ уже выбран',
-                                style: TextStyles.ruberoidLight16,
-                              ),
-                            ),
-                          );
+                          showTestDialog(context, removeSelectedAnswerToFirebase);
                         }
                       },
                       child: Container(
