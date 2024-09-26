@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 
-PreferredSizeWidget? buildSettingsAppBar(BuildContext context) {
+PreferredSizeWidget? buildSettingsAppBar(BuildContext context, String title) {
   return AppBar(
     scrolledUnderElevation: 0.0,
     automaticallyImplyLeading: false,
-    title: const Text(
-      'Настройки',
+    title: Text(
+      title,
       style: TextStyles.ruberoidRegular28,
     ),
     centerTitle: true,

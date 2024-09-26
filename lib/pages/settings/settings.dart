@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_hub/backend/fire_funcs.dart';
+import 'package:study_hub/pages/settings/app_info_page.dart';
 import 'package:study_hub/pages/user/account_info.dart';
 import 'package:study_hub/pages/auth/sign_up_in.dart';
 import 'package:study_hub/preferences/app_theme.dart';
@@ -35,39 +36,8 @@ class _UserSettingsState extends State<UserSettings> {
     }
   }
 
-  Widget _buildSettingItem({
-    required IconData icon,
-    required String label,
-    required Function onTap,
-  }) {
-    return GestureDetector(
-      onTap: () => onTap(),
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.08,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
-          color: AppTheme.mainElementColor,
-        ),
-        constraints: const BoxConstraints(maxWidth: 600, minHeight: 40),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                size: 30,
-                color: Colors.white54,
-              ),
-              const SizedBox(width: 20),
-              Text(
-                label,
-                style: TextStyles.ruberoidLight20,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+  Future<void> rotateToAppInfo() async {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AppInfoPage()));
   }
 
   Future<void> _showAccountInfoDialog() async {
@@ -86,7 +56,7 @@ class _UserSettingsState extends State<UserSettings> {
                   height: 38,
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 179, 173, 173),
-                    borderRadius: BorderRadius.all(Radius.circular(40))
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
                   ),
                   child: IconButton(
                     onPressed: () {
@@ -104,8 +74,7 @@ class _UserSettingsState extends State<UserSettings> {
           );
         },
       );
-    } else 
-    if (Platform.isAndroid) {
+    } else if (Platform.isAndroid) {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -120,7 +89,7 @@ class _UserSettingsState extends State<UserSettings> {
                   height: 38,
                   decoration: const BoxDecoration(
                     color: AppTheme.secondaryColor,
-                    borderRadius: BorderRadius.all(Radius.circular(40))
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
                   ),
                   child: IconButton(
                     onPressed: () {
@@ -152,7 +121,7 @@ class _UserSettingsState extends State<UserSettings> {
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
           title: Text(title),
-          content: Text(content, style: const TextStyle(fontSize: 16),),
+          content: Text(content, style: const TextStyle(fontSize: 16)),
           actions: [
             CupertinoDialogAction(
               onPressed: () {
@@ -299,11 +268,11 @@ class _UserSettingsState extends State<UserSettings> {
       {
         'icon': Icons.code,
         'label': 'О программе',
-        'onTap': () => debugPrint('About program'),
+        'onTap': () => rotateToAppInfo(),
       },
       {
         'icon': Icons.bug_report_outlined,
-        'label': 'Сообщить об ошибке',
+        'label': 'Сообщить об проблеме',
         'onTap': () => debugPrint('Message to support'),
       },
     ];
@@ -314,40 +283,38 @@ class _UserSettingsState extends State<UserSettings> {
         return true;
       },
       child: Scaffold(
-        appBar: buildSettingsAppBar(context),
+        appBar: buildSettingsAppBar(context, 'Настройки'),
         backgroundColor: AppTheme.secondaryColor,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text(
-                      'Основные',
-                      style: TextStyles.ruberoidLight28,
-                    ),
-                    SizedBox(
-                      width: 156,
-                      height: 4,
-                      child: Container(
-                        color: AppTheme.mainColor,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: ListView.builder(
+            itemCount: settings.length + 2, // 2 extra for headers
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Основные',
+                        style: TextStyles.ruberoidLight28,
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                                        ...settings.take(3).map((setting) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: _buildSettingItem(
-                          icon: setting['icon'],
-                          label: setting['label'],
-                          onTap: setting['onTap'],
+                      SizedBox(
+                        width: 156,
+                        height: 4,
+                        child: Container(
+                          color: AppTheme.mainColor,
                         ),
-                      );
-                    }),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                );
+              } else if (index == 4) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     const Text(
                       'Дополнительные',
                       style: TextStyles.ruberoidLight28,
@@ -360,25 +327,46 @@ class _UserSettingsState extends State<UserSettings> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ...settings.skip(3).map((setting) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: _buildSettingItem(
-                          icon: setting['icon'],
-                          label: setting['label'],
-                          onTap: setting['onTap'],
-                        ),
-                      );
-                    }),
                   ],
-                ),
-              ],
-            ),
+                );
+              } else {
+                final setting = settings[index > 3 ? index - 2 : index - 1];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: GestureDetector(
+                    onTap: () => setting['onTap'](),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60),
+                        color: AppTheme.mainElementColor,
+                      ),
+                      constraints: const BoxConstraints(maxWidth: 600, minHeight: 50),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 24, right: 10),
+                            child: Icon(
+                              setting['icon'],
+                              color: Colors.grey,
+                              size: 34,
+                            ),
+                          ),
+                          Text(
+                            setting['label'],
+                            style: TextStyles.ruberoidRegular20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
           ),
         ),
       ),
     );
   }
 }
-
-                    
