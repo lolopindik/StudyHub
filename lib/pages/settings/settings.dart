@@ -36,6 +36,7 @@ class _UserSettingsState extends State<UserSettings> {
     }
   }
 
+
   Future<void> rotateToAppInfo() async {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AppInfoPage()));
   }
@@ -270,11 +271,11 @@ class _UserSettingsState extends State<UserSettings> {
         'label': 'О программе',
         'onTap': () => rotateToAppInfo(),
       },
-      {
-        'icon': Icons.bug_report_outlined,
-        'label': 'Сообщить об проблеме',
-        'onTap': () => debugPrint('Message to support'),
-      },
+      // {
+      //   'icon': Icons.bug_report_outlined,
+      //   'label': 'Сообщить об ошибке',
+      //   'onTap': () => debugPrint('Message to support'),
+      // },
     ];
 
     return WillPopScope(

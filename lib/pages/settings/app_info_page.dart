@@ -66,6 +66,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
       body: RawScrollbar(
         thumbColor: Colors.white70,
         thickness: 2,
+        radius: const Radius.circular(10.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
