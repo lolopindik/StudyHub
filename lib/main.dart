@@ -24,7 +24,8 @@ void main() async {
     bool isFirstLaunch = await firebaseService.isFirstLaunch();
 
     Widget initialPage;
-    
+
+    //! нужно добавить проверку верификации
     if (user == null) {
       if (isFirstLaunch) {
         await firebaseService.setFirstLaunch(false);
