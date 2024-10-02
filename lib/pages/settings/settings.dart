@@ -243,7 +243,6 @@ class _UserSettingsState extends State<UserSettings> {
               try {
                 await FirebaseService().deleteAcc(_userId!);
                 await FirebaseService().deleteProgress(_userId);
-                await FirebaseService().logOut();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
