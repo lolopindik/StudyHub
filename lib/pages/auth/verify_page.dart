@@ -16,7 +16,7 @@ class _VerifyPageState extends State<VerifyPage> {
   bool isEmailVerified = false;
   bool canResendEmail = false;
   Timer? _timer;
-  int _remainingSeconds = 60;
+  int _remainingSeconds = 120;
   Timer? _checkVerificationTimer;
   String? _userId;
 
@@ -31,7 +31,6 @@ class _VerifyPageState extends State<VerifyPage> {
 
   @override
   void initState() {
-    
     final user = FirebaseAuth.instance.currentUser;
     _getCurrentUser();
     isEmailVerified = user!.emailVerified;
@@ -53,7 +52,7 @@ class _VerifyPageState extends State<VerifyPage> {
   }
 
   void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (_remainingSeconds > 0) {
         if (mounted) {
           setState(() {
@@ -72,7 +71,8 @@ class _VerifyPageState extends State<VerifyPage> {
   }
 
   void startVerificationCheckTimer() {
-    _checkVerificationTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+    _checkVerificationTimer =
+        Timer.periodic(const Duration(seconds: 5), (timer) async {
       await checkEmailVerified();
       if (isEmailVerified) {
         timer.cancel();
@@ -172,7 +172,9 @@ class _VerifyPageState extends State<VerifyPage> {
                                 height: 70,
                               ),
                               Text(
-                                'Осталось: $_remainingSeconds секунд',
+                                (_remainingSeconds > 0)
+                                    ? 'Осталось: $_remainingSeconds секунд'
+                                    : 'Время истекло',
                                 style: TextStyles.ruberoidRegular20,
                               ),
                               const Icon(Icons.mark_email_unread,

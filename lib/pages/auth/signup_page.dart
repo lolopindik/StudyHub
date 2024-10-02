@@ -64,7 +64,7 @@ class SignUpPage extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content:
-                  Text('Пользователь успешно зарегистрирован: ${user?.uid}', style: TextStyles.ruberoidLight16),
+                  Text('Данные переданы присвоен ID: ${user?.uid}', style: TextStyles.ruberoidLight16),
             ),
           );
 
@@ -78,7 +78,7 @@ class SignUpPage extends StatelessWidget {
           // Обработка ошибки регистрации, например, вывод сообщения об ошибке
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Ошибка регистрации: $e', style: TextStyles.ruberoidLight16),
+              content: Text('Ошибка при регистрации: $e', style: TextStyles.ruberoidLight16),
             ),
           );
         }
