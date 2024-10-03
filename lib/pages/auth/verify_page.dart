@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_hub/backend/fire_funcs.dart';
+import 'package:study_hub/pages/auth/sign_up_in.dart';
 import 'package:study_hub/pages/user/user_details.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 
@@ -204,7 +205,12 @@ class _VerifyPageState extends State<VerifyPage> {
                                 padding: const EdgeInsets.only(top: 15),
                                 child: TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SignUpInPage()),
+                                      );
                                       FirebaseService().deleteAcc(_userId!);
                                     },
                                     child: const Text(
