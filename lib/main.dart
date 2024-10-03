@@ -9,6 +9,7 @@ import 'package:study_hub/pages/home/welcome_page.dart';
 import 'package:study_hub/preferences/app_theme.dart';
 import 'backend/firebase_options.dart';
 import 'pages/auth/sign_up_in.dart';
+import 'pages/auth/verify_page.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,13 +20,11 @@ void main() async {
 
   final FirebaseService firebaseService = FirebaseService();
 
-
   firebaseService.onListenUser((user) async {
     bool isFirstLaunch = await firebaseService.isFirstLaunch();
 
     Widget initialPage;
 
-    //! нужно добавить проверку верификации
     if (user == null) {
       if (isFirstLaunch) {
         await firebaseService.setFirstLaunch(false);
@@ -36,17 +35,22 @@ void main() async {
         debugPrint('no user');
       }
     } else {
-      final ref = FirebaseDatabase.instance.ref();
-      final tokenSnapshot = await ref
-          .child('UserDetails/${user.uid}/courseProgress/courseToken')
-          .get();
-      if (tokenSnapshot.value != null) {
-        debugPrint('Токен курса: ${tokenSnapshot.value}');
-        debugPrint('user $user');
-        initialPage = const HomePage();
+      if (!user.emailVerified) {
+        initialPage = const VerifyPage();
+        debugPrint('user not verified');
       } else {
-        debugPrint('no token');
-        initialPage = const UserData();
+        final ref = FirebaseDatabase.instance.ref();
+        final tokenSnapshot = await ref
+            .child('UserDetails/${user.uid}/courseProgress/courseToken')
+            .get();
+        if (tokenSnapshot.value != null) {
+          debugPrint('Токен курса: ${tokenSnapshot.value}');
+          debugPrint('user $user');
+          initialPage = const HomePage();
+        } else {
+          debugPrint('no token');
+          initialPage = const UserData();
+        }
       }
     }
 
@@ -55,9 +59,9 @@ void main() async {
       theme: ThemeData(
         primarySwatch: Colors.grey,
         textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.white70, 
-          selectionColor: AppTheme.secondaryColor, 
-          selectionHandleColor: Colors.white70 
+          cursorColor: Colors.white70,
+          selectionColor: AppTheme.secondaryColor,
+          selectionHandleColor: Colors.white70,
         ),
       ),
       home: initialPage,
