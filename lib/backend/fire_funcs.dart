@@ -35,8 +35,8 @@ class FirebaseService {
   Future<void> deleteAcc(String userId) async {
     try {
       await FirebaseAuth.instance.currentUser!.delete();
-      await FirebaseAuth.instance.signOut();
       await FirebaseDatabase.instance.ref("UserDetails/$userId/").remove();
+      await FirebaseAuth.instance.signOut();
     } catch (error) {
       print("Ошибка при удалении аккаунта: $error");
     }
