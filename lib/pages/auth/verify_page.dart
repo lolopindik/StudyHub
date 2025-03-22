@@ -72,27 +72,29 @@
     }
 
     void startVerificationCheckTimer() {
-      _checkVerificationTimer =
-          Timer.periodic(const Duration(seconds: 5), (timer) async {
+      _checkVerificationTimer?.cancel();
+      _checkVerificationTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
         await checkEmailVerified();
         if (isEmailVerified) {
           timer.cancel();
+          _checkVerificationTimer = null;
         }
       });
     }
 
     Future<void> checkEmailVerified() async {
+      if (!mounted) return;
+      
       await FirebaseAuth.instance.currentUser!.reload();
+      if (!mounted) return;
 
-      if (mounted) {
-        setState(() {
-          isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-        });
-      }
+      setState(() {
+        isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      });
 
       if (isEmailVerified) {
         _timer?.cancel();
-        // Navigate to the UserData page with pushReplacement
+        _timer = null;
         if (mounted) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const UserData()),

@@ -101,8 +101,7 @@ Widget buildTestWidget(
                                         ))
                                   : LinearGradient(
                                       colors: [
-                                        AppTheme.mainElementColor
-                                            .withOpacity(0.8),
+                                        AppTheme.mainElementColor,
                                         AppTheme.mainElementColor
                                       ],
                                       begin: Alignment.topLeft,
