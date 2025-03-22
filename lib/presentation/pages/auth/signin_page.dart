@@ -3,9 +3,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:study_hub/pages/home/home_page.dart';
-import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/auth/auth.dart';
+import 'package:study_hub/presentation/pages/home/home_page.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
+import 'package:study_hub/presentation/widgets/auth/auth.dart';
 import 'package:email_validator/email_validator.dart';
 
 class SignInPage extends StatelessWidget {

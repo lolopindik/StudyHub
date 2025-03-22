@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:study_hub/pages/auth/sign_up_in.dart';
-import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/presentation/pages/auth/sign_up_in.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});

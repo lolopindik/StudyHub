@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/appbars/sign_appbar.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
+import 'package:study_hub/presentation/widgets/appbars/sign_appbar.dart';
 
 class NoConnectionPage extends StatelessWidget {
   const NoConnectionPage({super.key});

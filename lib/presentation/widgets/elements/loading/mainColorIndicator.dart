@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
 
 class CustomMainColorLoadingIndicator extends StatelessWidget {
   const CustomMainColorLoadingIndicator({super.key});

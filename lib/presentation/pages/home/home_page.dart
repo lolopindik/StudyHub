@@ -2,14 +2,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:study_hub/backend/fire_funcs.dart';
-import 'package:study_hub/pages/lessons/lesson_page.dart';
-import 'package:study_hub/pages/settings/settings.dart';
-import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/elements/empty_container.dart';
-import 'package:study_hub/widgets/elements/loading/cupertinoLoadingIndicator.dart';
-import 'package:study_hub/widgets/elements/loading/customLoadingIndicator.dart';
-import 'package:study_hub/widgets/elements/blur_container.dart';
+import 'package:study_hub/logic/backend/fire_funcs.dart';
+import 'package:study_hub/presentation/pages/lessons/lesson_page.dart';
+import 'package:study_hub/presentation/pages/settings/settings.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
+import 'package:study_hub/presentation/widgets/elements/empty_container.dart';
+import 'package:study_hub/presentation/widgets/elements/loading/cupertinoLoadingIndicator.dart';
+import 'package:study_hub/presentation/widgets/elements/loading/customLoadingIndicator.dart';
+import 'package:study_hub/presentation/widgets/elements/blur_container.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

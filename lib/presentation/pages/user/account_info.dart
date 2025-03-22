@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
 
 class AccountInfo extends StatefulWidget {
   const AccountInfo({super.key});

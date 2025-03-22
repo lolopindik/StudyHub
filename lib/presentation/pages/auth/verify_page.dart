@@ -1,10 +1,10 @@
   import 'dart:async';
   import 'package:firebase_auth/firebase_auth.dart';
   import 'package:flutter/material.dart';
-  import 'package:study_hub/backend/fire_funcs.dart';
-  import 'package:study_hub/pages/auth/sign_up_in.dart';
-  import 'package:study_hub/pages/user/user_details.dart';
-  import 'package:study_hub/preferences/app_theme.dart';
+  import 'package:study_hub/logic/backend/fire_funcs.dart';
+  import 'package:study_hub/presentation/pages/auth/sign_up_in.dart';
+  import 'package:study_hub/presentation/pages/user/user_details.dart';
+  import 'package:study_hub/logic/config/theme/app_theme.dart';
 
   class VerifyPage extends StatefulWidget {
     const VerifyPage({super.key});

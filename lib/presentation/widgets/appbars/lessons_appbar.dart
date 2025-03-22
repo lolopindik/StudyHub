@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/elements/moving_home.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
+import 'package:study_hub/presentation/widgets/elements/moving_home.dart';
 
   PreferredSizeWidget? buildLessonAppBar(BuildContext context) {
     return AppBar(

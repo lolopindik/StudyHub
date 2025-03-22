@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/widgets/appbars/webview_appbar.dart';
-import 'package:study_hub/widgets/bottombars/webview_bottombar.dart';
+import 'package:study_hub/presentation/widgets/appbars/webview_appbar.dart';
+import 'package:study_hub/presentation/widgets/bottombars/webview_bottombar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebviewPage extends StatefulWidget {

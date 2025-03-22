@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:study_hub/preferences/app_theme.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
 
 Future<void> showTestDialog(context, VoidCallback removeSelectedAnswerToFirebase) async {
   if (Platform.isAndroid) {

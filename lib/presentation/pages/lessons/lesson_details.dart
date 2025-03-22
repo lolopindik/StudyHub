@@ -6,15 +6,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:study_hub/backend/fire_funcs.dart';
-import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
-import 'package:study_hub/widgets/elements/details/entry_field/entry_field.dart';
-import 'package:study_hub/widgets/elements/details/test_/test_widget.dart';
-import 'package:study_hub/widgets/elements/details/webview/url_widget.dart';
-import 'package:study_hub/widgets/elements/details/theory_widget.dart';
-import 'package:study_hub/widgets/elements/loading/cupertinoLoadingIndicator.dart';
-import 'package:study_hub/widgets/elements/loading/mainColorIndicator.dart';
+import 'package:study_hub/logic/backend/fire_funcs.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
+import 'package:study_hub/presentation/widgets/appbars/lessons_appbar.dart';
+import 'package:study_hub/presentation/widgets/elements/details/entry_field/entry_field.dart';
+import 'package:study_hub/presentation/widgets/elements/details/test_/test_widget.dart';
+import 'package:study_hub/presentation/widgets/elements/details/webview/url_widget.dart';
+import 'package:study_hub/presentation/widgets/elements/details/theory_widget.dart';
+import 'package:study_hub/presentation/widgets/elements/loading/cupertinoLoadingIndicator.dart';
+import 'package:study_hub/presentation/widgets/elements/loading/mainColorIndicator.dart';
 
 class LessonDetails extends StatefulWidget {
   final Map<String, dynamic> lessonData;

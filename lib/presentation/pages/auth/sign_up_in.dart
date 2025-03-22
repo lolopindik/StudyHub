@@ -1,9 +1,9 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:study_hub/pages/auth/signin_page.dart';
-import 'package:study_hub/pages/auth/signup_page.dart';
-import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/appbars/sign_appbar.dart';
+import 'package:study_hub/presentation/pages/auth/signin_page.dart';
+import 'package:study_hub/presentation/pages/auth/signup_page.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
+import 'package:study_hub/presentation/widgets/appbars/sign_appbar.dart';
 
 class SignUpInPage extends StatefulWidget {
   const SignUpInPage({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:study_hub/pages/lessons/lesson_details.dart';
-import 'package:study_hub/preferences/app_theme.dart';
-import 'package:study_hub/widgets/appbars/lessons_appbar.dart';
+import 'package:study_hub/presentation/pages/lessons/lesson_details.dart';
+import 'package:study_hub/logic/config/theme/app_theme.dart';
+import 'package:study_hub/presentation/widgets/appbars/lessons_appbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class LessonPage extends StatefulWidget {
