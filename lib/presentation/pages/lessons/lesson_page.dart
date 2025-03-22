@@ -24,80 +24,83 @@ class LessonPageState extends State<LessonPage> {
     return Scaffold(
       appBar: buildLessonAppBar(context),
       backgroundColor: AppTheme.secondaryColor,
-      body: Column(
-        children: <Widget>[
-          // Заголовок с названием курса
-          Container(
-            height: MediaQuery.of(context).size.height * 0.103,
-            color: AppTheme.mainElementColor,
-            constraints: const BoxConstraints(minHeight: 60),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return AutoSizeText(
-                      widget.lessonData['name'] ?? 'Lesson',
-                      style: TextStyles.ruberoidLight20,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                    );
-                  },
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: Column(
+          children: <Widget>[
+            // Заголовок с названием курса
+            Container(
+              height: MediaQuery.of(context).size.height * 0.103,
+              color: AppTheme.mainElementColor,
+              constraints: const BoxConstraints(minHeight: 60),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return AutoSizeText(
+                        widget.lessonData['name'] ?? 'Lesson',
+                        style: TextStyles.ruberoidLight20,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 5),
-          // Список уроков
-          Expanded(
-            child: ListView.builder(
-              itemCount: lessons.length,
-              itemBuilder: (context, index) {
-                Map<String, dynamic> lesson = lessons[index];
-                int lessonProgress = lesson['progress'] ?? 0; // Прогресс урока
-
-                // Получаем цвет для прогресса урока
-                BoxDecoration containerDecoration =
-                    _getGradientDecorationForLessonComplete(lessonProgress);
-
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LessonDetails(lessonData: lesson),
-                      ),
-                    ).then((value) {
-                      if (value == true) {
-                        setState(() {
-                          widget.refreshData();
-                          debugPrint('Data refreshed');
-                        });
-                      }
-                    });
-                  },
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                    decoration: containerDecoration,
-                    constraints: const BoxConstraints(minHeight: 60),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: AutoSizeText(
-                          lesson['name'] ?? 'Lesson ${index + 1}',
-                          style: TextStyles.ruberoidLight20,
-                          maxLines: 1,
+            const SizedBox(height: 5),
+            // Список уроков
+            Expanded(
+              child: ListView.builder(
+                itemCount: lessons.length,
+                itemBuilder: (context, index) {
+                  Map<String, dynamic> lesson = lessons[index];
+                  int lessonProgress = lesson['progress'] ?? 0; // Прогресс урока
+        
+                  // Получаем цвет для прогресса урока
+                  BoxDecoration containerDecoration =
+                      _getGradientDecorationForLessonComplete(lessonProgress);
+        
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LessonDetails(lessonData: lesson),
+                        ),
+                      ).then((value) {
+                        if (value == true) {
+                          setState(() {
+                            widget.refreshData();
+                            debugPrint('Data refreshed');
+                          });
+                        }
+                      });
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                      decoration: containerDecoration,
+                      constraints: const BoxConstraints(minHeight: 60),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: AutoSizeText(
+                            lesson['name'] ?? 'Lesson ${index + 1}',
+                            style: TextStyles.ruberoidLight20,
+                            maxLines: 1,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
