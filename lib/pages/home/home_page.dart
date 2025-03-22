@@ -9,7 +9,7 @@ import 'package:study_hub/preferences/app_theme.dart';
 import 'package:study_hub/widgets/elements/empty_container.dart';
 import 'package:study_hub/widgets/elements/loading/cupertinoLoadingIndicator.dart';
 import 'package:study_hub/widgets/elements/loading/customLoadingIndicator.dart';
-import 'package:blur/blur.dart';
+import 'package:study_hub/widgets/elements/blur_container.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -64,17 +64,9 @@ class HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Blur(
-              blur: 3,
+            child: BlurContainer(
               blurColor: const Color.fromARGB(255, 92, 91, 91),
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('lib/assets/images/background.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              child: Container(),
             ),
           ),
           _buildContent(),
