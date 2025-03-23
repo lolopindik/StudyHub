@@ -41,10 +41,10 @@ class SignUpInPageState extends State<SignUpInPage> {
               ],
             ),
           ),
-          Positioned(
-              bottom: 120,
-              right: 40,
-              left: 40,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 90),
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -63,7 +63,9 @@ class SignUpInPageState extends State<SignUpInPage> {
                     fontSize: 16,
                   ),
                 ),
-              ))
+              ),
+            ),
+          ),
         ],
       ),
     );
