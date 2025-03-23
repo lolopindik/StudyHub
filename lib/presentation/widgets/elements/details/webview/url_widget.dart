@@ -8,9 +8,7 @@ Widget buildUrl(BuildContext context, String url, VoidCallback sendingReply) {
   return GestureDetector(
     onTap: () {
       debugPrint('link pushed');
-      if (Platform.isAndroid) {
-        showWebviewDialog(context, url, sendingReply);
-      }
+      showWebviewDialog(context, url, sendingReply);
     },
     child: Container(
       decoration: BoxDecoration(
