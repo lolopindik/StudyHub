@@ -18,7 +18,7 @@ class BlurContainer extends StatelessWidget {
           image: AssetImage('lib/assets/images/background.png'),
           fit: BoxFit.cover,
         ),
-        color: blurColor.withOpacity(0.3),
+        color: blurColor,
       ),
       child: child,
     );

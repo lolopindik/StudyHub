@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:study_hub/logic/config/theme/app_theme.dart';
 import 'package:study_hub/presentation/widgets/elements/details/webview/webview_dialog.dart';
