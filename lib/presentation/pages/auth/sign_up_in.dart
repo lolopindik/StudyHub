@@ -21,6 +21,7 @@ class SignUpInPageState extends State<SignUpInPage> {
     return Scaffold(
       backgroundColor: AppTheme.mainColor,
       appBar: buildSignAppBar(context),
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Container(
@@ -41,27 +42,26 @@ class SignUpInPageState extends State<SignUpInPage> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 90),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PasswordResetPage(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Восстановить пароль?',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.white,
-                    color: Colors.white,
-                    fontSize: 16,
+          Positioned(
+            bottom: 120,
+            right: 40,
+            left: 40,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PasswordResetPage(),
                   ),
+                );
+              },
+              child: const Text(
+                'Восстановить пароль?',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.white,
+                  color: Colors.white,
+                  fontSize: 16,
                 ),
               ),
             ),
